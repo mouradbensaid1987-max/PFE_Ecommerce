@@ -1,3 +1,9 @@
+@import '../vendor/bootstrap/dist/css/bootstrap.css';
+
 body {
-    background-color: skyblue;
+    background-color: rgb(255, 255, 255);
+
+}
+.bg-primary { 
+    background-color: #1e4a8a !important; 
 }
