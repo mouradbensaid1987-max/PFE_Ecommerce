@@ -7,14 +7,27 @@
 {% block body %}
 
 	<div class="bg-primary text-white p-5 rounded mb-4">
-		<h1 class="display-4">{{ message }}</h1>
+		<h1 class="display-4">Bienvenue sur ma boutique</</h1>
 		<p class="lead">Découvrez bientôt notre catalogue de produits.</p>
 	</div>
 
-  <div class="bg-success text-white p-5 rounded mb-4">
-		<h1> {{ message }}</h1>
-		<p class="lead">Découvrez bientôt notre catalogue de produits.</p>
-	</div>
+    <h2 class="mb-3">Nos catégories</h2>
+    <div class="row g-3">
+      {% for cat in categories %}
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title text-primary">{{ cat.name }}</h5>
+              <p class="card-text">{{ cat.description }}</p>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <p class="text-muted">Aucune catégorie pour l'instant.</p>
+      {% endfor %}
+    </div>
+
+
 
 
 
