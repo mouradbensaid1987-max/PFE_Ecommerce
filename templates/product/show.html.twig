@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}{{ product.name }}{% endblock %}
+
+
+{% block body %}
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"> <a href="{{ path('app_home') }}"> Accueil </a> </li>
+        <li class="breadcrumb-item"> <a href="{{ path('app_product_list') }}"> Produits </a> </li>
+        <li class="breadcrumb-item active">{{ product.name }}</li>
+      </ol>
+    </nav>
+
+
+  <div class="row">
+
+    <div class="col-md-6">
+      <img src="https://placehold.co/600x400/1e4a8a/fff?text={{ product.name|url_encode}}"
+           alt="{{ product.name }}" class="img-fluid rounded">
+    </div>
+
+    <div class="col-md-6">
+      <h1>{{ product.name }}</h1>
+      <p class="text-muted">Catégorie : {{ product.category.name }}</p>
+      <p>{{ product.description }}</p>
+      <h2 class="text-primary">  {{ product.priceTtc|number_format(2, ',', ' ') }} € TTC  </h2>
+      <p class="text-muted small">TVA {{ product.tva.rate }}%</p>
+
+      <p>
+          {% if product.stock > 0 %}
+          <span class="badge bg-success">✓ En stock ({{ product.stock }})</span>
+          {% else %}
+          <span class="badge bg-danger">Rupture de stock</span>
+          {% endif %}
+      </p>
+      
+      <button class="btn btn-primary btn-lg w-100"
+        {% if product.stock <= 0 %} disabled {% endif %}>
+        🛒 Ajouter au panier
+      </button>
+
+    </div>
+  </div>
+
+{% endblock %}

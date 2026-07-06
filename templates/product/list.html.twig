@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Tous nos produits{% endblock %}
+
+
+{% block body %}
+    <h1 class="mb-4">Tous nos produits</h1>
+    <form class="mb-4" method="get" action="{{ path('app_product_list') }}">
+      <div class="input-group">
+        <input type="search" name="q" class="form-control" placeholder="Rechercher un produit..." value="{{ search }}">
+        <button class="btn btn-primary">🔍 Rechercher</button>
+      </div>
+    </form>
+
+
+    {% if products.items|length == 0 %}
+      <div class="alert alert-warning">Aucun produit trouvé.</div>
+    {% else %}
+      <div class="row g-3">
+        {% for product in products %}
+          <div class="col-md-3">
+            <a href="{{ path('app_product_show',{slug: product.slug}) }}" class="text-decoration-none text-reset">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h6 class="card-title">{{ product.name }}</h6>
+                  <p class="text-muted small mb-1">{{ product.category.name }}</p>
+                  <p class="text-primary fw-bold mb-0">
+                    {{ product.priceTtc|number_format(2, ',', ' ') }}
+                    €
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(products, 'partials/pagination_tamplate.html.twig') }}
+      </div>
+
+    {% endif %}
+{% endblock %}
