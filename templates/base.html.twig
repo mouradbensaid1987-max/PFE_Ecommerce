@@ -34,9 +34,9 @@
                   Catégories
                 </a>
                 <ul class="dropdown-menu">
-                  {% for cat in categories %}
+                  {% for cat in category_repository.findAll() %}
                     <li>
-                      <a class="dropdown-item" href="#">{{ cat.name }}</a>
+                      <a class="dropdown-item" href="{{ path('app_category_show', {slug: cat.slug}) }}"> {{ cat.name }}</a>
                     </li>
                   {% endfor %}
                 </ul>
