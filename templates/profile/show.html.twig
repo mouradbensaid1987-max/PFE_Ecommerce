@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil{% endblock %}
+
+{% block body %}
+
+<div class="card mt-3">
+
+  <div class="card-body">
+      <p><strong>Email :</strong> {{ user.email }}</p>
+      <p><strong>Prénom :</strong> {{ user.firstName }}</p>
+      <p><strong>Nom :</strong> {{ user.lastName }}</p>
+  </div>
+
+  <div class="card-footer">
+      <a href="#" class="btn btn-primary">✏️ Modifier mes informations</a>
+  </div>
+
+</div>
+
+{% endblock %}

@@ -52,7 +52,7 @@
                     👤 {{ app.user.firstName }}
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#">Mon profil</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_profile') }}">Mon profil</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a></li>
                   </ul>
@@ -62,7 +62,7 @@
                   <a class="nav-link text-white" href="{{ path('app_login') }}">Connexion</a>
                 </li>
                 <li class="nav-item">
-                  <a class="btn btn-light btn-sm ms-2" href="{{ path('app_register') }}">Inscription</a>
+                  <a class="btn btn-light btn-sm ms-2 mt-1" href="{{ path('app_register') }}">Inscription</a>
                 </li>
               {% endif %}
             </ul>
@@ -72,8 +72,8 @@
 		</nav>
 
 
-		<main class="container py-4"> 
-
+		<main class="container py-4">
+    
         {% for label, messages in app.flashes %}
           {% for message in messages %}
             <div class="alert alert-{{ label }} alert-dismissible fade show">
