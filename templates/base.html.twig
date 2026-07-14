@@ -29,6 +29,10 @@
 
           <div class="collapse navbar-collapse" id="navMain">
             <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ path('app_product_list') }}">Produits</a>
+              </li>
+
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                   Catégories
@@ -43,27 +47,27 @@
               </li>
             </ul>
 
-
-
             <ul class="navbar-nav">
               {% if app.user %}
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
-                    👤 {{ app.user.firstName }}
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="{{ path('app_profile') }}">Mon profil</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a></li>
-                  </ul>
-                </li>
+                    
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle text-white" href="#" role="button" 
+                          data-bs-toggle="dropdown" aria-expanded="false">
+                        👤 {{ app.user.firstName }}
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{{ path('app_profile') }}">Mon profil</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a></li>
+                      </ul>
+                  </li>
               {% else %}
-                <li class="nav-item">
-                  <a class="nav-link text-white" href="{{ path('app_login') }}">Connexion</a>
-                </li>
-                <li class="nav-item">
-                  <a class="btn btn-light btn-sm ms-2 mt-1" href="{{ path('app_register') }}">Inscription</a>
-                </li>
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{{ path('app_login') }}">Connexion</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="btn btn-light btn-sm ms-2 mt-1" href="{{ path('app_register') }}">Inscription</a>
+                  </li>
               {% endif %}
             </ul>
 
@@ -86,12 +90,11 @@
         {% block body %}{% endblock %}
 		</main>
 		
-    
+  
     <footer class="bg-dark text-light text-center py-4 mt-5">
 			<p class="mb-0">&copy; 2026 Ma Boutique — Tous droits réservés</p>
 		</footer>
 
-  
 				{% block javascripts %}{% endblock %}
 	</body>
 
