@@ -3,12 +3,15 @@
 namespace App\Service;
 
 use App\Repository\ProductRepository;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Cart
 {
-    public function __construct(private readonly ProductRepository $productRepository)
-        { }
+    public function __construct(private readonly ProductRepository $productRepository, private RequestStack $requestStack)
+        { 
+          
+        }
 
     public function getcart(SessionInterface $session) : array
     {
@@ -31,5 +34,12 @@ class Cart
                 'cart'=>$cartWhitData,
                 'total'=>$total 
             ];
+    }
+
+    public function getCount(): int
+    {
+         $cart = $this->requestStack->getSession()->get('cart', []);
+
+        return array_sum($cart);
     }
 }
