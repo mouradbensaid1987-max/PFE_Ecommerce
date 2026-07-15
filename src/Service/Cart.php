@@ -42,4 +42,5 @@ class Cart
 
         return array_sum($cart);
     }
+
 }

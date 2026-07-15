@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Validation de la commande{% endblock %}
+
+{% block body %}
+
+<h1>📋 Validation de votre commande</h1>
+
+  <div class="row mt-4">
+      <div class="col-md-7">
+          <h3>📦 Choisir une adresse de livraison</h3>
+          {% if deliveryAddresses|length == 0 %}
+              <div class="alert alert-warning">
+                  Vous n'avez aucune adresse de livraison.
+                  <a href="{{ path('app_address_new') }}" class="alert-link">En ajouter une</a>
+              </div>
+          {% else %}
+              <form method="post" action="{{ path('app_order_confirm') }}">>
+                  {% for address in deliveryAddresses %}
+                      <div class="card mb-2">
+                          <div class="card-body">
+                              <div class="form-check">
+
+                                    <input type="radio" 
+                                           name="address_id"
+                                           value="{{ address.id }}"
+                                           id="addr_{{ address.id }}"
+                                           class="form-check-input"
+                                           {% if loop.first %}checked{% endif %}>
+
+                                    <label for="addr_{{ address.id }}" class="form-check-label">
+                                        <strong> {{ address.firstName }} {{ address.lastName }} </strong><br>
+                                        {{ address.street }}<br>
+                                        {{ address.postalCode }} {{ address.city }}
+                                    </label>
+
+                              </div>
+                          </div>
+                      </div>
+                  {% endfor %}
+
+                  <button class="btn btn-primary btn-lg w-100 mt-3"> Continuer vers le paiement → </button>
+              </form>
+          {% endif %}
+      </div>
+
+      <div class="col-md-5">
+        <div class="card">
+
+            <div class="card-header bg-primary text-white">
+                <strong>🛒 Récapitulatif</strong>
+            </div>
+
+            <ul class="list-group list-group-flush">
+                {% for item in items %}
+                    <li class="list-group-item d-flex justify-content-between">
+                      <span>{{ item.product.name }} × {{ item.quantity }}</span>
+                      <span>{{ (item.product.priceTtc * item.quantity)|number_format(2,',', ' ') }} €</span>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <div class="card-footer d-flex justify-content-between">
+                <strong>Total</strong>
+                <strong class="text-primary h5">{{ total|number_format(2, ',', ' ') }}€</strong>
+            </div>
+        </div>
+      </div>
+
+  </div>
+
+{% endblock %}
