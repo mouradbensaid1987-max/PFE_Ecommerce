@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement{% endblock %}
+
+{% block body %}
+
+<h1>💳 Paiement</h1>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <p><strong>Commande :</strong> {{ order.reference }}</p>
+        <p>
+            <strong>Montant à payer :</strong>
+            <span class="text-primary h4">{{ order.totalTtc|number_format(2, ',', ' ') }}€ </span>
+        </p>
+        <p>
+            <strong>Livraison :</strong><br>
+            {{ order.deliveryFirstName }} {{ order.deliveryLastName }}<br>
+            {{ order.deliveryStreet }}<br>
+            {{ order.deliveryPostalCode }} {{ order.deliveryCity }}
+        </p>
+        <hr>
+        <div class="alert alert-info">
+            ℹ️ Mode démo : aucun vrai paiement n'est effectué.
+        </div>
+
+        <form method="post" action="{{ path('app_payment_pay', {ref: order.reference}) }}">
+            <button class="btn btn-success btn-lg w-100">
+                  ✓ Payer {{ order.totalTtc|number_format(2, ',', ' ') }} €
+            </button>
+          </form>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+{% endblock %}
