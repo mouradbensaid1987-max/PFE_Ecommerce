@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes favoris{% endblock %}
+
+{% block body %}
+
+<h1>❤️ Mes favoris</h1>
+
+    {% if favorites|length == 0 %}
+
+        <div class="alert alert-info mt-3">
+              Aucun favori. Cliquez sur le ❤️ sur une page produit pour en ajouter.
+        </div>
+
+    {% else %}
+        
+          <div class="row g-3 mt-2">
+              {% for fav in favorites %}
+                  <div class="col-md-3">
+                      <div class="card h-100">
+                          <div class="card-body">
+
+                            <h6>{{ fav.product.name }}</h6>
+                            <p class="text-primary fw-bold mb-2">{{ fav.product.priceTtc|number_format(2, ',', ' ') }} €</p>
+                            <a href="{{ path('app_product_show', {slug: fav.product.slug}) }}"
+                               class="btn btn-sm btn-outline-primary w-100">Voir</a>
+                              
+                          </div>
+                      </div>
+                  </div>
+              {% endfor %}
+          </div>
+
+
+
+
+
+    {% endif %}
+
+
+{% endblock %}

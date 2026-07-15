@@ -41,12 +41,21 @@
           {% endif %}
       </p>
       
-      <form method="post" action="{{ path('app_cart_add', {id: product.id}) }}">
-          <button class="btn btn-primary btn-lg w-100"
-            {% if product.stock <= 0 %} disabled {% endif %}>
-            🛒 Ajouter au panier
-          </button>
-        </form>
+      <div class="d-flex gap-2">
+          <form method="post" action="{{ path('app_cart_add', {id: product.id}) }}" class="flex-grow-1">
+              <button class="btn btn-primary btn-lg w-100"
+                {% if product.stock <= 0 %} disabled {% endif %}>
+                🛒 Ajouter au panier
+              </button>
+          </form>
+          {% if app.user %}
+              <form method="post" action="{{ path('app_favorite_toggle', {id: product.id}) }}">
+                  <button class="btn btn-outline-danger btn-lg" title="Ajouter aux favoris">
+                      ❤️
+                  </button>
+              </form>
+          {% endif %}
+      </div>
 
     </div>
   </div>
