@@ -1,0 +1,48 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block admin_body %}
+
+<h1 class="mb-4">📊 Tableau de bord</h1>
+<div class="row g-3">
+
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+            <h6 class="card-title">Produits</h6>
+            <h2>{{ nbProducts }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h6 class="card-title">Catégories</h6>
+                <h2>{{ nbCategories }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h6 class="card-title">Utilisateurs</h6>
+                <h2>{{ nbUsers }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h6 class="card-title">Commandes</h6>
+                <h2>{{ nbOrders }}</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
