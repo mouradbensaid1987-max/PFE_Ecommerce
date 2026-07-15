@@ -5,6 +5,7 @@ namespace App\Controller\Client;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Repository\AddressRepository;
+use App\Repository\OrderRepository;
 use App\Service\Cart;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -85,6 +86,29 @@ class OrderController extends AbstractController
 
         return $this->redirectToRoute('app_payment', ['ref' => $order->getReference()]);
 
+    }
+
+    #[Route('/history', name: 'app_order_history')]
+    public function history(OrderRepository $repo): Response
+    {
+        $orders = $repo->findBy(
+              ['user' => $this->getUser()],
+              ['createdAt' => 'DESC']
+          );
+
+        return $this->render('order/history.html.twig', [
+            'orders' => $orders,
+          ]);
+    }
+
+    #[Route('/{ref}', name: 'app_order_show')]
+    public function show(string $ref, OrderRepository $repo): Response
+    {
+        $order = $repo->findOneBy(['reference' => $ref, 'user' => $this->getUser()]);
+        if (!$order) {
+        throw $this->createNotFoundException();
+        }
+        return $this->render('order/show.html.twig', ['order' => $order]);
     }
 
 
