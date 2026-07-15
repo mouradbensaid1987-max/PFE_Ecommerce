@@ -15,7 +15,7 @@
                   <a href="{{ path('app_address_new') }}" class="alert-link">En ajouter une</a>
               </div>
           {% else %}
-              <form method="post" action="{{ path('app_order_confirm') }}">>
+              <form method="post" action="{{ path('app_order_confirm') }}">
                   {% for address in deliveryAddresses %}
                       <div class="card mb-2">
                           <div class="card-body">
