@@ -1,0 +1,64 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block admin_body %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>📦 Produits</h1>
+    <a href="{{ path('app_admin_product_new') }}" class="btn btn-primary">➕ Nouveau</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Catégorie</th>
+            <th>Prix HT</th>
+            <th>Stock</th>
+            <th>Actif</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+          {% for p in products %}
+              <tr>
+                <td>{{ p.name }}</td>
+                <td>{{ p.category.name }}</td>
+                <td>{{ p.priceHt }} €</td>
+                <td>{{ p.stock }}</td>
+                <td>
+                    {% if p.isActive %}
+                        ✓
+                    {% else %}
+                        ✗
+                    {% endif %}
+                </td>
+                <td class="text-end">
+                    <a href="{{ path('app_admin_product_edit', {id: p.id}) }}" class="btn btn-sm btn-outline-primary">✏️</a>
+                    <form method="post" action="{{ path('app_admin_product_delete', {id:p.id}) }}"
+                          class="d-inline" onsubmit="return confirm('Supprimer ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ p.id) }}">
+                        <button class="btn btn-sm btn-outline-danger">🗑️</button>
+                    </form>
+                </td>
+              </tr>
+          {% endfor %}
+
+          
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(products, 'partials/pagination_tamplate.html.twig') }}
+  </div>
+    
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
