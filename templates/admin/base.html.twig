@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-3 mb-3">
+                <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            <strong>⚙️ Admin</strong>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <a href="{{ path('app_admin_dashboard') }}" 
+                              class="list-group-item listgroup-item-action">📊 Tableau de bord</a>
+
+                            <a href="#" class="list-group-item list-group-item-action">📂 Catégories</a>
+                            <a href="#" class="list-group-item list-group-item-action">💰 TVA</a>
+                            <a href="#" class="list-group-item list-group-item-action">📦 Produits</a>
+                            <a href="#" class="list-group-item list-group-item-action">👥Utilisateurs</a>
+                            <a href="#" class="list-group-item list-group-item-action">📋 Commandes</a>
+                        </div>
+                </div>
+          </div>
+        <div class="col-md-9">
+            {% block admin_body %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

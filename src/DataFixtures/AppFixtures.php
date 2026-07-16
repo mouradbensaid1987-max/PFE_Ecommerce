@@ -5,12 +5,20 @@ namespace App\DataFixtures;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Tva;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class AppFixtures extends Fixture
 {
+
+    public function __construct(private UserPasswordHasherInterface $hasher) 
+    {
+      
+    }
+
     public function load(ObjectManager $manager): void
     {
 
@@ -100,8 +108,22 @@ class AppFixtures extends Fixture
                   $p->setTva($tvaStandard);
                   $manager->persist($p);
                 }
+            // === UTILISATEURS ===
+          $admin = new User();
+          $admin->setEmail('admin@test.com');
+          $admin->setFirstName('Admin');
+          $admin->setLastName('Boutique');
+          $admin->setRoles(['ROLE_ADMIN']);
+          $admin->setPassword($this->hasher->hashPassword($admin, 'admin123'));
+          $manager->persist($admin);
         
-
+          $client = new User();
+          $client->setEmail('client@test.com');
+          $client->setFirstName('Client');
+          $client->setLastName('Test');
+          $client->setRoles(['ROLE_USER']);
+          $client->setPassword($this->hasher->hashPassword($client, 'client123'));
+          $manager->persist($client);
 
         // $product = new Product();
         // $manager->persist($product);
