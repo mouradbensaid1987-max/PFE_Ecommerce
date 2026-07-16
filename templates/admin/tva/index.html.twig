@@ -1,0 +1,37 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block admin_body %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>💰 TVA</h1>
+    <a href="{{ path('app_admin_tva_new') }}" class="btn btn-primary">➕ Nouvelle</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Taux</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tva in tvas %}
+          <tr>
+            <td>{{ tva.name }}</td>
+            <td>{{ tva.rate }}</td>
+            <td class="text-end">
+                <a href="{{ path('app_admin_tva_edit', {id: tva.id}) }}" class="btn btn-sm btn-outline-primary">✏️</a>
+                <form method="post" action="{{ path('app_admin_tva_delete', {id:tva.id}) }}"
+                      class="d-inline" onsubmit="return confirm('Supprimer ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tva.id) }}">
+                    <button class="btn btn-sm btn-outline-danger">🗑️</button>
+                </form>
+            </td>
+          </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}
