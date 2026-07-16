@@ -1,0 +1,39 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block admin_body %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>📂 Catégories</h1>
+    <a href="{{ path('app_admin_category_new') }}" class="btn btn-primary">➕ Nouvelle</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Slug</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cat in categories %}
+          <tr>
+            <td>{{ cat.id }}</td>
+            <td>{{ cat.name }}</td>
+            <td>{{ cat.slug }}</td>
+            <td class="text-end">
+                <a href="{{ path('app_admin_category_edit', {id: cat.id}) }}" class="btn btn-sm btn-outline-primary">✏️</a>
+                <form method="post" action="{{ path('app_admin_category_delete', {id:cat.id}) }}"
+                      class="d-inline" onsubmit="return confirm('Supprimer ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cat.id) }}">
+                    <button class="btn btn-sm btn-outline-danger">🗑️</button>
+                </form>
+            </td>
+          </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}
