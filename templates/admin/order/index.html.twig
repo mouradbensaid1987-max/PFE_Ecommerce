@@ -4,7 +4,40 @@
 {% block admin_body %}
 
 <h1>📋 Toutes les commandes</h1>
+{# === Formulaire de recherche : référence + statut + client === #}
+<form method="get" action="{{ path('app_admin_order_index') }}" class="card mb-4">
+    <div class="card-body row g-3 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label">Nom de la commande (référence)</label>
+            <input type="text" name="q" class="form-control" placeholder="Ex: CMD-A1B2C3D4" value="{{ search }}">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">État de la commande</label>
+            <select name="status" class="form-select">
+                <option value="">Tous les statuts</option>
+                <option value="pending" {% if status == 'pending' %}selected{% endif %}>En attente</option>
+                <option value="paid" {% if status == 'paid' %}selected{% endif %}>Payée</option>
+                <option value="preparing" {% if status == 'preparing' %}selected{% endif %}>En préparation</option>
+                <option value="shipped" {% if status == 'shipped' %}selected{% endif %}>Expédiée</option>
+                <option value="delivered" {% if status == 'delivered' %}selected{% endif %}>Livrée</option>
+                <option value="cancelled" {% if status == 'cancelled' %}selected{% endif %}>Annulée</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Client (email, prénom, nom)</label>
+            <input type="text" name="user" class="form-control" placeholder="Ex: jean@test.com" value="{{ userQuery }}">
+        </div>
+        <div class="col-12 d-flex gap-2">
+            <button class="btn btn-primary">Rechercher</button>
+            <a href="{{ path('app_admin_order_index') }}" class="btn btn-outline-secondary"> Réinitialiser </a>
+        </div>
+    </div>
+</form>
 
+
+{% if orders|length == 0 %}
+    <div class="alert alert-warning">Aucune commande ne correspond à cette recherche.</div>
+{% else %}
 <table class="table mt-3">
     <thead>
           <tr>
@@ -40,4 +73,5 @@
         {% endfor %}
     </tbody>
 </table>
+{% endif %}
 {% endblock %}
