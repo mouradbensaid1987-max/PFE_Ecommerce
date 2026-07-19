@@ -1,0 +1,38 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block admin_body %}
+
+    <h1>👥 Utilisateurs</h1>
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Nom</th>
+                <th>Rôles</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in users %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ u.firstName }} {{ u.lastName }}</td>
+                    <td>
+                        {% if 'ROLE_ADMIN' in u.roles %}
+                            <span class="badge bg-danger">Admin</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Client</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('app_admin_user_edit', {id: u.id}) }}" 
+                           class="btn btnsm btn-outline-primary">✏️</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
