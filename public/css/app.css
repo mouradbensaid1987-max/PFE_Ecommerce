@@ -1,44 +1,46 @@
-:root {
+:root{
   --bs-primary: #1e4a8a;
   --bs-primary-rgb: 30, 74, 138;
 }
 
-body {
+body{
   background-color: #f8f9fa;
 }
 
-.btn-primary {
+.btn-primary{
   background-color: #1e4a8a;
   border-color: #1e4a8a;
 }
 
 .btn-primary:hover,
-.btn-primary:focus {
+.btn-primary:focus{
   background-color: #0c3577;
   border-color: #0c3577;
 }
 
-.text-primary {
+.text-primary{
   color: #1e4a8a !important;
 }
 
-.bg-primary {
+.bg-primary{
   background-color: #1e4a8a !important;
 }
 
-.border-primary {
+.border-primary{
   border-color: #1e4a8a !important;
 }
 
 /* Petite animation pour les cartes au hover */
-.card {
+.card{
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.card:hover {
+.card:hover{
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(30, 74, 138, 0.15);
 }
+
+
 
 
 

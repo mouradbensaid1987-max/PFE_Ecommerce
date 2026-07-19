@@ -7,8 +7,7 @@ use App\Entity\Product;
 use App\Entity\Tva;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-
-
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
@@ -38,6 +37,14 @@ class ProductFormType extends AbstractType
                   'class' => Tva::class,
                   'choice_label' => 'name',
                   'label' => 'TVA'
+            ])
+            ->add('productImages', CollectionType::class, [
+                  'entry_type' => ProductImageFormType::class,
+                  'allow_add' => true,
+                  'allow_delete' => true,
+                  'by_reference' => false,
+                  'label' => false,
+                  'attr' => ['class' => 'img-fluid my-2'],
             ])
         ;
     }

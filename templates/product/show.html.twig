@@ -19,7 +19,19 @@
     <div class="col-md-6">
 
       {% if product.productImages|length > 0 %}
-        <img src="{{ asset('uploads/products/' ~ product.productImages.imageName) }}" alt="{{ product.name }}" class="img-fluid rounded">
+
+
+          {% for productImage in product.productImages %}
+              <img src="{{ vich_uploader_asset(productImage, 'imageFile') }}" 
+                  alt="{{ product.name }}" 
+                  class="img-thumbnail">
+          {% endfor %}
+
+
+
+
+
+      
       {% else %}
         <img src="https://placehold.co/600x400/1e4a8a/fff?text={{ product.name|url_encode }}" alt="{{ product.name }}" class="img-fluid rounded">
       {% endif %}

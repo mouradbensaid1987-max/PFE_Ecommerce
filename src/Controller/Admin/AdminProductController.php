@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use App\Form\ProductFormType;
+use App\Entity\ProductImage;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,7 +28,7 @@ class AdminProductController extends AbstractController
         $produits = $paginator->paginate(
           $data,
           $request->query->getInt('page', 1),
-          16
+          100
       );
 
         return $this->render('admin/product/index.html.twig', [
@@ -40,6 +41,7 @@ class AdminProductController extends AbstractController
     public function new(Request $request, EntityManagerInterface $em): Response
     {
       $product = new Product();
+      $product->addProductImage(new ProductImage());
       $form = $this->createForm(ProductFormType::class, $product);
       $form->handleRequest($request);
 

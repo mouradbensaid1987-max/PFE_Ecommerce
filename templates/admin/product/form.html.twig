@@ -8,12 +8,122 @@
 <div class="card mt-3">
     <div class="card-body">
         {{ form_start(form) }}
-            {{ form_widget(form) }}
+
+            {{ form_row(form.name) }}
+            {{ form_row(form.slug) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.priceHt) }}
+            {{ form_row(form.stock) }}
+            {{ form_row(form.isActive) }}
+            {{ form_row(form.category) }}
+            {{ form_row(form.tva) }}
+        
+            
+            <div id="product-images-list"
+                 data-prototype="{{ form_widget(form.productImages.vars.prototype)|e('html_attr') }}"
+                 data-index="{{ form.productImages|length }}">
+
+                 
+                 {% for imageForm in form.productImages %}
+                    {% set productImage = imageForm.vars.data %}
+
+                    <div class="product-image-item border rounded p-2 mb-2 align-items-center justify-content-between">
+                        
+                            {% if productImage %}
+                                <img src="{{ vich_uploader_asset(productImage, 'imageFile') }}" 
+                                
+                                    class="img-fluid d-block mx-auto my-2 image-preview" alt="">
+                            {% endif %}
+                            {{ form_widget(imageForm.imageFile) }}
+                      
+
+                        <button type="button" class="btn btn-danger btn-sm remove-image-btn flex-shrink-0">
+                            Supprimer
+                        </button>
+                    </div>  
+                {% endfor %}
+            </div>
+            <button type="button" id="add-image-btn" class="btn btn-outline-primary">
+                 Ajouter une image
+            </button>
+
+
             <button class="btn btn-primary">💾 Enregistrer</button>
             <a href="{{ path('app_admin_product_index') }}" class="btn btn-secondary">Annuler</a>
         {{ form_end(form) }}
     </div>
-</div>
+  </div>
 
+
+  
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    const collectionHolder = document.querySelector('#product-images-list');
+    const addBtn = document.querySelector('#add-image-btn');
+
+    addBtn.addEventListener('click', function () {
+        const index = collectionHolder.dataset.index;
+        const prototype = collectionHolder.dataset.prototype;
+        const newForm = prototype.replace(/__name__/g, index);
+
+        const div = document.createElement('div');
+        div.classList.add('product-image-item', 'border', 'rounded', 'p-2', 'mb-2',
+                            'align-items-center', 'justify-content-between');
+
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('flex-grow-1', 'me-2');
+        wrapper.innerHTML = newForm;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.classList.add('btn','btn-sm','flex-shrink-0', 'btn-danger','remove-image-btn');
+        removeBtn.innerHTML = "Supprimer";
+
+        div.appendChild(wrapper);
+        div.appendChild(removeBtn);
+        collectionHolder.appendChild(div);
+
+        collectionHolder.dataset.index = parseInt(index) + 1;
+    });
+
+    collectionHolder.addEventListener('change', function (e) {
+    // On ne réagit que si c'est un input file qui a changé
+        if (!e.target.matches('input[type="file"]')) {
+            return;
+        }
+
+        const input = e.target;
+        const item = input.closest('.product-image-item');
+
+        // On cherche si une image de preview existe déjà dans ce bloc
+        let preview = item.querySelector('.image-preview');
+
+        // Si elle n'existe pas encore (nouveau bloc ajouté dynamiquement), on la crée
+        if (!preview) {
+            preview = document.createElement('img');
+            preview.classList.add('img-fluid', 'd-block', 'mx-auto', 'my-2', 'image-preview');
+            input.parentNode.insertBefore(preview, input);
+        }
+
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                preview.src = event.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    collectionHolder.addEventListener('click', function (e) {
+        const btn = e.target.closest('.remove-image-btn');
+        if (btn) {
+            btn.closest('.product-image-item').remove();
+        }
+    });
+});
+</script>
 
 {% endblock %}
