@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau message{% endblock %}
+
+{% block body %}
+
+<h1>✉️ Contacter l'administrateur</h1>
+<div class="card mt-3">
+
+    <div class="card-body">
+
+          {{ form_start(form) }}
+
+              {{ form_widget(form) }}
+              <button class="btn btn-primary">Envoyer</button>
+              <a href="{{ path('app_message_index') }}" class="btn btn-secondary">Annuler</a>
+
+          {{ form_end(form) }}
+
+    </div>
+
+</div>
+
+{% endblock %}
