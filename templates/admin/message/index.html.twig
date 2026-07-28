@@ -1,0 +1,31 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block admin_body %}
+
+<h1>✉️ Messages des clients</h1>
+
+{% for m in messages %}
+    <div class="card mt-3">
+        <div class="card-header d-flex justify-content-between">
+            <span>
+                <strong>{{ m.subject }}</strong> — {{ m.user.email }}
+            </span>
+            <span class="badge bg-{{ m.status == 'answered' ? 'success' : 'warning' }}">
+                {{ m.status == 'answered' ? 'Répondu' : 'En attente' }}
+            </span>
+        </div>
+
+        <div class="card-body">
+            <p>{{ m.content }}</p>
+            <form method="post" action="{{ path('app_admin_message_reply', {id: m.id}) }}">
+                <textarea name="reply" class="form-control mb-2" rows="2" placeholder="Votre réponse...">
+                        {{ m.reply }}
+                </textarea>
+                <button class="btn btn-sm btn-primary">Répondre</button>
+            </form>
+        </div>
+
+    </div>
+{% endfor %}
+
+{% endblock %}
