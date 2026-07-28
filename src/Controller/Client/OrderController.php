@@ -7,13 +7,15 @@ use App\Entity\OrderItem;
 use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Service\Cart;
+
+use App\Service\StripePayment;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 
 
@@ -48,7 +50,7 @@ class OrderController extends AbstractController
 
     #[Route('/confirm', name: 'app_order_confirm', methods: ['POST'])]
     public function confirm( Request $request, AddressRepository $addressRepository,
-                             Cart $cart, EntityManagerInterface $em, SessionInterface $session
+                             Cart $cart,StripePayment $payment, EntityManagerInterface $em, SessionInterface $session
                         ): Response {
 
         $addressId = (int) $request->request->get('address_id');
@@ -58,32 +60,34 @@ class OrderController extends AbstractController
           {
               throw $this->createAccessDeniedException();
           }
+        
+          $data =$cart->getcart($session);
 
-        $data =$cart->getcart($session);
+          $order = new Order();
+          $order->setUser($this->getUser());
+          $order->setTotalTtc((string) $data['total']);
+          $order->setStatus(Order::STATUS_PENDING);
 
-        $order = new Order();
-        $order->setUser($this->getUser());
-        $order->setTotalTtc((string) $data['total']);
-        $order->setStatus(Order::STATUS_PENDING);
+          $order->setDeliveryFirstName($address->getFirstName());
+          $order->setDeliveryLastName($address->getLastName());
+          $order->setDeliveryStreet($address->getStreet());
+          $order->setDeliveryPostalCode($address->getPostalCode());
+          $order->setDeliveryCity($address->getCity());
+          $order->setDeliveryCountry($address->getCountry());
 
-        $order->setDeliveryFirstName($address->getFirstName());
-        $order->setDeliveryLastName($address->getLastName());
-        $order->setDeliveryStreet($address->getStreet());
-        $order->setDeliveryPostalCode($address->getPostalCode());
-        $order->setDeliveryCity($address->getCity());
-        $order->setDeliveryCountry($address->getCountry());
+          foreach ($data['cart'] as $item) 
+            {
+                $orderItem = new OrderItem();
+                $orderItem->setProduct($item['product']);
+                $orderItem->setTva($item['product']->getTva()->getRate());
+                $orderItem->setPriceTtc((string) $item['product']->getPriceTtc());
+                $orderItem->setQuantity($item['quantity']);
+                $order->addItem($orderItem);
+            }
 
-        foreach ($data['cart'] as $item) {
-          $orderItem = new OrderItem();
-          $orderItem->setProductName($item['product']->getName());
-          $orderItem->setPriceTtc((string) $item['product']->getPriceTtc());
-          $orderItem->setQuantity($item['quantity']);
-          $order->addItem($orderItem);
-        }
-
-        $em->persist($order);
-        $em->flush();
-
+          $em->persist($order);
+          $em->flush();
+          
         return $this->redirectToRoute('app_payment', ['ref' => $order->getReference()]);
 
     }
@@ -101,10 +105,10 @@ class OrderController extends AbstractController
           ]);
     }
 
-    #[Route('/{ref}', name: 'app_order_show')]
-    public function show(string $ref, OrderRepository $repo): Response
+    #[Route('/{id}', name: 'app_order_show')]
+    public function show(string $id, OrderRepository $repo): Response
     {
-        $order = $repo->findOneBy(['reference' => $ref, 'user' => $this->getUser()]);
+        $order = $repo->findOneBy(['id' => $id, 'user' => $this->getUser()]);
         if (!$order) {
         throw $this->createNotFoundException();
         }

@@ -7,7 +7,7 @@
 <h1>📋 Validation de votre commande</h1>
 
   <div class="row mt-4">
-      <div class="col-md-7">
+      <div class="col-md-5">
           <h3>📦 Choisir une adresse de livraison</h3>
           {% if deliveryAddresses|length == 0 %}
               <div class="alert alert-warning">
@@ -44,26 +44,39 @@
           {% endif %}
       </div>
 
-      <div class="col-md-5">
+      <div class="col-md-7">
         <div class="card">
 
             <div class="card-header bg-primary text-white">
                 <strong>🛒 Récapitulatif</strong>
             </div>
 
-            <ul class="list-group list-group-flush">
-                {% for item in items %}
-                    <li class="list-group-item d-flex justify-content-between">
-                      <span>{{ item.product.name }} × {{ item.quantity }}</span>
-                      <span>{{ (item.product.priceTtc * item.quantity)|number_format(2,',', ' ') }} €</span>
-                    </li>
-                {% endfor %}
-            </ul>
+            <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Quantité</th>
+                            <th>Prix TTC</th>
+                            <th>Total TTC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set total = 0 %}
+                        {% for item in items %}
+                            <tr>
+                                <td>{{ item.product.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.product.priceTtc }} €</td>
+                                <td>{{ (item.product.priceTtc * item.quantity)|number_format(2,',', ' ') }} €</td>
+                            </tr>
+                            {% set total = total + (item.product.priceTtc) *(item.quantity) %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h4 class="text-end">
+                    Total TTC : <strong>{{ total|number_format(2, ',', ' ') }}€</strong>
+                </h4>
 
-            <div class="card-footer d-flex justify-content-between">
-                <strong>Total</strong>
-                <strong class="text-primary h5">{{ total|number_format(2, ',', ' ') }}€</strong>
-            </div>
         </div>
       </div>
 

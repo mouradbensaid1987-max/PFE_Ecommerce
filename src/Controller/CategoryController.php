@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryController extends AbstractController
 {
-  #[Route('/categorie/{slug}', name: 'app_category_show')]
+  #[Route('/categorie/{id}', name: 'app_category_show')]
   public function show(Category $category, ProductRepository $productRepository): Response
   {
     $products = $productRepository->findBy([

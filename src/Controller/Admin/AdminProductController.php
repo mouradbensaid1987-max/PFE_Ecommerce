@@ -3,16 +3,17 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
-use App\Form\ProductFormType;
 use App\Entity\ProductImage;
+use App\Form\ProductFormType;
+use App\Repository\OrderItemRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Knp\Component\Pager\PaginatorInterface;
 
 
 #[IsGranted('ROLE_ADMIN')]
@@ -86,13 +87,25 @@ class AdminProductController extends AbstractController
 
 
     #[Route('/{id}/delete', name: 'app_admin_product_delete', methods: ['POST'])]
-    public function delete(Product $product, Request $request, EntityManagerInterface $em):Response
+    public function delete(Product $product, Request $request, EntityManagerInterface $em,OrderItemRepository $orderItemRepository ):Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) 
           {
+            $item = $orderItemRepository->findBy([
+                'product' => $product,
+            ]);
+            if($item)
+              {
+                $product->setIsActive(false);
+                $em->flush();
+                $this->addFlash('success', 'Le produit a été désactivé car il est utilisé dans une commande.');
+
+              }else{
                 $em->remove($product);
                 $em->flush();
                 $this->addFlash('success', 'Produit supprimé');
+              }
+
           }
       return $this->redirectToRoute('app_admin_product_index');
 

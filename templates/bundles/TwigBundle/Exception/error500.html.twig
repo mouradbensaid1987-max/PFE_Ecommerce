@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur serveur{% endblock %}
+
+{% block body %}
+
+<div class="text-center py-5">
+
+    <h1 class="display-1 text-danger">500</h1>
+
+    <p class="lead">Oups, une erreur est survenue. Réessayez plus tard.</p>
+
+    <a href="{{ path('app_home') }}" class="btn btn-primary">← Retour à l'accueil</a>
+
+</div>
+
+{% endblock %}

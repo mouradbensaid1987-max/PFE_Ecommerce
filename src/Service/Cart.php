@@ -26,9 +26,11 @@ class Cart
                 }
 
             $total = array_sum(array_map(function($item){
+          
                 return $item['product']->getPriceTtc() * $item['quantity'];
                 },$cartWhitData
                 ));
+
 
             return [
                 'cart'=>$cartWhitData,

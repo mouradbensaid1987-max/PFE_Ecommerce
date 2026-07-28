@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande {{ order.reference }}{% endblock %}
+
+{% block body %}
+
+<h1>Commande {{ order.reference }}</h1>
+<p class="text-muted">Passée le {{ order.createdAt|date('d/m/Y à H:i') }}</p>
+
+
+<div class="row mt-3">
+    <div class="col-md-7">
+        <h3>Articles</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Ref</th>
+                    <th>Produit</th>
+                    <th>Qté</th>
+                    <th>Prix</th>
+                    <th>Sous-total</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in order.items %}
+                    <tr>
+                        <td>{{ item.product.ref }}</td>
+                        <td>
+                            <a href="{{ path('app_product_show', {id: item.product.id}) }}">{{ item.product.name }}</a>
+                        </td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.priceTtc|number_format(2, ',', ' ') }} €</td>
+                        <td>{{ (item.priceTtc * item.quantity)|number_format(2, ',', ' ') }}€</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <th colspan="4" class="text-end">Total</th>
+                    <th class="text-primary">{{ order.totalTtc|number_format(2, ',', ' ') }}€</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+
+
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header">
+                <strong>📦 Livraison</strong>
+            </div>
+
+            <div class="card-body">
+                {{ order.deliveryFirstName }} {{ order.deliveryLastName }}  <br>
+                {{ order.deliveryStreet }}  <br>
+                {{ order.deliveryPostalCode }} {{ order.deliveryCity }}  <br>
+                {{ order.deliveryCountry }}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<a href="{{ path('app_admin_order_index') }}" class="btn btn-secondary mt-3">← Retourner</a>
+{% if order.status in ['paid', 'shipped', 'delivered'] %}
+    <a href="{{ path('app_facture', {id: order.id}) }}" class="btn btn-outline-success mt-3">
+        Télécharger la facture
+    </a>
+{% endif %}
+
+{% endblock %}

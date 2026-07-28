@@ -34,12 +34,11 @@ final class ProductController extends AbstractController
 
 
 
-    #[Route('/produit/{slug}', name: 'app_product_show')]
+    #[Route('/produit/{id}', name: 'app_product_show')]
     public function show(Product $product, CategoryRepository $categoryRepository): Response
     {
         return $this->render('product/show.html.twig', [
         'product' => $product,
-        'categories' => $categoryRepository->findAll(),
         ]);
     }
 }

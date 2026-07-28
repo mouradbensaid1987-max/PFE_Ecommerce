@@ -14,11 +14,11 @@ class OrderItem
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 200)]
-    private ?string $productName = null;
-
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $priceTtc = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
+    private ?string $tva = null;
 
     #[ORM\Column]
     private ?int $quantity = null;
@@ -27,27 +27,21 @@ class OrderItem
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $orderRef = null;
 
+    #[ORM\ManyToOne(inversedBy: 'orderItems')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Product $product = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getProductName(): ?string
-    {
-        return $this->productName;
-    }
-
-    public function setProductName(string $productName): static
-    {
-        $this->productName = $productName;
-
-        return $this;
-    }
 
     public function getPriceTtc(): ?string
     {
         return $this->priceTtc;
     }
+    
 
     public function setPriceTtc(string $priceTtc): static
     {
@@ -76,6 +70,30 @@ class OrderItem
     public function setOrderRef(?Order $orderRef): static
     {
         $this->orderRef = $orderRef;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Product $product): static
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
+    public function getTva(): ?string
+    {
+        return $this->tva;
+    }
+ 
+    public function setTva(String $t): static
+    {
+        $this->tva = $t;
 
         return $this;
     }

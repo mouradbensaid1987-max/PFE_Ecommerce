@@ -45,8 +45,9 @@
               <th>Date</th>
               <th>Client</th>
               <th>Total</th>
-              <th>Statut</th>
+              <th class="text-center">Statut</th>
               <th>Action</th>
+              <th></th>
           </tr>
     </thead>
     <tbody>
@@ -56,7 +57,21 @@
                   <td>{{ o.createdAt|date('d/m/Y H:i') }}</td>
                   <td>{{ o.user.email }}</td>
                   <td>{{ o.totalTtc|number_format(2, ',', ' ') }} €</td>
-                  <td>{{ o.status }}</td>
+                  <td class="text-center">
+
+                    {% if o.status == 'paid' %}
+                      <h5><span class="badge text-dark text-bg-info">Payée</span></h5>
+                    {% elseif o.status == 'shipped' %}
+                      <h5><span class="badge text-dark text-bg-info">Expédiée</span></h5>
+                    {% elseif o.status == 'delivered' %}
+                      <h5><span class="badge text-dark text-bg-info">Livrée</span></h5>
+                    {% elseif o.status == 'cancelled' %}
+                      <h5><span class="badge text-dark text-bg-danger">Annulée</span></h5>
+                    {% elseif o.status == 'pending' %}
+                      <h5><span class="badge text-dark text-bg-warning">En attente</span></h5>
+                    {% endif %}
+                  
+                  </td>
                   <td>
                       <form method="post" action="{{ path('app_admin_order_status', {id:o.id}) }}" class="d-flex gap-1">
                         <select name="status" class="form-select form-select-sm">
@@ -68,6 +83,10 @@
                         </select>
                         <button class="btn btn-sm btn-primary">↻</button>
                       </form>
+                  </td>
+                  <td>
+                  <a  href="{{ path('app_admin_order_show', {id: o.id}) }}"
+                    class="btn btn-sm btn-outline-primary">Détails</a>
                   </td>
             </tr>
         {% endfor %}

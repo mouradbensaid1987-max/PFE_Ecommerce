@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page introuvable{% endblock %}
+
+{% block body %}
+
+<div class="text-center py-5">
+
+    <h1 class="display-1 text-primary">404</h1>
+
+    <p class="lead">Désolé, cette page n'existe pas.</p>
+
+    <a href="{{ path('app_home') }}" class="btn btn-primary">← Retour à l'accueil</a>
+    
+</div>
+
+{% endblock %}

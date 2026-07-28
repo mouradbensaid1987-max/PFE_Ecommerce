@@ -27,7 +27,7 @@
           {% for item in items %}
             <tr>
               <td>
-                <a href="{{ path('app_product_show', {slug: item.product.slug}) }}">{{ item.product.name }}</a>
+                <a href="{{ path('app_product_show', {id: item.product.id}) }}">{{ item.product.name }}</a>
               </td>
 
               <td>

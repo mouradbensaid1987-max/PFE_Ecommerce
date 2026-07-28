@@ -20,7 +20,7 @@
       <div class="row g-3">
         {% for product in products %}
           <div class="col-md-3">
-            <a href="{{ path('app_product_show',{slug: product.slug}) }}" class="text-decoration-none text-reset">
+            <a href="{{ path('app_product_show',{id: product.id}) }}" class="text-decoration-none text-reset">
               <div class="card h-100">
                 <div class="card-body">
                   <h6 class="card-title">{{ product.name }}</h6>

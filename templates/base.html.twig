@@ -12,6 +12,7 @@
         {% endblock %}
         
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  
 
 	</head>
 
@@ -40,7 +41,7 @@
                 <ul class="dropdown-menu">
                   {% for cat in category_repository.findAll() %}
                     <li>
-                      <a class="dropdown-item" href="{{ path('app_category_show', {slug: cat.slug}) }}"> {{ cat.name }}</a>
+                      <a class="dropdown-item" href="{{ path('app_category_show', {id: cat.id}) }}"> {{ cat.name }}</a>
                     </li>
                   {% endfor %}
                 </ul>
@@ -72,6 +73,10 @@
                         <li><a class="dropdown-item" href="{{ path('app_address_list') }}">Mes adresses</a></li>
                         <li><a class="dropdown-item" href="{{ path('app_order_history') }}">Mes commandes</a></li>
                         <li><a class="dropdown-item" href="{{ path('app_favorites') }}">❤️ Mes favoris</a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ path('app_admin_dashboard') }}"><i class="bi bi-speedometer2"></i> Administration</a></li>
+                        {% endif %}
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a></li>
                       </ul>

@@ -1,0 +1,36 @@
+<h1 style="color:#333; font-family: Arial, sans-serif;">Merci pour votre commande !</h1>
+
+<p style="font-family: Arial, sans-serif; font-size: 14px;">
+    Bonjour {{ order.user.firstname }},
+</p>
+
+<p style="font-family: Arial, sans-serif; font-size: 14px;">
+    Votre commande <strong>#{{ order.reference }}</strong> a bien été payée.
+</p>
+
+<table style="width:100%; border-collapse: collapse; font-family: Arial, sans-serif;">
+    <thead>
+        <tr style="background-color:#cfe2ff; text-align:left;">
+            <th style="padding:8px; border:1px solid #dee2e6;">Produit</th>
+            <th style="padding:8px; border:1px solid #dee2e6;">Quantité</th>
+            <th style="padding:8px; border:1px solid #dee2e6;">Prix</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in order.items %}
+        <tr style="background-color:#e7f1ff;">
+            <td style="padding:8px; border:1px solid #dee2e6;">{{ item.product.name }}</td>
+            <td style="padding:8px; border:1px solid #dee2e6;">{{ item.quantity }}</td>
+            <td style="padding:8px; border:1px solid #dee2e6;">{{ item.product.getPriceTtc() }} €</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p style="font-family: Arial, sans-serif; font-size: 14px;">
+    <strong>Total TTC : {{ order.totalTtc }} €</strong>
+</p>
+
+<p style="font-family: Arial, sans-serif; font-size: 14px;">
+    Merci de votre confiance !
+</p>

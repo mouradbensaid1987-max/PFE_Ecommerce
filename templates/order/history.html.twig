@@ -29,19 +29,21 @@
             <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
             <td>{{ order.items|length }}</td>
             <td>{{ order.totalTtc|number_format(2, ',', ' ') }} €</td>
-            <td>
-                {% if order.status == 'pending' %}
-                    <span class="badge bg-warning">En attente</span>
-                {% elseif order.status == 'paid' %}
-                    <span class="badge bg-info">Payée</span>
-                {% elseif order.status == 'shipped' %}
-                    <span class="badge bg-primary">Expédiée</span>
-                {% elseif order.status == 'delivered' %}
-                    <span class="badge bg-success">Livrée</span>
-                {% endif %}
+            <td >
+                    {% if order.status == 'paid' %}
+                      <h5><span class="badge text-dark text-bg-info">Payée</span></h5>
+                    {% elseif order.status == 'shipped' %}
+                      <h5><span class="badge text-dark text-bg-info">Expédiée</span></h5>
+                    {% elseif order.status == 'delivered' %}
+                      <h5><span class="badge text-dark text-bg-info">Livrée</span></h5>
+                    {% elseif order.status == 'cancelled' %}
+                      <h5><span class="badge text-dark text-bg-danger">Annulée</span></h5>
+                    {% elseif order.status == 'pending' %}
+                      <h5><span class="badge text-dark text-bg-warning">En attente</span></h5>
+                    {% endif %}
             </td>
             <td>
-                <a  href="{{ path('app_order_show', {ref: order.reference}) }}"
+                <a  href="{{ path('app_order_show', {id: order.id}) }}"
                     class="btn btn-sm btn-outline-primary">Détails</a>
             </td>
         </tr>

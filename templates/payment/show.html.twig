@@ -20,15 +20,23 @@
             {{ order.deliveryPostalCode }} {{ order.deliveryCity }}
         </p>
         <hr>
-        <div class="alert alert-info">
-            ℹ️ Mode démo : aucun vrai paiement n'est effectué.
+
+        <div class="card-body">
+
+            {{ form_start(form) }}
+                <h5>Choisir le mode de payement</h5> 
+                {{ form_row(form.typePaiement) }}
+                        
+                <button data-turbo="false" class="btn btn-primary btn-lg w-100">
+                    ✓ Payer {{ order.totalTtc|number_format(2, ',', ' ') }} €
+                </button>
+
+            {{ form_end(form) }}
+
+
         </div>
 
-        <form method="post" action="{{ path('app_payment_pay', {ref: order.reference}) }}">
-            <button class="btn btn-success btn-lg w-100">
-                  ✓ Payer {{ order.totalTtc|number_format(2, ',', ' ') }} €
-            </button>
-          </form>
+        
 
     </div>
 </div>
