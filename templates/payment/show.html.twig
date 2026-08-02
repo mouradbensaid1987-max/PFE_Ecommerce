@@ -4,49 +4,85 @@
 
 {% block body %}
 
-<h1>💳 Paiement</h1>
+<h1 class="mb-4"><i class="bi bi-credit-card me-2"></i>Paiement</h1>
 
-<div class="card mt-3">
-    <div class="card-body">
-        <p><strong>Commande :</strong> {{ order.reference }}</p>
-        <p>
-            <strong>Montant à payer :</strong>
-            <span class="text-primary h4">{{ order.totalTtc|number_format(2, ',', ' ') }}€ </span>
-        </p>
-        <p>
-            <strong>Livraison :</strong><br>
-            {{ order.deliveryFirstName }} {{ order.deliveryLastName }}<br>
-            {{ order.deliveryStreet }}<br>
-            {{ order.deliveryPostalCode }} {{ order.deliveryCity }}
-        </p>
-        <hr>
+<div class="row g-4">
 
-        <div class="card-body">
+    {# ===================== Colonne récapitulatif commande ===================== #}
+    <div class="col-lg-7">
 
-            {{ form_start(form) }}
-                <h5>Choisir le mode de payement</h5> 
-                {{ form_row(form.typePaiement) }}
-                        
-                <button data-turbo="false" class="btn btn-primary btn-lg w-100">
-                    ✓ Payer {{ order.totalTtc|number_format(2, ',', ' ') }} €
-                </button>
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white d-flex align-items-center justify-content-between">
+                <strong>Commande</strong>
+                <span class="badge bg-secondary-subtle text-secondary-emphasis">
+                    {{ order.reference }}
+                </span>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Sous-total TTC</span>
+                        <span>{{ (order.totalTtc - order.shippingCost)|number_format(2, ',', ' ') }} €</span>
+                    </li>
+                    <li class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">
+                            <i class="bi bi-truck me-1"></i>Frais de livraison
+                        </span>
+                        {% if order.shippingCost == 0 %}
+                            <span class="badge bg-success-subtle text-success-emphasis">Offerts</span>
+                        {% else %}
+                            <span>{{ order.shippingCost|number_format(2, ',', ' ') }} €</span>
+                        {% endif %}
+                    </li>
 
-            {{ form_end(form) }}
+                    <li><hr class="my-2"></li>
 
-
+                    <li class="d-flex justify-content-between align-items-center">
+                        <span class="h5 mb-0">Montant à payer</span>
+                        <span class="h4 mb-0 text-primary fw-bold">{{ order.totalTtc|number_format(2, ',', ' ') }} €</span>
+                    </li>
+                </ul>
+            </div>
         </div>
 
-        
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white">
+                <strong>Adresse de livraison</strong>
+            </div>
+            <div class="card-body">
+                <p class="mb-1 fw-medium">{{ order.deliveryFirstName }} {{ order.deliveryLastName }}</p>
+                <p class="mb-1 text-muted">{{ order.deliveryStreet }}</p>
+                <p class="mb-0 text-muted">{{ order.deliveryPostalCode }} {{ order.deliveryCity }}</p>
+            </div>
+        </div>
 
     </div>
+
+    {# ===================== Colonne paiement ===================== #}
+    <div class="col-lg-5">
+        <div class="card shadow-sm border-0" style="position: sticky; top: 1rem;">
+            <div class="card-header bg-primary text-white">
+                <strong>Mode de paiement</strong>
+            </div>
+            <div class="card-body">
+
+                
+
+                {{ form_start(form) }}
+                    {{ form_row(form.typePaiement) }}
+
+                    <button data-turbo="false" class="btn btn-success btn-lg w-100 mt-3">
+                        Payer {{ order.totalTtc|number_format(2, ',', ' ') }} €
+                    </button>
+                {{ form_end(form) }}
+
+                <p class="text-muted small text-center mt-3 mb-0">
+                    Paiement sécurisé
+                </p>
+            </div>
+        </div>
+    </div>
+
 </div>
-
-
-
-
-
-
-
-
 
 {% endblock %}

@@ -19,7 +19,7 @@ class MessageFormType extends AbstractType
             
             ->add('content', TextareaType::class, [
                 'label' => 'Votre message',
-                'attr' => ['rows' => 5],
+                'attr' => ['rows' => 10],
                 ])
             ;
     }

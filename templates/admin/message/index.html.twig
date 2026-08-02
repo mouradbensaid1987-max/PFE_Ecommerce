@@ -4,28 +4,36 @@
 
 <h1>✉️ Messages des clients</h1>
 
-{% for m in messages %}
-    <div class="card mt-3">
-        <div class="card-header d-flex justify-content-between">
-            <span>
-                <strong>{{ m.subject }}</strong> — {{ m.user.email }}
-            </span>
-            <span class="badge bg-{{ m.status == 'answered' ? 'success' : 'warning' }}">
-                {{ m.status == 'answered' ? 'Répondu' : 'En attente' }}
-            </span>
-        </div>
+{% if messages is empty %}
+      <div class="alert alert-light border text-center py-5">
+          <p class="mb-0 text-muted">Aucun message pour le moment.</p>
+      </div>
+{% else %}
 
-        <div class="card-body">
-            <p>{{ m.content }}</p>
-            <form method="post" action="{{ path('app_admin_message_reply', {id: m.id}) }}">
-                <textarea name="reply" class="form-control mb-2" rows="2" placeholder="Votre réponse...">
-                        {{ m.reply }}
-                </textarea>
-                <button class="btn btn-sm btn-primary">Répondre</button>
-            </form>
-        </div>
+    {% for m in messages %}
+        <div class="card mt-3">
+            <div class="card-header d-flex justify-content-between">
+                <span>
+                    <strong>{{ m.subject }}</strong> — {{ m.user.firstName }} {{ m.user.lastName }} — {{ m.user.email }}
+                </span>
+                    {% if m.status == 'answered' %}
+                        <span class="badge text-dark bg-success">Répondu</span>
+                    {% else %}
+                        <span class="badge text-dark bg-warning">En attente</span>
+                    {% endif %}
+            </div>
 
-    </div>
-{% endfor %}
+            <div class="card-body">
+                <p>Message client : {{ m.content }}</p>
+                <form method="post" action="{{ path('app_admin_message_reply', {id: m.id}) }}">
+                    <textarea name="reply" class="form-control mb-2" rows="6" placeholder="Ecrivez votre réponse ici...">{{ m.reply|default('') }}</textarea>
+                    <button class="btn btn-sm btn-primary">Répondre</button>
+                </form>
+            </div>
+
+        </div>
+    {% endfor %}
+
+{% endif %}
 
 {% endblock %}

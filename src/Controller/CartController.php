@@ -22,7 +22,9 @@ final class CartController extends AbstractController
 
         return $this->render('cart/index.html.twig', [
             'items'=>$data['cart'],
-            'total'=>$data['total'] 
+            'total'=>$data['total'],
+            'shippingFee'=> $data['shippingFee'],
+            'totalWithShipping' => $data['totalWithShipping'],
         ]);
     }
 

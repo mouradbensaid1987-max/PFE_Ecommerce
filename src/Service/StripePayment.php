@@ -53,6 +53,24 @@ class StripePayment
               'payment_method_types' => [$p],
               'cancel_url' => 'https://127.0.0.1:8000/pay/cancel',
               'success_url' => 'https://127.0.0.1:8000/pay/success',
+
+
+              'shipping_options' => 
+                [
+                  [
+                    'shipping_rate_data' => 
+                    [
+                        'type' => 'fixed_amount',
+                        'fixed_amount' => [
+                            'amount' => $order->getShippingCost() * 100, // en centimes
+                            'currency' => 'eur',
+                        ],
+                        'display_name' => 'Frais de livraison',
+                        
+                    ],
+                  ],
+                ],
+
               'payment_intent_data'=>
                 [
                     'metadata' => //très important pour plus tard on peux stocké ['user_id' => 5, 'order_id' => 123]

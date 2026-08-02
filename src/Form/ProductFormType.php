@@ -40,10 +40,10 @@ class ProductFormType extends AbstractType
             ])
             ->add('productImages', CollectionType::class, [
                   'entry_type' => ProductImageFormType::class,
+                  'by_reference' => false,
+                  'entry_options' => ['label' => false],
                   'allow_add' => true,
                   'allow_delete' => true,
-                  'by_reference' => false,
-                  'label' => false,
                   'attr' => ['class' => 'img-fluid my-2'],
             ])
         ;

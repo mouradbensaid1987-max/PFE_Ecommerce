@@ -37,6 +37,9 @@ class Order
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $totalTtc = null;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $shippingCost = null;
+
     #[ORM\Column(length: 100)]
     private ?string $deliveryFirstName = null;
 
@@ -121,6 +124,18 @@ class Order
     public function setTotalTtc(string $totalTtc): static
     {
         $this->totalTtc = $totalTtc;
+
+        return $this;
+    }
+    public function getShippingCost(): ?string
+    {
+        return $this->shippingCost;
+    }
+
+    
+    public function setShippingCost(string $shippingCost): static
+    {
+        $this->shippingCost = $shippingCost;
 
         return $this;
     }

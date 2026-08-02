@@ -38,6 +38,15 @@
 
             <tfoot>
                 <tr>
+                    <th colspan="4" class="text-end">Sous-total</th>
+                    <th>{{ (order.totalTtc - order.shippingCost)|number_format(2, ',', ' ') }}€</th>
+                </tr>
+                <tr>
+                    <th colspan="4" class="text-end">Frais de livraison</th>
+                    <th>{{ order.shippingCost|number_format(2, ',', ' ') }}€</th>
+                </tr>
+
+                <tr>
                     <th colspan="4" class="text-end">Total</th>
                     <th class="text-primary">{{ order.totalTtc|number_format(2, ',', ' ') }}€</th>
                 </tr>

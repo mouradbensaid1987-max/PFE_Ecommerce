@@ -21,10 +21,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class PaymentController extends AbstractController
 {
 
-  #[Route('/payment/{ref}', name: 'app_payment')]
-  public function show(string $ref, OrderRepository $repo, StripePayment $payment, Request $request): Response
+  #[Route('/payment/{id}', name: 'app_payment')]
+  public function show(string $id, OrderRepository $repo, StripePayment $payment, Request $request): Response
   {
-      $order = $repo->findOneBy(['reference' => $ref, 'user' => $this->getUser()]);
+      $order = $repo->findOneBy(['id' => $id, 'user' => $this->getUser()]);
 
       if (!$order) 
         {

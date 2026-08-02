@@ -43,7 +43,9 @@ class OrderController extends AbstractController
       return $this->render('order/checkout.html.twig', [
             'items'=>$data['cart'],
             'total'=>$data['total'],
-            'deliveryAddresses' => $deliveryAddresses
+            'deliveryAddresses' => $deliveryAddresses,
+            'shippingFee'=> $data['shippingFee'],
+            'totalWithShipping' => $data['totalWithShipping'],
         ]);
     }
 
@@ -65,7 +67,8 @@ class OrderController extends AbstractController
 
           $order = new Order();
           $order->setUser($this->getUser());
-          $order->setTotalTtc((string) $data['total']);
+          $order->setShippingCost((string) $data['shippingFee']);
+          $order->setTotalTtc((string) $data['totalWithShipping']);
           $order->setStatus(Order::STATUS_PENDING);
 
           $order->setDeliveryFirstName($address->getFirstName());
@@ -88,7 +91,7 @@ class OrderController extends AbstractController
           $em->persist($order);
           $em->flush();
           
-        return $this->redirectToRoute('app_payment', ['ref' => $order->getReference()]);
+        return $this->redirectToRoute('app_payment', ['id' => $order->getId()]);
 
     }
 

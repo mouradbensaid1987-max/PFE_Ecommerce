@@ -40,6 +40,11 @@ body{
   box-shadow: 0 6px 16px rgba(30, 74, 138, 0.15);
 }
 
+.product-thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
 
 
 

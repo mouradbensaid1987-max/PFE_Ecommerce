@@ -13,9 +13,11 @@
         <div class="card mt-3">
             <div class="card-header d-flex justify-content-between">
                 <strong>{{ m.subject }}</strong>
-                <span class="badge text-dark bg-{{ m.status == 'answered' ? 'success' : 'warning' }}">
-                      {{ m.status == 'answered' ? 'Répondu' : 'En attente' }}
-                </span>
+                {% if m.status == 'answered' %}
+                    <span class="badge text-dark bg-success">Répondu</span>
+                {% else %}
+                    <span class="badge text-dark bg-warning">En attente</span>
+                {% endif %}
             </div>
 
             <div class="card-body">
