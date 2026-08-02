@@ -38,6 +38,27 @@ class Product
     #[ORM\Column]
     private ?bool $isActive = null;
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $materiau = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $diametreMm = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $longueurMm = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $typeTete = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $typeEmpreinte = null;
+
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $unite = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $quantiteConditionnement = null;
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
@@ -265,4 +286,89 @@ class Product
 
         return $this;
     }
+
+    public function getMateriau(): ?string
+    {
+        return $this->materiau;
+    }
+
+    public function setMateriau(?string $materiau): static
+    {
+        $this->materiau = $materiau;
+
+        return $this;
+    }
+
+    public function getDiametreMm(): ?string
+    {
+        return $this->diametreMm;
+    }
+
+    public function setDiametreMm(?string $diametreMm): static
+    {
+        $this->diametreMm = $diametreMm;
+
+        return $this;
+    }
+
+    public function getLongueurMm(): ?int
+    {
+        return $this->longueurMm;
+    }
+
+    public function setLongueurMm(?int $longueurMm): static
+    {
+        $this->longueurMm = $longueurMm;
+
+        return $this;
+    }
+
+    public function getTypeTete(): ?string
+    {
+        return $this->typeTete;
+    }
+
+    public function setTypeTete(?string $typeTete): static
+    {
+        $this->typeTete = $typeTete;
+
+        return $this;
+    }
+
+    public function getTypeEmpreinte(): ?string
+    {
+        return $this->typeEmpreinte;
+    }
+
+    public function setTypeEmpreinte(?string $typeEmpreinte): static
+    {
+        $this->typeEmpreinte = $typeEmpreinte;
+
+        return $this;
+    }
+
+    public function getUnite(): ?string
+    {
+        return $this->unite;
+    }
+
+    public function setUnite(?string $unite): static
+    {
+        $this->unite = $unite;
+
+        return $this;
+    }
+
+    public function getQuantiteConditionnement(): ?int
+    {
+        return $this->quantiteConditionnement;
+    }
+
+    public function setQuantiteConditionnement(?int $quantiteConditionnement): static
+    {
+        $this->quantiteConditionnement = $quantiteConditionnement;
+        
+        return $this;
+    }
+
 }
