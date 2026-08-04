@@ -26,7 +26,7 @@ final class ProductController extends AbstractController
       );
 
         return $this->render('product/list.html.twig', [
-          'categories' => $categoryRepository->findAll(),
+        //  'categories' => $categoryRepository->findAll(),
           'products' => $products,
           'search' => $search,
         ]);

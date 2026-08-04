@@ -7,14 +7,14 @@
 {% block body %}
 
 	<div class="bg-primary text-white p-5 rounded mb-4">
-		<h1 class="display-4">Bienvenue sur ma boutique</h1>
-		<p class="lead">Découvrez bientôt notre catalogue de produits.</p>
+		<h1 class="display-4">Quincaillerie Pro</h1>
+		<p class="lead">Vis, boulons, chevilles, clous et outillage : tout pour vos travaux et votre bricolage.</p>
 	</div>
 
     <h2 class="mb-3">Nos catégories</h2>
     <div class="row g-3">
       {% for cat in categories %}
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-6">
           <a href="{{ path('app_category_show', {id: cat.id}) }}"
              class="text-decoration-none text-reset">
                 <div class="card h-100">
@@ -29,17 +29,36 @@
         <p class="text-muted">Aucune catégorie pour l'instant.</p>
       {% endfor %}
     </div>
+    <br>
 
 
 
     <h2 class="mb-3">Nos Produits</h2>
     <div class="row g-3">
       {% for product in products %}
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-6">
+
+
+
+
+
           <a href="{{ path('app_product_show',{id: product.id}) }}" class="text-decoration-none text-reset">
             <div class="card h-100">
+
+                <div class="product-image">
+                      {% if product.productImages|length > 0 %}
+                          <img  src="{{ vich_uploader_asset(product.productImages|first, 'imageFile') }}" 
+                                class="card-img-top product-img"
+                                alt="{{ product.name }}">
+                      {% else %}
+                          <div class="placeholder-img"></div>
+                      {% endif %}
+                </div>
+
+
               <div class="card-body">
                 <h6 class="card-title">{{ product.name }}</h6>
+
                 <p class="text-muted small mb-1">{{ product.category.name }}</p>
                 {% if product.diametreMm or product.longueurMm %}
                       <p class="text-muted small mb-1">
@@ -55,20 +74,21 @@
               </div>
             </div>
           </a>
+
+
+
+
+
+
+
+
+
+
+
         </div>
       {% endfor %}
     
     </div>
-
-
-
-
-
-
-
-	<div class="alert alert-info">
-		🚧 Le site est en construction. Catégories et produits arrivent dans les prochaines étapes !
-	</div>
 
 
 {% endblock %}

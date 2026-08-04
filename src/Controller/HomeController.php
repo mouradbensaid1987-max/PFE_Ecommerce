@@ -20,7 +20,7 @@ class HomeController extends AbstractController
             'products' => $productRepository->findBy(
               ['isActive' => true],
               ['createdAt'=> 'DESC'],
-              8
+              60
             ),
         ]);
     }

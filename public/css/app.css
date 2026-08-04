@@ -3,6 +3,11 @@
   --bs-primary-rgb: 30, 74, 138;
 }
 
+* {
+    box-sizing: border-box;
+}
+
+
 body{
   background-color: #f8f9fa;
 }
@@ -46,6 +51,48 @@ body{
     object-fit: cover;
 }
 
+.product-image {
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: #fff;
+}
 
+@media screen and (min-width: 575px) {
+      .product-image{
+          height: 260px;
+      }
+  }
+@media screen and (min-width: 768px) {
+      .product-image{
+          height: 230px;
+      }
+  }
+
+@media screen and (min-width: 1200px) {
+      .product-image{
+          height: 280px;
+      }
+  }
+
+@media screen and (min-width: 1400px) {
+      .product-image{
+          height: 310px;
+      }
+  }
+
+.product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.placeholder-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
 
