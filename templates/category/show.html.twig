@@ -9,37 +9,9 @@
 
   <div class="row g-3">
     {% for product in products %}
-      <div class="col-md-3">
-        <a href="{{ path('app_product_show', {id: product.id}) }}" class="text-decoration-none text-reset">
-          <div class="card h-100">
-            <div class="product-image">
-                      {% if product.productImages|length > 0 %}
-                          <img  src="{{ vich_uploader_asset(product.productImages|first, 'imageFile') }}" 
-                                class="card-img-top product-img"
-                                alt="{{ product.name }}">
-                      {% else %}
-                          <div class="placeholder-img"></div>
-                      {% endif %}
-            </div>
-            <div class="card-body">
-              <h6>{{ product.name }}</h6>
-
-              <p class="text-muted small mb-1">{{ product.category.name }}</p>
-                {% if product.diametreMm or product.longueurMm %}
-                      <p class="text-muted small mb-1">
-                      {% if product.diametreMm %}
-                        Ø {{ product.diametreMm }}
-                      {% endif %}
-                      {% if product.longueurMm %} 
-                        · {{ product.longueurMm }} mm
-                      {% endif %}
-                      </p>
-                  {% endif %}
-                <p class="text-primary fw-bold mb-0"> {{ product.priceTtc|number_format(2, ',', ' ') }} € </p>
-            </div>
-          </div>
-        </a>
-      </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            {% include 'components/_product_card.html.twig' with {product: product} %}
+        </div>
     {% else %}
       <p class="text-muted">Aucun produit dans cette catégorie.</p>
     {% endfor %}

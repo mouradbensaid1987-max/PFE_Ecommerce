@@ -6,12 +6,111 @@
 
 {% block body %}
     <h1 class="mb-4">Tous nos produits</h1>
-    <form class="mb-4" method="get" action="{{ path('app_product_list') }}">
-      <div class="input-group">
-        <input type="search" name="q" class="form-control" placeholder="Rechercher un produit..." value="{{ search }}">
-        <button class="btn btn-primary">🔍 Rechercher</button>
+
+    <form class="mb-4 p-3 border rounded bg-light" method="get" action="{{ path('app_product_list') }}">
+        <div class="row g-2 align-items-end">
+
+              <div class="col-md-3">
+                <label class="form-label small">Recherche</label>
+                <input type="search" name="q" class="form-control" placeholder="Nom, référence..." value="{{ filters.search }}">
+              </div>
+
+              <div class="col-md-2">
+                <label class="form-label small">Catégorie</label>
+                <select name="category" class="form-select">
+                  <option value="">Toutes</option>
+                  {% for cat in categories %}
+                    <option value="{{ cat.id }}" {{ filters.category == cat.id ? 'selected' : '' }}>{{ cat.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+          <div class="col-md-2">
+            <label class="form-label small">Matériau</label>
+            <select name="materiau" class="form-select">
+              <option value="">Tous</option>
+              {% for m in materiaux %}
+                <option value="{{ m }}" {{ filters.materiau == m ? 'selected' : '' }}>{{ m }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small">Diamètre</label>
+            <select name="diametreMm" class="form-select">
+              <option value="">Tous</option>
+              {% for d in diametres %}
+                <option value="{{ d }}" {{ filters.diametreMm == d ? 'selected' : '' }}>{{ d }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small">Type de tête</label>
+            <select name="typeTete" class="form-select">
+              <option value="">Tous</option>
+              {% for t in typesTete %}
+                <option value="{{ t }}" {{ filters.typeTete == t ? 'selected' : '' }}>{{ t }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small">Empreinte</label>
+            <select name="typeEmpreinte" class="form-select">
+              <option value="">Toutes</option>
+              {% for e in typesEmpreinte %}
+                <option value="{{ e }}" {{ filters.typeEmpreinte == e ? 'selected' : '' }}>{{ e }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small">Unité</label>
+            <select name="unite" class="form-select">
+              <option value="">Toutes</option>
+              {% for u in unites %}
+                <option value="{{ u }}" {{ filters.unite == u ? 'selected' : '' }}>{{ u }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small">Longueur min (mm)</label>
+            <input type="number" name="longueurMin" class="form-control" value="{{ filters.longueurMin }}">
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small">Longueur max (mm)</label>
+            <input type="number" name="longueurMax" class="form-control" value="{{ filters.longueurMax }}">
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-primary w-100"> Filtrer</button>
+          </div>
+          <div class="col-md-2">
+            <a href="{{ path('app_product_list') }}" class="btn btn-outline-secondary w-100">↺ Réinitialiser</a>
+          </div>
+        </div>
+      </form>
+
+    {% if filters.category or filters.materiau or filters.diametreMm or filters.typeTete or filters.typeEmpreinte or filters.unite %}
+      <div class="mb-3">
+        <span class="text-muted small">Filtres actifs :</span>
+        {% if filters.category %}
+          <span class="badge bg-secondary me-1">Catégorie</span>
+        {% endif %}
+        {% if filters.materiau %}
+          <span class="badge bg-secondary me-1">{{ filters.materiau }}</span>
+        {% endif %}
+        {% if filters.diametreMm %}
+          <span class="badge bg-secondary me-1">Ø
+            {{ filters.diametreMm }}</span>
+        {% endif %}
+        {% if filters.typeTete %}
+          <span class="badge bg-secondary me-1">{{ filters.typeTete }}</span>
+        {% endif %}
+        {% if filters.typeEmpreinte %}
+          <span class="badge bg-secondary me-1">{{ filters.typeEmpreinte }}</span>
+        {% endif %}
+        {% if filters.unite %}
+          <span class="badge bg-secondary me-1">{{ filters.unite }}</span>
+        {% endif %}
       </div>
-    </form>
+    {% endif %}
+
 
 
     {% if products.items|length == 0 %}
@@ -19,42 +118,8 @@
     {% else %}
       <div class="row g-3">
         {% for product in products %}
-          <div class="col-md-3">
-            <a href="{{ path('app_product_show',{id: product.id}) }}" class="text-decoration-none text-reset">
-              <div class="card h-100">
-
-              <div class="product-image">
-                      {% if product.productImages|length > 0 %}
-                          <img  src="{{ vich_uploader_asset(product.productImages|first, 'imageFile') }}" 
-                                class="card-img-top product-img"
-                                alt="{{ product.name }}">
-                      {% else %}
-                          <div class="placeholder-img"></div>
-                      {% endif %}
-                </div>
-
-
-                <div class="card-body">
-                  <h6 class="card-title">{{ product.name }}</h6>
-                  <p class="text-muted small mb-1">{{ product.category.name }}</p>
-                  {% if product.diametreMm or product.longueurMm %}
-                      <p class="text-muted small mb-1">
-                      {% if product.diametreMm %}
-                        Ø {{ product.diametreMm }}
-                      {% endif %}
-                      {% if product.longueurMm %} 
-                        · {{ product.longueurMm }} mm
-                      {% endif %}
-                      </p>
-                  {% endif %}
-
-                  <p class="text-primary fw-bold mb-0">
-                    {{ product.priceTtc|number_format(2, ',', ' ') }}
-                    €
-                  </p>
-                </div>
-              </div>
-            </a>
+          <div class="col-lg-3 col-md-4 col-sm-6">
+            {% include 'components/_product_card.html.twig' with {product: product} %}
           </div>
         {% endfor %}
       </div>

@@ -1,0 +1,53 @@
+<div class="card h-100 product-card shadow-sm">
+    <a href="{{ path('app_product_show',{id: product.id}) }}" class="text-decoration-none text-reset">
+        <div class="product-image position-relative">
+            {% if product.productImages|length > 0 %}
+                <img  src="{{ vich_uploader_asset(product.productImages|first, 'imageFile') }}" 
+                      class="card-img-top product-img"
+                      loading="lazy"
+                      decoding="async"
+                      alt="{{ product.name }}">
+            {% else %}
+                <div class="placeholder-img d-flex align-items-center justify-content-center">
+                    <span class="text-muted small">Pas d'image</span>
+                </div>
+            {% endif %}
+            {% if product.stock is defined and product.stock <= 0 %}
+                <span class="badge bg-danger position-absolute top-0 end-0 m-2">
+                    Rupture de stock
+                </span>
+            {% endif  %}
+        </div>
+
+        <div class="px-2 pt-2">
+            <h6 class="card-title mb-1 text-truncate">{{ product.name }}</h6>
+            <p class="text-muted small mb-1">{{ product.ref }}</p>
+            {% if product.diametreMm or product.longueurMm %}
+                  <p class="text-muted small mb-1">
+                  {% if product.diametreMm %}
+                    Ø {{ product.diametreMm }}
+                  {% endif %}
+                  {% if product.longueurMm %} 
+                    · {{ product.longueurMm }} mm
+                  {% endif %}
+                  </p>
+            {% else %}
+                
+            {% endif %}
+        </div>
+    </a>
+    <div class="card-body d-flex flex-column pt-0">
+        <p class="text-primary fw-bold mb-0"> {{ product.priceTtc|number_format(2, ',', ' ') }} € </p>
+
+        <form action="{{ path('app_cart_add', {id: product.id}) }}" method="post" class="mt-auto">
+            <button type="submit" class="btn btn-primary btn-sm w-100" {% if product.stock is defined and product.stock <= 0 %}disabled{% endif %}>
+                
+                {% if product.stock is defined and product.stock <= 0 %}
+                    Indisponible
+                {% else %}
+                    Ajouter au panier
+                {% endif %}
+            </button>
+        </form>
+    </div>
+</div>

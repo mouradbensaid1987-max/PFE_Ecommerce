@@ -7,9 +7,59 @@
     <a href="{{ path('app_admin_product_new') }}" class="btn btn-primary">➕ Nouveau</a>
 </div>
 
+<form method="get" action="{{ path('app_admin_product_index') }}" class="row g-2 align-items-end mb-3 p-3 border rounded bglight">
+
+      <div class="col-md-3">
+        <label class="form-label small">Recherche (nom, référence)</label>
+        <input type="search" name="q" class="form-control" value="{{ filters.search }}">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label small">Catégorie</label>
+        <select name="category" class="form-select">
+          <option value="">Toutes</option>
+              {% for cat in categories %}
+                <option value="{{ cat.id }}" {{ filters.category == cat.id ? 'selected' : '' }}>{{ cat.name }}</option>
+              {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label small">Matériau</label>
+        <select name="materiau" class="form-select">
+              <option value="">Tous</option>
+              {% for m in materiaux %}
+                <option value="{{ m }}" {{ filters.materiau == m ? 'selected' : '' }}>{{ m }}</option>
+              {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label small">Statut</label>
+        <select name="isActive" class="form-select">
+          <option value="">Tous</option>
+          <option value="1" {{ filters.isActive == '1' ? 'selected' : '' }}>Actif</option>
+          <option value="0" {{ filters.isActive == '0' ? 'selected' : '' }}>Inactif</option>
+        </select>
+      </div>
+
+      <div class="col-md-1 d-flex gap-1">
+          <button class="btn btn-primary" title="Filtrer">🔍</button>
+      </div>
+
+      <div class="col-12">
+        <a href="{{ path('app_admin_product_index') }}" class="btn btn-sm btn-outline-secondary">↺ Réinitialiser les filtres</a>
+      </div>
+
+</form>
+
+
+
 <table class="table">
     <thead>
         <tr>
+            <th>Img</th>
+            <th>Ref</th>
             <th>Nom</th>
             <th>Catégorie</th>
             <th>Prix HT</th>
@@ -21,6 +71,18 @@
     <tbody>
           {% for p in products %}
               <tr>
+                <td>
+                    <div class="admin-product-image">
+                        {% if p.productImages|length > 0 %}
+                            <img  src="{{ vich_uploader_asset(p.productImages|first, 'imageFile') }}"
+                                  class="admin-product-img"  
+                                  alt="{{ p.name }}">
+                        {% else %}
+                            <div class="placeholder-img"></div>
+                        {% endif %}
+                    </div>
+                </td>
+                <td>{{ p.ref }}</td>
                 <td>{{ p.name }}</td>
                 <td>{{ p.category.name }}</td>
                 <td>{{ p.priceHt }} €</td>

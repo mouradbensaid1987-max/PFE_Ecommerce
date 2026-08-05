@@ -19,7 +19,7 @@
 <div class="row g-4">
 
     {# ===================== Colonne produits ===================== #}
-    <div class="col-lg-8">
+    <div class="col-lg-9">
         <div class="card shadow-sm border-2">
             <div class="card-header bg-white d-flex align-items-center justify-content-between">
                 <strong>Articles</strong>
@@ -32,8 +32,10 @@
                 <table class="table align-middle mb-0">
                     <thead class="table-light">
                         <tr>
+                            <th>Img</th>
+                            <th>Ref</th>
                             <th>Produit</th>
-                            <th class="text-center" style="width:160px">Quantité</th>
+                            <th style="width:160px">Quantité</th>
                             <th class="text-end">Prix unitaire</th>
                             <th class="text-end">Sous-total</th>
                             <th class="text-end"></th>
@@ -42,6 +44,20 @@
                     <tbody>
                         {% for item in items %}
                             <tr>
+                                <td>
+                                    <a href="{{ path('app_product_show', {id: item.product.id}) }}">
+                                      <div class="admin-product-image">
+                                          {% if item.product.productImages|length > 0 %}
+                                              <img  src="{{ vich_uploader_asset(item.product.productImages|first, 'imageFile') }}"
+                                                    class="admin-product-img"  
+                                                    alt="{{ item.product.name }}">
+                                          {% else %}
+                                              <div class="placeholder-img"></div>
+                                          {% endif %}
+                                      </div>
+                                    </a>
+                                </td>
+                                <td>{{ item.product.ref }}</td>
                                 <td>
                                     <a href="{{ path('app_product_show', {id: item.product.id}) }}"
                                        class="text-decoration-none text-dark fw-medium">
@@ -52,7 +68,7 @@
                                 <td>
                                     <form method="post"
                                           action="{{ path('app_cart_update', {id: item.product.id}) }}"
-                                          class="d-flex justify-content-center gap-2">
+                                          class="d-flex gap-2">
                                         <input type="number"
                                                name="quantity"
                                                value="{{ item.quantity }}"
@@ -87,8 +103,8 @@
                     {% if items|length > 0 %}
                         <tfoot>
                             <tr class="table-light">
-                                <td colspan="3" class="text-end fw-semibold">Total TTC</td>
-                                <td class="text-end fw-bold fs-5">{{ total|number_format(2, ',', ' ') }} €</td>
+                                <td colspan="5" class="text-end fw-semibold">Total TTC</td>
+                                <td class="text-end fw-bold text-primary fs-5">{{ total|number_format(2, ',', ' ') }} €</td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -108,7 +124,7 @@
     </div>
 
     {# ===================== Colonne récapitulatif ===================== #}
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="card shadow-sm border-0" style="position: sticky; top: 1rem;">
             <div class="card-header bg-primary text-white">
                 <strong><i class="bi bi-receipt me-2"></i>Récapitulatif</strong>

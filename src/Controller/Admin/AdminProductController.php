@@ -7,6 +7,7 @@ use App\Entity\ProductImage;
 use App\Form\ProductFormType;
 use App\Repository\OrderItemRepository;
 use App\Repository\ProductRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,18 +23,29 @@ class AdminProductController extends AbstractController
 {
 
     #[Route('', name: 'app_admin_product_index')]
-    public function index(ProductRepository $productRepository, PaginatorInterface $paginator, Request $request): Response
+    public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, PaginatorInterface $paginator, Request $request): Response
     {
-        $data = $productRepository->findAll();
+
+        $filters = [
+              'search' => $request->query->get('q'),
+              'category' => $request->query->get('category'),
+              'materiau' => $request->query->get('materiau'),
+              'isActive' => $request->query->get('isActive'),
+          ];
+
+        $data = $productRepository->findFiltered($filters, false);
 
         $produits = $paginator->paginate(
-          $data,
-          $request->query->getInt('page', 1),
-          100
-      );
+              $data,
+              $request->query->getInt('page', 1),
+              20
+          );
 
         return $this->render('admin/product/index.html.twig', [
-          'products' => $produits
+          'products' => $produits,
+          'categories' => $categoryRepository->findAll(),
+          'materiaux' => $productRepository->findDistinctValues('materiau'),
+          'filters' => $filters,
           ]);
     }
 

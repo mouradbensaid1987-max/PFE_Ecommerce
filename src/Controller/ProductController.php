@@ -16,19 +16,43 @@ final class ProductController extends AbstractController
     #[Route('/product', name: 'app_product_list')]
     public function index(CategoryRepository $categoryRepository, ProductRepository $productRepository,PaginatorInterface $paginator, Request $request): Response
     {
-      $search = $request->query->get('q');
-      $data = $productRepository->findActiveProducts($search);
+        $filters = [
+              'search' => $request->query->get('q'),
+              'category' => $request->query->get('category'),
+              'materiau' => $request->query->get('materiau'),
+              'diametreMm' => $request->query->get('diametreMm'),
+              'typeTete' => $request->query->get('typeTete'),
+              'typeEmpreinte' => $request->query->get('typeEmpreinte'),
+              'unite' => $request->query->get('unite'),
+              'longueurMin' => $request->query->get('longueurMin'),
+              'longueurMax' => $request->query->get('longueurMax'),
+          ];
+
+    $data = $productRepository->findFiltered($filters, true);
+
+
+    //  $search = $request->query->get('q');
+    //  $data = $productRepository->findActiveProducts($search);
     
       $products = $paginator->paginate(
-          $data,
-          $request->query->getInt('page', 1),
-          16
-      );
+                    $data,
+                    $request->query->getInt('page', 1),
+                    20
+          );
 
         return $this->render('product/list.html.twig', [
-        //  'categories' => $categoryRepository->findAll(),
-          'products' => $products,
-          'search' => $search,
+
+            'categories' => $categoryRepository->findAll(),
+            'products' => $products,
+            'search' => $filters['search'],
+            'filters' => $filters,
+            'materiaux' => $productRepository->findDistinctValues('materiau'),
+            'diametres' => $productRepository->findDistinctValues('diametreMm'),
+            'typesTete' => $productRepository->findDistinctValues('typeTete'),
+            'typesEmpreinte' => $productRepository->findDistinctValues('typeEmpreinte'),
+            'unites' => $productRepository->findDistinctValues('unite'),
+
+        
         ]);
     }
 
