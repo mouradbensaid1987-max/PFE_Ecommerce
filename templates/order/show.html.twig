@@ -9,16 +9,16 @@
 
 
 <div class="row mt-3">
-    <div class="col-md-7">
+    <div class="col-md-9">
         <h3>Articles</h3>
-        <table class="table">
+        <table class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>Ref</th>
                     <th>Produit</th>
                     <th>Qté</th>
                     <th>Prix</th>
-                    <th>Sous-total</th>
+                    <th class="text-end pe-4">Sous-total</th>
                 </tr>
             </thead>
 
@@ -27,11 +27,11 @@
                     <tr>
                         <td>{{ item.product.ref }}</td>
                         <td>
-                            <a href="{{ path('app_product_show', {id: item.product.id}) }}">{{ item.product.name }}</a>
+                            {{ item.product.name }}
                         </td>
                         <td>{{ item.quantity }}</td>
                         <td>{{ item.priceTtc|number_format(2, ',', ' ') }} €</td>
-                        <td>{{ (item.priceTtc * item.quantity)|number_format(2, ',', ' ') }}€</td>
+                        <td class="text-end pe-4">{{ (item.priceTtc * item.quantity)|number_format(2, ',', ' ') }}€</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -39,16 +39,16 @@
             <tfoot>
                 <tr>
                     <th colspan="4" class="text-end">Sous-total</th>
-                    <th>{{ (order.totalTtc - order.shippingCost)|number_format(2, ',', ' ') }}€</th>
+                    <th class="text-end pe-4">{{ (order.totalTtc - order.shippingCost)|number_format(2, ',', ' ') }}€</th>
                 </tr>
                 <tr>
                     <th colspan="4" class="text-end">Frais de livraison</th>
-                    <th>{{ order.shippingCost|number_format(2, ',', ' ') }}€</th>
+                    <th class="text-end pe-4">{{ order.shippingCost|number_format(2, ',', ' ') }}€</th>
                 </tr>
 
                 <tr>
                     <th colspan="4" class="text-end">Total</th>
-                    <th class="text-primary">{{ order.totalTtc|number_format(2, ',', ' ') }}€</th>
+                    <th class="text-primary text-end pe-4">{{ order.totalTtc|number_format(2, ',', ' ') }}€</th>
                 </tr>
             </tfoot>
         </table>
@@ -56,7 +56,7 @@
 
 
 
-    <div class="col-md-5">
+    <div class="col-md-3">
         <div class="card">
             <div class="card-header">
                 <strong>📦 Livraison</strong>

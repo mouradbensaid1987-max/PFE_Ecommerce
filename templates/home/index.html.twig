@@ -6,43 +6,120 @@
 
 {% block body %}
 
-	<div class="bg-primary text-white p-5 rounded mb-4">
-		<h1 class="display-4">Quincaillerie Pro</h1>
-		<p class="lead">Vis, boulons, chevilles, clous et outillage : tout pour vos travaux et votre bricolage.</p>
-	</div>
+<div class="hero-quincaillerie text-white p-5 rounded mb-4 position-relative overflow-hidden">
+    <div class="hero-slide" style="background-image: url('{{ asset('images/aaa.webp') }}'); animation-delay: 0s;"></div>
+    <div class="hero-slide" style="background-image: url('{{ asset('images/aaa1.jpg') }}'); animation-delay: 5s;"></div>
+    <div class="hero-slide" style="background-image: url('{{ asset('images/aaa2.avif') }}'); animation-delay: 10s;"></div>
+    <div class="hero-slide" style="background-image: url('{{ asset('images/aaa3.avif') }}'); animation-delay: 15s;"></div>
+    <div class="hero-slide" style="background-image: url('{{ asset('images/aaa4.jpg') }}'); animation-delay: 20s;"></div>
 
-    <h2 class="mb-3">Nos catégories</h2>
-    <div class="row g-3">
-      {% for cat in categories %}
-        <div class="col-md-4 col-sm-6">
-          <a href="{{ path('app_category_show', {id: cat.id}) }}"
-             class="text-decoration-none text-reset">
-                <div class="card h-100">
-                  <div class="card-body">
-                    <h5 class="card-title text-primary">{{ cat.name }}</h5>
-                    <p class="card-text">{{ cat.description }}</p>
-                  </div>
-                </div>
-          </a>
-        </div>
-      {% else %}
-        <p class="text-muted">Aucune catégorie pour l'instant.</p>
-      {% endfor %}
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(30, 74, 138, 0.1);"></div>
+
+    <div class="position-relative">
+        <h1 class="display-4">Quincaillerie Pro</h1>
+        <p class="lead">Vis, boulons, chevilles, clous et outillage : tout pour vos travaux et votre bricolage.</p>
     </div>
-    <br>
 
+</div>
 
+{#------------------------------------------category---------------------------------------------------------------------- #}
+<div class="d-flex align-items-center">
+
+    <!-- Flèche gauche -->
+    <button class="carousel-control-prev position-static flex-shrink-0 w-auto px-2"
+            type="button"
+            data-bs-target="#productCarousel"
+            data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle"
+              aria-hidden="true"></span>
+    </button>
+
+    <!-- Carousel -->
+    <div id="productCarousel" class="carousel slide flex-grow-1 version-sm-plus">
+        <div class="carousel-inner">
+            {% for chunk in categories|batch(4) %}
+                <div class="carousel-item {{ loop.first ? 'active' : '' }}">
+
+                    <div class="row justify-content-center g-3">
+
+                        {% for cat in chunk %}
+                            <div class="col-md-3 col-sm-6">
+                                <a href="{{ path('app_category_show', {id: cat.id}) }}" class="text-decoration-none">
+                                  
+                                    <div class="card h-100 position-relative">
+                                        <div class="text-center rounded bg-primary bottom-0 start-0 end-0">
+                                            <p class="text-white fw-bold m-3">
+                                                {{ cat.name }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+      <!-- Carousel2 -->
+    <div id="productCarousel" class="carousel slide flex-grow-1 version-mobile">
+        <div class="carousel-inner">
+            {% for chunk in categories|batch(2) %}
+                <div class="carousel-item {{ loop.first ? 'active' : '' }}">
+
+                    <div class="row justify-content-center g-3">
+
+                        {% for cat in chunk %}
+                            <div class="col-6">
+                                <a href="{{ path('app_category_show', {id: cat.id}) }}" class="text-decoration-none">
+                                  
+                                    <div class="card h-100 position-relative">
+                                        <div class="text-center rounded bg-primary bottom-0 start-0 end-0">
+                                            <p class="text-white fw-bold m-3">
+                                                {{ cat.name }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+
+    <!-- Flèche droite -->
+    <button class="carousel-control-next position-static flex-shrink-0 w-auto px-2"
+            type="button"
+            data-bs-target="#productCarousel"
+            data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle"
+              aria-hidden="true"></span>
+    </button>
+
+</div>
+
+{#---------------------------------------Product------------------------------------------------------------- #}
 
     <h2 class="mb-3">Nos Produits</h2>
-    <div class="row g-3">
-      {% for product in products %}
-        <div class="col-lg-3 col-md-4 col-sm-6">
-            {% include 'components/_product_card.html.twig' with {product: product} %}
-        </div>
-      {% endfor %}
-    
+      <div class="version-sm-plus">
+        <div class="row g-3">
+        {% for product in products %}
+          <div class="col-lg-3 col-md-4 col-sm-6">
+              {% include 'components/_product_card.html.twig' with {product: product} %}
+          </div>
+        {% endfor %}
+      </div>
     </div>
-
+      <div class="version-mobile">
+        <div class="row g-3">
+          {% for product in products %}
+            {% include 'components/_product_card_smull.html.twig' with {product: product} %}
+          {% endfor %}
+        </div>
+      </div>
 
 {% endblock %}
 

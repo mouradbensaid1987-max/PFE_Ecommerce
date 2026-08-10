@@ -9,11 +9,12 @@
 
 
 <div class="row mt-3">
-    <div class="col-md-7">
+    <div class="col-md-9">
         <h3>Articles</h3>
-        <table class="table">
+        <table class="table align-middle mb-0">
             <thead>
                 <tr>
+                    
                     <th>Ref</th>
                     <th>Produit</th>
                     <th>Qté</th>
@@ -27,7 +28,7 @@
                     <tr>
                         <td>{{ item.product.ref }}</td>
                         <td>
-                            <a href="{{ path('app_product_show', {id: item.product.id}) }}">{{ item.product.name }}</a>
+                            {{ item.product.name }}
                         </td>
                         <td>{{ item.quantity }}</td>
                         <td>{{ item.priceTtc|number_format(2, ',', ' ') }} €</td>
@@ -47,7 +48,7 @@
 
 
 
-    <div class="col-md-5">
+    <div class="col-md-3">
         <div class="card">
             <div class="card-header">
                 <strong>📦 Livraison</strong>

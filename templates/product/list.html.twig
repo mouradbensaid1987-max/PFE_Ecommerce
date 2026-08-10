@@ -10,12 +10,12 @@
     <form class="mb-4 p-3 border rounded bg-light" method="get" action="{{ path('app_product_list') }}">
         <div class="row g-2 align-items-end">
 
-              <div class="col-md-3">
+              <div class="col-12 col-md-4">
                 <label class="form-label small">Recherche</label>
                 <input type="search" name="q" class="form-control" placeholder="Nom, référence..." value="{{ filters.search }}">
               </div>
 
-              <div class="col-md-2">
+              <div class="col-6  col-md-2">
                 <label class="form-label small">Catégorie</label>
                 <select name="category" class="form-select">
                   <option value="">Toutes</option>
@@ -24,7 +24,7 @@
                   {% endfor %}
                 </select>
               </div>
-          <div class="col-md-2">
+          <div class="col-6 col-md-2">
             <label class="form-label small">Matériau</label>
             <select name="materiau" class="form-select">
               <option value="">Tous</option>
@@ -33,7 +33,7 @@
               {% endfor %}
             </select>
           </div>
-          <div class="col-md-2">
+          <div class="col-6 col-md-2">
             <label class="form-label small">Diamètre</label>
             <select name="diametreMm" class="form-select">
               <option value="">Tous</option>
@@ -42,7 +42,7 @@
               {% endfor %}
             </select>
           </div>
-          <div class="col-md-2">
+          <div class="col-6 col-md-2">
             <label class="form-label small">Type de tête</label>
             <select name="typeTete" class="form-select">
               <option value="">Tous</option>
@@ -51,7 +51,7 @@
               {% endfor %}
             </select>
           </div>
-          <div class="col-md-2">
+          <div class="col-6 col-md-2">
             <label class="form-label small">Empreinte</label>
             <select name="typeEmpreinte" class="form-select">
               <option value="">Toutes</option>
@@ -60,7 +60,7 @@
               {% endfor %}
             </select>
           </div>
-          <div class="col-md-2">
+          <div class="col-6 col-md-2">
             <label class="form-label small">Unité</label>
             <select name="unite" class="form-select">
               <option value="">Toutes</option>
@@ -69,22 +69,26 @@
               {% endfor %}
             </select>
           </div>
-          <div class="col-md-2">
+          <div class="col-6 col-md-2">
             <label class="form-label small">Longueur min (mm)</label>
             <input type="number" name="longueurMin" class="form-control" value="{{ filters.longueurMin }}">
           </div>
-          <div class="col-md-2">
+          <div class="col-6 col-md-2">
             <label class="form-label small">Longueur max (mm)</label>
             <input type="number" name="longueurMax" class="form-control" value="{{ filters.longueurMax }}">
           </div>
-          <div class="col-md-2">
-            <button class="btn btn-primary w-100"> Filtrer</button>
+          <div class="col-6 col-md-2">
+            <button class="btn btn-primary w-100">🔍 Filtrer</button>
           </div>
-          <div class="col-md-2">
-            <a href="{{ path('app_product_list') }}" class="btn btn-outline-secondary w-100">↺ Réinitialiser</a>
+          <div class="col-6 col-md-2">
+            <a href="{{ path('app_product_list') }}" class="btn btn-outline-secondary w-100">Réinitialiser</a>
           </div>
         </div>
       </form>
+
+
+
+
 
     {% if filters.category or filters.materiau or filters.diametreMm or filters.typeTete or filters.typeEmpreinte or filters.unite %}
       <div class="mb-3">
@@ -116,6 +120,9 @@
     {% if products.items|length == 0 %}
       <div class="alert alert-warning">Aucun produit trouvé.</div>
     {% else %}
+
+
+    {# 
       <div class="row g-3">
         {% for product in products %}
           <div class="col-lg-3 col-md-4 col-sm-6">
@@ -123,6 +130,29 @@
           </div>
         {% endfor %}
       </div>
+    #}
+    <div class="version-sm-plus">
+            <div class="row g-3">
+                {% for product in products %}
+                      <div class="col-sm-6 col-md-4 col-lg-3 col-xxl-3">
+                          {% include 'components/_product_card.html.twig' with {product: product} %}
+                      </div>
+                {% endfor %}
+            </div>
+    </div>
+    <div class="version-mobile">
+          <div class="row g-3">
+                {% for product in products %}
+                  {% include 'components/_product_card_smull.html.twig' with {product: product} %}
+                {% endfor %}
+          </div>
+    </div>
+
+
+
+
+
+
       <div class="d-flex justify-content-center mt-4">
         {{ knp_pagination_render(products, 'partials/pagination_tamplate.html.twig') }}
       </div>

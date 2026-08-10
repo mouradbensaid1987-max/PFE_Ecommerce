@@ -11,6 +11,13 @@ body{
   background-color: #f8f9fa;
 }
 
+.tail-image-acc {
+   height: 500px;
+}
+
+.btn-outline-primary {
+  --bs-btn-hover-bg: #0c3577;
+}
 
 
 .btn-primary{
@@ -30,6 +37,9 @@ body{
 
 .bg-primary{
   background-color: #1e4a8a !important;
+}
+.bg-opacity-50 {
+    --bs-bg-opacity: 0.5;
 }
 
 .border-primary{
@@ -61,28 +71,6 @@ body{
     background-color: #fff;
 }
 
-@media screen and (min-width: 575px) {
-      .product-image{
-          height: 260px;
-      }
-  }
-@media screen and (min-width: 768px) {
-      .product-image{
-          height: 230px;
-      }
-  }
-
-@media screen and (min-width: 1200px) {
-      .product-image{
-          height: 280px;
-      }
-  }
-
-@media screen and (min-width: 1400px) {
-      .product-image{
-          height: 310px;
-      }
-  }
 
 .product-img {
     width: 100%;
@@ -116,4 +104,94 @@ body{
 
 .rounded-top-custom {
     border-radius: 20px 20px 0 0;
+}
+
+.table {
+    font-size: 0.85rem;
+}
+
+
+@media (min-width: 576px) {
+      .product-image{
+          height: 260px;
+      }
+  }
+@media (min-width: 768px) {
+      .product-image{
+          height: 230px;
+      }
+  }
+
+@media (min-width: 1200px) {
+      .product-image{
+          height: 280px;
+      }
+  }
+
+@media (min-width: 1400px) {
+      .product-image{
+          height: 310px;
+      }
+  }
+
+  .version-sm-plus {
+    display: none;
+  }
+
+  .version-mobile {
+      display: block;
+  }
+
+@media (min-width: 576px) {
+    .version-sm-plus{
+        display: block;
+    }
+    
+    .version-mobile {
+        display: none ;
+    }
+}
+
+.admin-tablet-up {
+    display: none;
+}
+
+.admin-tablet {
+    display: block;
+}
+
+@media (min-width: 992px) {
+    .admin-tablet-up {
+        display: block;
+    }
+
+    .admin-tablet {
+        display: none;
+    }
+}
+
+
+.hero-quincaillerie {
+    min-height: 400px;
+}
+
+.hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: heroSlide 25s infinite;
+    animation-fill-mode: backwards;
+}
+
+@keyframes heroSlide {
+    0%   { opacity: 0; }
+    2%   { opacity: 1; }
+    18%  { opacity: 1; }
+    20%  { opacity: 0; }
+    100% { opacity: 0; }
 }

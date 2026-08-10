@@ -9,12 +9,12 @@
 
 <form method="get" action="{{ path('app_admin_product_index') }}" class="row g-2 align-items-end mb-3 p-3 border rounded bglight">
 
-      <div class="col-md-3">
+      <div class="col-sm-6 col-lg-3">
         <label class="form-label small">Recherche (nom, référence)</label>
         <input type="search" name="q" class="form-control" value="{{ filters.search }}">
       </div>
 
-      <div class="col-md-3">
+      <div class="col-sm-6 col-lg-3">
         <label class="form-label small">Catégorie</label>
         <select name="category" class="form-select">
           <option value="">Toutes</option>
@@ -24,7 +24,7 @@
         </select>
       </div>
 
-      <div class="col-md-3">
+      <div class="col-sm-6 col-lg-2">
         <label class="form-label small">Matériau</label>
         <select name="materiau" class="form-select">
               <option value="">Tous</option>
@@ -34,7 +34,7 @@
         </select>
       </div>
 
-      <div class="col-md-2">
+      <div class="col-sm-6 col-lg-2">
         <label class="form-label small">Statut</label>
         <select name="isActive" class="form-select">
           <option value="">Tous</option>
@@ -43,73 +43,153 @@
         </select>
       </div>
 
-      <div class="col-md-1 d-flex gap-1">
-          <button class="btn btn-primary" title="Filtrer">🔍</button>
+      <div class="col-sm-3 col-lg-2">
+          <button class="btn btn-primary" title="Filtrer">🔍 Filtrer</button>
       </div>
 
-      <div class="col-12">
-        <a href="{{ path('app_admin_product_index') }}" class="btn btn-sm btn-outline-secondary">↺ Réinitialiser les filtres</a>
+      <div class="col-sm-6 col-lg-12">
+        <a href="{{ path('app_admin_product_index') }}" class="btn btn-outline-secondary">↺ Réinitialiser les filtres</a>
       </div>
 
 </form>
 
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Img</th>
-            <th>Ref</th>
-            <th>Nom</th>
-            <th>Catégorie</th>
-            <th>Prix HT</th>
-            <th>Stock</th>
-            <th>Actif</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-          {% for p in products %}
-              <tr>
-                <td>
-                    <div class="admin-product-image">
-                        {% if p.productImages|length > 0 %}
-                            <img  src="{{ vich_uploader_asset(p.productImages|first, 'imageFile') }}"
-                                  class="admin-product-img"  
-                                  alt="{{ p.name }}">
+  <div class="admin-tablet-up">
+    <table class="table align-middle mb-0">
+        <thead>
+            <tr>
+                <th>Img</th>
+                <th>Ref</th>
+                <th>Nom</th>
+                <th>Catégorie</th>
+                <th>Prix HT</th>
+                <th>Stock</th>
+                <th>Actif</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+              {% for p in products %}
+                  <tr>
+                    <td>
+                        <div class="admin-product-image">
+                            {% if p.productImages|length > 0 %}
+                                <img  src="{{ vich_uploader_asset(p.productImages|first, 'imageFile') }}"
+                                      class="admin-product-img"  
+                                      alt="{{ p.name }}">
+                            {% else %}
+                                <div class="placeholder-img"></div>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>{{ p.ref }}</td>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.category.name }}</td>
+                    <td>{{ p.priceHt }} €</td>
+                    <td>{{ p.stock }}</td>
+                    <td>
+                        {% if p.isActive %}
+                            ✓
                         {% else %}
-                            <div class="placeholder-img"></div>
+                            ✗
                         {% endif %}
-                    </div>
-                </td>
-                <td>{{ p.ref }}</td>
-                <td>{{ p.name }}</td>
-                <td>{{ p.category.name }}</td>
-                <td>{{ p.priceHt }} €</td>
-                <td>{{ p.stock }}</td>
-                <td>
-                    {% if p.isActive %}
-                        ✓
-                    {% else %}
-                        ✗
-                    {% endif %}
-                </td>
-                <td class="text-end">
-                    <a href="{{ path('app_admin_product_edit', {id: p.id}) }}" class="btn btn-sm btn-outline-primary">✏️</a>
-                    <form method="post" action="{{ path('app_admin_product_delete', {id:p.id}) }}"
-                          class="d-inline" onsubmit="return confirm('Supprimer ?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ p.id) }}">
-                        <button class="btn btn-sm btn-outline-danger">🗑️</button>
-                    </form>
-                </td>
-              </tr>
+                    </td>
+                    <td class="text-end">
+                        <a href="{{ path('app_admin_product_edit', {id: p.id}) }}" class="btn btn-sm btn-outline-primary">✏️</a>
+                        <form method="post" action="{{ path('app_admin_product_delete', {id:p.id}) }}"
+                              class="d-inline" onsubmit="return confirm('Supprimer ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ p.id) }}">
+                            <button class="btn btn-sm btn-outline-danger">🗑️</button>
+                        </form>
+                    </td>
+                  </tr>
+              {% endfor %}
+
+              
+        </tbody>
+      </table>
+  </div>
+  <div class="admin-tablet">
+          {% for p in products %}
+            
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                  <div class="row">
+                            <div class="col-4 text-center">
+                                  <a href="{{ path('app_product_show',{id:p.id}) }}">
+                                    {% if p.productImages|length > 0 %}
+                                      <img src="{{ vich_uploader_asset(p.productImages|first,'imageFile') }}" class="img-fluid rounded" alt="{{ p.name }}">
+                                    {% else %}
+                                      <div class="placeholder-img"></div>
+                                    {% endif %}
+                                  </a>
+                            </div>
+                            <div class="col-8">
+
+                            
+                                <h5 class="card-title mb-3">
+                                    {{ p.name }}
+                                </h5>
+
+                              
+                                <div class="row g-2">
+
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Référence</small>
+                                        <span>{{ p.ref }}</span>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Prix</small>
+                                        <span>{{ p.priceHt }} €</span>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Stock</small>
+                                        <span>{{ p.stock }}</span>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Catégorie</small>
+                                        <span>{{ p.category.name }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                  </div>
+                  <div class="d-flex justify-content-end gap-2 mt-3 pt-3 border-top">
+
+                      <a href="{{ path('app_admin_product_edit', {id: p.id}) }}"
+                        class="btn btn-sm btn-outline-primary">
+                          ✏️ Modifier
+                      </a>
+
+                      <form method="post"
+                            action="{{ path('app_admin_product_delete', {id: p.id}) }}"
+                            class="m-0"
+                            onsubmit="return confirm('Supprimer ?');">
+
+                          <input type="hidden"
+                                name="_token"
+                                value="{{ csrf_token('delete' ~ p.id) }}">
+
+                          <button type="submit"
+                                  class="btn btn-sm btn-outline-danger">
+                              🗑️ Supprimer
+                          </button>
+
+                      </form>
+
+                  </div>
+
+                  </div>
+              </div>
           {% endfor %}
+      </div>
 
-          
-    </tbody>
-  </table>
 
-  <div class="d-flex justify-content-center mt-4">
+  
+      <div class="d-flex justify-content-center mt-4">
         {{ knp_pagination_render(products, 'partials/pagination_tamplate.html.twig') }}
   </div>
     
