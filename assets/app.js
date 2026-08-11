@@ -1,5 +1,6 @@
 // import './stimulus_bootstrap.js';
 import 'bootstrap';
+import 'bootstrap-icons';
 /*
  * Welcome to your app's main JavaScript file!
  *

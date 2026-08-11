@@ -24,11 +24,36 @@
             <td>{{ cat.slug }}</td>
             <td class="text-end">
                 <a href="{{ path('app_admin_category_edit', {id: cat.id}) }}" class="btn btn-sm btn-outline-primary">✏️</a>
+                {# 
                 <form method="post" action="{{ path('app_admin_category_delete', {id:cat.id}) }}"
-                      class="d-inline" onsubmit="return confirm('Supprimer ?');">
+                      class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ? \nLa suppression de cette catégorie entraînera également la suppression de tous les produits associés.');">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cat.id) }}">
                     <button class="btn btn-sm btn-outline-danger">🗑️</button>
                 </form>
+                #}
+                <form method="post" action="{{ path('app_admin_category_delete', {id:cat.id}) }}" class="d-inline" id="deleteForm{{ cat.id }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cat.id) }}">
+                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ cat.id }}">🗑️</button>
+                </form>
+
+                <div class="modal fade" id="deleteModal{{ cat.id }}" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content border-danger">
+                      <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">Confirmation de suppression</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Êtes-vous sûr de vouloir supprimer cette catégorie ?</p>
+                        <p>La suppression de cette catégorie entraînera également la suppression de tous les produits associés.</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" form="deleteForm{{ cat.id }}" class="btn btn-danger">Supprimer</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </td>
           </tr>
         {% endfor %}

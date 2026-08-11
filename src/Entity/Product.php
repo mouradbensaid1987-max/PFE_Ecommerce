@@ -59,7 +59,7 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?int $quantiteConditionnement = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
@@ -82,6 +82,8 @@ class Product
     #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'product')]
     private Collection $orderItems;
 
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Favorite::class, cascade: ['remove'], orphanRemoval: true)]
+    private Collection $favorites;
 
     public function __construct()
     {
@@ -89,7 +91,9 @@ class Product
       $this->isActive = true;
       $this->productImages = new ArrayCollection();
       $this->orderItems = new ArrayCollection();
+      $this->favorites = new ArrayCollection();
       $this->ref = 'REF-'.strtoupper(bin2hex(random_bytes(4)));
+      
     }
 
     public function getId(): ?int
@@ -368,6 +372,32 @@ class Product
     {
         $this->quantiteConditionnement = $quantiteConditionnement;
         
+        return $this;
+    }
+  
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Favorite $favorite): static
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites->add($favorite);
+            $favorite->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Favorite $favorite): static
+    {
+        if ($this->favorites->removeElement($favorite)) {
+            if ($favorite->getProduct() === $this) {
+                $favorite->setProduct(null);
+            }
+        }
+
         return $this;
     }
 

@@ -22,6 +22,13 @@
                         {% endfor %}
                     </ul>
                 </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <li><a class="nav-link" href="{{ path('app_admin_dashboard') }}"><i class="bi bi-speedometer2"></i> Administration</a></li>
+                    </li>
+                {% endif %}
+
+
             </ul>
 
             <ul class="navbar-nav">
@@ -37,10 +44,7 @@
                             <li><a class="dropdown-item" href="{{ path('app_order_history') }}">📦 Mes commandes</a></li>
                             <li><a class="dropdown-item" href="{{ path('app_favorites') }}">❤️ Mes favoris</a></li>
                             <li><a class="dropdown-item" href="{{ path('app_message_index') }}">✉️ Mes messages</a></li>
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{ path('app_admin_dashboard') }}"><i class="bi bi-speedometer2"></i> Administration</a></li>
-                            {% endif %}
+  
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a></li>
                         </ul>
@@ -55,14 +59,15 @@
                 {% endif %}
             </ul>
         </div>
-
-        <a class="btn btn-outline-light btn-sm mt-1 position-relative ms-auto me-2" href="{{ path('app_cart_index') }}">🛒
-            {% if cart.getCount() > 0 %}
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  {{ cart.getCount() }}
-                </span>
-            {% endif %}
-        </a>
+        <li class="nav-item d-flex align-items-center">
+            <a class="btn btn-outline-light btn-sm position-relative ms-2" href="{{ path('app_cart_index') }}">
+              🛒
+                {% if cart.getCount() > 0 %}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                      {{ cart.getCount() }}
+                    </span>
+                {% endif %}
+            </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
             <span class="navbar-toggler-icon"></span>

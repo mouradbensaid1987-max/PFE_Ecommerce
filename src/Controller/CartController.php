@@ -29,20 +29,34 @@ final class CartController extends AbstractController
     }
 
     #[Route('/add/{id}/', name: 'app_cart_add', methods: ['POST'])]
-    public function addToCart(int $id,SessionInterface $session): Response
+    public function addToCart(Product $product, SessionInterface $session): Response
     {
         $cart = $session->get('cart', []);
-        if(!empty($cart[$id]))
-            {
-                $cart[$id]++;
-            }
-            else{
-                $cart[$id]=1;
-            }
+        $id = $product->getId();
+        $stock = $product->getStock();
+
+        $currentQty = $cart[$id] ?? 0;
+        $newQty = $currentQty + 1;
+
+        if ($stock <= 0) {
+            $this->addFlash('danger', 'Le produit "' . $product->getName() . '" est en rupture de stock.');
+            return $this->redirectToRoute('app_cart_index');
+        }
+        if ($newQty > $stock) {
+            // On plafonne à la quantité max disponible
+            $cart[$id] = $stock;
+            $this->addFlash('warning','Stock insuffisant pour "' . $product->getName() . '". Quantité limitée à ' . $stock . '.');
+        } else {
+            $cart[$id] = $newQty;
+            $this->addFlash('success', 'Le produit "' . $product->getName() . '" a été ajouté au panier.');
+        }
+
         $session->set('cart', $cart);
         return $this->redirectToRoute('app_cart_index');
     }
     
+
+
     #[Route('/remove/{id}/', name: 'app_cart_product_remove', methods: ['GET'])]
     public function removeToCart(int $id,SessionInterface $session): Response
     {
@@ -55,6 +69,8 @@ final class CartController extends AbstractController
         return $this->redirectToRoute('app_cart_index');
     }
 
+
+
     #[Route('/remove', name: 'app_cart_remove', methods: ['GET'])]
     public function remove(SessionInterface $session): Response
     {
@@ -63,17 +79,28 @@ final class CartController extends AbstractController
         return $this->redirectToRoute('app_cart_index');
     }
 
+
+
     #[Route('/update/{id}', name: 'app_cart_update', methods: ['POST'])]
     public function update(Product $product, Request $request, SessionInterface $session): Response
     {
         $qty = (int) $request->request->get('quantity', 1);
-
         $cart = $session->get('cart');
 
-        if ($qty <= 0) {
+        if ($qty <= 0) 
+          {
             unset($cart[$product->getId()]);
-        } else {
-          $cart[$product->getId()] = $qty;
+            $this->addFlash('info', 'Le produit "' . $product->getName() . '" a été retiré du panier.');
+          } else {
+            $stock = $product->getStock();
+
+            if ($qty > $stock) 
+            {
+                $cart[$product->getId()] = $stock;
+                $this->addFlash('warning','Stock insuffisant pour "' . $product->getName() . '". Quantité ajustée à ' . $stock . '.');
+            } else {
+              $cart[$product->getId()] = $qty;
+            }
         }
         $session->set('cart', $cart);
 

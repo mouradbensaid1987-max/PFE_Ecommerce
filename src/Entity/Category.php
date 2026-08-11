@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
@@ -22,6 +24,14 @@ class Category
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
+
+    #[ORM\OneToMany(mappedBy: 'category',targetEntity: Product::class, cascade: ['remove'],orphanRemoval: true)]
+    private Collection $products;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
 
     
     public function getId(): ?int
@@ -61,6 +71,40 @@ class Category
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+  
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    
+    public function setProducts(Collection $products)
+    {
+        $this->products = $products;
+
+        return $this;
+    }
+     public function addProduct(Product $product): static
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        if ($this->products->removeElement($product)) {
+            if ($product->getCategory() === $this) {
+                $product->setCategory(null);
+            }
+        }
 
         return $this;
     }

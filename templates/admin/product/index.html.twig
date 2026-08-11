@@ -84,7 +84,13 @@
                     </td>
                     <td>{{ p.ref }}</td>
                     <td>{{ p.name }}</td>
-                    <td>{{ p.category.name }}</td>
+                    <td>
+                        {% if p.category %}
+                            {{ p.category.name }}
+                        {% else %}
+                            Non classé
+                        {% endif %}
+                    </td>
                     <td>{{ p.priceHt }} €</td>
                     <td>{{ p.stock }}</td>
                     <td>

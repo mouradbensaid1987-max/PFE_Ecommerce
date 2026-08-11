@@ -32,11 +32,9 @@ class PaymentController extends AbstractController
         }
         $form = $this->createForm(CheckoutType::class);
         $form->handleRequest($request);
-        //$form1->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) 
             {
-
                 $a = $form->get('typePaiement')->getData();
                 $payment = new StripePayment();
                 $payment->startPayment($order,$a);
@@ -50,27 +48,4 @@ class PaymentController extends AbstractController
       ]);
   }
   
-/*
-
-  #[Route('/payment/{ref}/pay', name: 'app_payment_pay', methods: ['POST'])]
-  public function pay(string $ref, OrderRepository $repo, EntityManagerInterface $em,SessionInterface $session): Response {
-
-    $order = $repo->findOneBy(['reference' => $ref, 'user' => $this->getUser()]);
-
-    if (!$order) 
-      {
-          throw $this->createNotFoundException();
-      }
-    $order->setStatus(Order::STATUS_PAID);
-    $em->flush();
-
-    $session->set('cart', []);
-    $this->addFlash('success', 'Paiement validé ! Commande ' . $order->getReference() . 'confirmée.');
-
-    return $this->redirectToRoute('app_order_history');
-
-  }
-    */
-
-
 }
