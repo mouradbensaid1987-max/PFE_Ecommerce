@@ -16,10 +16,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormEvents;
 
 
 class ProductFormType extends AbstractType
 {
+    public function __construct(private FormListenerFactory $listenerFactory){}
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -27,7 +29,8 @@ class ProductFormType extends AbstractType
                   'label' => 'Nom'
             ])
             ->add('slug', TextType::class, [
-                  'label' => 'Slug'
+                'label' => 'Slug',
+                'required' => false
             ])
             ->add('description', TextareaType::class, [
                   'label' => 'Description', 
@@ -98,6 +101,8 @@ class ProductFormType extends AbstractType
                   'allow_delete' => true,
                   'attr' => ['class' => 'img-fluid my-2'],
             ])
+            ->addEventListener(FormEvents::PRE_SUBMIT, $this->listenerFactory->autoslug('name'))
+            ->addEventListener(FormEvents::POST_SUBMIT, $this->listenerFactory->timestamps())
         ;
     }
 

@@ -3,20 +3,20 @@
 {% block admin_body %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>📦 Produits</h1>
-    <a href="{{ path('app_admin_product_new') }}" class="btn btn-primary">➕ Nouveau</a>
+    <h1><span aria-hidden="true">📦</span> Produits</h1>
+    <a href="{{ path('app_admin_product_new') }}" class="btn btn-primary"><span aria-hidden="true">➕</span> Nouveau</a>
 </div>
 
 <form method="get" action="{{ path('app_admin_product_index') }}" class="row g-2 align-items-end mb-3 p-3 border rounded bglight">
 
       <div class="col-sm-6 col-lg-3">
-        <label class="form-label small">Recherche (nom, référence)</label>
-        <input type="search" name="q" class="form-control" value="{{ filters.search }}">
+        <label for="admin-filter-search" class="form-label small">Recherche (nom, référence)</label>
+        <input id="admin-filter-search" type="search" name="q" class="form-control" value="{{ filters.search }}">
       </div>
 
       <div class="col-sm-6 col-lg-3">
-        <label class="form-label small">Catégorie</label>
-        <select name="category" class="form-select">
+        <label for="filter-category" class="form-label small">Catégorie</label>
+        <select id="filter-category" name="category" class="form-select">
           <option value="">Toutes</option>
               {% for cat in categories %}
                 <option value="{{ cat.id }}" {{ filters.category == cat.id ? 'selected' : '' }}>{{ cat.name }}</option>
@@ -25,8 +25,8 @@
       </div>
 
       <div class="col-sm-6 col-lg-2">
-        <label class="form-label small">Matériau</label>
-        <select name="materiau" class="form-select">
+        <label for="admin-filter-materiau" class="form-label small">Matériau</label>
+        <select id="admin-filter-materiau" name="materiau" class="form-select">
               <option value="">Tous</option>
               {% for m in materiaux %}
                 <option value="{{ m }}" {{ filters.materiau == m ? 'selected' : '' }}>{{ m }}</option>
@@ -35,8 +35,8 @@
       </div>
 
       <div class="col-sm-6 col-lg-2">
-        <label class="form-label small">Statut</label>
-        <select name="isActive" class="form-select">
+        <label for="admin-filter-status" class="form-label small">Statut</label>
+        <select id="admin-filter-status" name="isActive" class="form-select">
           <option value="">Tous</option>
           <option value="1" {{ filters.isActive == '1' ? 'selected' : '' }}>Actif</option>
           <option value="0" {{ filters.isActive == '0' ? 'selected' : '' }}>Inactif</option>
@@ -44,7 +44,7 @@
       </div>
 
       <div class="col-sm-3 col-lg-2">
-          <button class="btn btn-primary" title="Filtrer">🔍 Filtrer</button>
+          <button class="btn btn-primary" title="Filtrer"><span aria-hidden="true">🔍</span> Filtrer</button>
       </div>
 
       <div class="col-sm-6 col-lg-12">
@@ -58,14 +58,14 @@
     <table class="table align-middle mb-0">
         <thead>
             <tr>
-                <th>Img</th>
-                <th>Ref</th>
-                <th>Nom</th>
-                <th>Catégorie</th>
-                <th>Prix HT</th>
-                <th>Stock</th>
-                <th>Actif</th>
-                <th></th>
+                <th scope="col">Img</th>
+                <th scope="col">Ref</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Catégorie</th>
+                <th scope="col">Prix HT</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Actif</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -73,13 +73,15 @@
                   <tr>
                     <td>
                         <div class="admin-product-image">
-                            {% if p.productImages|length > 0 %}
-                                <img  src="{{ vich_uploader_asset(p.productImages|first, 'imageFile') }}"
-                                      class="admin-product-img"  
-                                      alt="{{ p.name }}">
-                            {% else %}
-                                <div class="placeholder-img"></div>
-                            {% endif %}
+                            <a href="{{ path('app_product_show',{id:p.id, slug: p.slug|replace({'\'': '-', ' ': '-'})|lower})  }}">
+                              {% if p.productImages|length > 0 %}
+                                  <img  src="{{ vich_uploader_asset(p.productImages|first, 'imageFile') }}"
+                                        class="admin-product-img"  
+                                        alt="{{ p.name }}">
+                              {% else %}
+                                  <div class="placeholder-img"></div>
+                              {% endif %}
+                            </a>
                         </div>
                     </td>
                     <td>{{ p.ref }}</td>
@@ -95,17 +97,24 @@
                     <td>{{ p.stock }}</td>
                     <td>
                         {% if p.isActive %}
-                            ✓
+                          <span class="badge text-bg-success fs-6">Actif </span>
                         {% else %}
-                            ✗
+                          <span class="badge text-bg-danger fs-6">Inactif </span>
                         {% endif %}
                     </td>
                     <td class="text-end">
-                        <a href="{{ path('app_admin_product_edit', {id: p.id}) }}" class="btn btn-sm btn-outline-primary">✏️</a>
+
+                        <a href="{{ path('app_admin_product_edit', {id: p.id}) }}" 
+                           class="btn btn-sm btn-outline-primary"
+                           aria-label="Modifier le produit {{ p.name }}">
+                           <span aria-hidden="true">✏️</span>
+                        </a>
                         <form method="post" action="{{ path('app_admin_product_delete', {id:p.id}) }}"
                               class="d-inline" onsubmit="return confirm('Supprimer ?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ p.id) }}">
-                            <button class="btn btn-sm btn-outline-danger">🗑️</button>
+                            <button class="btn btn-sm btn-outline-danger" aria-label="Supprimer le produit {{ p.name }}">
+                              <span aria-hidden="true">🗑️</span>
+                            </button>
                         </form>
                     </td>
                   </tr>
@@ -122,7 +131,7 @@
                 <div class="card-body">
                   <div class="row">
                             <div class="col-4 text-center">
-                                  <a href="{{ path('app_product_show',{id:p.id}) }}">
+                                  <a href="{{ path('app_product_show',{id:p.id, slug: p.slug|replace({'\'': '-', ' ': '-'})|lower})  }}">
                                     {% if p.productImages|length > 0 %}
                                       <img src="{{ vich_uploader_asset(p.productImages|first,'imageFile') }}" class="img-fluid rounded" alt="{{ p.name }}">
                                     {% else %}
@@ -140,25 +149,40 @@
                               
                                 <div class="row g-2">
 
-                                    <div class="col-6">
+                                    <div class="col-5">
                                         <small class="text-muted d-block">Référence</small>
                                         <span>{{ p.ref }}</span>
                                     </div>
+                                    <div class="col-4">
+                                        <small class="text-muted d-block">Catégorie</small>
+                                        <span>{{ p.category.name }}</span>
+                                    </div>
+                                    <div class="col-2">
+                                        <small class="text-muted d-block">Statut</small>
 
-                                    <div class="col-6">
+                                        {% if p.isActive %}
+                                            <span class="badge text-bg-success">
+                                                Actif
+                                            </span>
+                                        {% else %}
+                                            <span class="badge text-bg-danger">
+                                                Inactif
+                                            </span>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="col-5">
                                         <small class="text-muted d-block">Prix</small>
                                         <span>{{ p.priceHt }} €</span>
                                     </div>
 
-                                    <div class="col-6">
+                                    <div class="col-4">
                                         <small class="text-muted d-block">Stock</small>
                                         <span>{{ p.stock }}</span>
                                     </div>
+                                    
 
-                                    <div class="col-6">
-                                        <small class="text-muted d-block">Catégorie</small>
-                                        <span>{{ p.category.name }}</span>
-                                    </div>
+                                    
 
                                 </div>
                             </div>
@@ -167,7 +191,7 @@
 
                       <a href="{{ path('app_admin_product_edit', {id: p.id}) }}"
                         class="btn btn-sm btn-outline-primary">
-                          ✏️ Modifier
+                          <span aria-hidden="true">✏️</span> Modifier
                       </a>
 
                       <form method="post"
@@ -181,7 +205,7 @@
 
                           <button type="submit"
                                   class="btn btn-sm btn-outline-danger">
-                              🗑️ Supprimer
+                              <span aria-hidden="true">🗑️</span> Supprimer
                           </button>
 
                       </form>

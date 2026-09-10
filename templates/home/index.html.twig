@@ -6,32 +6,57 @@
 
 {% block body %}
 
-<div class="hero-quincaillerie text-white p-5 rounded mb-4 position-relative overflow-hidden">
+<div class="hero-quincaillerie text-white p-5 rounded mb-4 position-relative overflow-hidden" id="heroBanner">
+
+
+  <button type="button" id="heroPauseBtn"
+          class="btn btn-sm btn-light btn-sm rounded-circle position-absolute top-0 end-0 m-2"
+          style="z-index: 10;"
+          aria-pressed="false"
+          aria-label="Mettre en pause le diaporama"
+    >
+        <i class="bi bi-pause-fill" aria-hidden="true"></i>
+  </button>
+
+  
     <div class="hero-slide" style="background-image: url('{{ asset('images/aaa.webp') }}'); animation-delay: 0s;"></div>
     <div class="hero-slide" style="background-image: url('{{ asset('images/aaa1.jpg') }}'); animation-delay: 5s;"></div>
     <div class="hero-slide" style="background-image: url('{{ asset('images/aaa2.avif') }}'); animation-delay: 10s;"></div>
     <div class="hero-slide" style="background-image: url('{{ asset('images/aaa3.avif') }}'); animation-delay: 15s;"></div>
     <div class="hero-slide" style="background-image: url('{{ asset('images/aaa4.jpg') }}'); animation-delay: 20s;"></div>
 
-    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(30, 74, 138, 0.1);"></div>
+    <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-end" 
+         style="background: linear-gradient(90deg, rgba(10,20,40,0.65) 0%, rgba(10,20,40,0.35) 45%, rgba(10,20,40,0) 75%);"></div>
 
-    <div class="position-relative">
-        <h1 class="display-4">Quincaillerie Pro</h1>
-        <p class="lead">Vis, boulons, chevilles, clous et outillage : tout pour vos travaux et votre bricolage.</p>
+     <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-end p-5">
+        <div class="hero-card p-3 p-md-4" style="max-width: 380px;">
+            <h1 class="fw-bold fs-5 mb-2" style="text-shadow: 0 2px 10px rgba(0,0,0,0.4);">
+                Toute la visserie professionnelle
+            </h1>
+            <p class="mb-3" style="font-size: 0.9rem; text-shadow: 0 1px 6px rgba(0,0,0,0.4); opacity: 0.95;">
+                Vis, boulons et fixations pour tous vos projets.
+                Large choix de matériaux, diamètres et conditionnements, au meilleur prix.
+            </p>
+
+            <a href="{{ path('app_product_list') }}" class="btn btn-light btn-sm fw-semibold px-3">
+                Voir les Produits
+            </a>
+        </div>
     </div>
-
+  
 </div>
 
 {#------------------------------------------category---------------------------------------------------------------------- #}
 <div class="d-flex align-items-center">
 
     <!-- Flèche gauche -->
-    <button class="carousel-control-prev position-static flex-shrink-0 w-auto px-2"
+    <button class="carousel-control-prev position-static flex-shrink-0 w-auto px-2 version-sm-plus"
             type="button"
             data-bs-target="#productCarousel"
             data-bs-slide="prev">
         <span class="carousel-control-prev-icon bg-dark rounded-circle"
               aria-hidden="true"></span>
+        <span class="visually-hidden">Catégorie précédente</span>
     </button>
 
     <!-- Carousel -->
@@ -46,7 +71,7 @@
                             <div class="col-md-3 col-sm-6">
                                 <a href="{{ path('app_category_show', {id: cat.id}) }}" class="text-decoration-none">
                                   
-                                    <div class="card h-100 position-relative">
+                                    <div class="card h-100">
                                         <div class="text-center rounded bg-primary bottom-0 start-0 end-0">
                                             <p class="text-white fw-bold m-3">
                                                 {{ cat.name }}
@@ -61,19 +86,37 @@
             {% endfor %}
         </div>
     </div>
+    <!-- Flèche droite -->
+    <button class="carousel-control-next position-static flex-shrink-0 w-auto px-2 version-sm-plus"
+            type="button"
+            data-bs-target="#productCarousel"
+            data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle"
+              aria-hidden="true"></span>
+        <span class="visually-hidden">Catégorie suivante"</span>
+    </button>
+
+
       <!-- Carousel2 -->
-    <div id="productCarousel" class="carousel slide flex-grow-1 version-mobile">
+    <!-- Flèche gauche -->
+    <button class="carousel-control-prev position-static flex-shrink-0 w-auto px-2 version-mobile"
+            type="button"
+            data-bs-target="#productCarousel2"
+            data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle"
+              aria-hidden="true"></span>
+        <span class="visually-hidden">Catégorie précédente</span>
+    </button>
+
+    <div id="productCarousel2" class="carousel slide flex-grow-1 version-mobile">
         <div class="carousel-inner">
             {% for chunk in categories|batch(2) %}
                 <div class="carousel-item {{ loop.first ? 'active' : '' }}">
-
                     <div class="row justify-content-center g-3">
-
                         {% for cat in chunk %}
                             <div class="col-6">
                                 <a href="{{ path('app_category_show', {id: cat.id}) }}" class="text-decoration-none">
-                                  
-                                    <div class="card h-100 position-relative">
+                                    <div class="card h-100">
                                         <div class="text-center rounded bg-primary bottom-0 start-0 end-0">
                                             <p class="text-white fw-bold m-3">
                                                 {{ cat.name }}
@@ -89,14 +132,14 @@
         </div>
     </div>
     
-
     <!-- Flèche droite -->
-    <button class="carousel-control-next position-static flex-shrink-0 w-auto px-2"
+    <button class="carousel-control-next position-static flex-shrink-0 w-auto px-2 version-mobile"
             type="button"
-            data-bs-target="#productCarousel"
+            data-bs-target="#productCarousel2"
             data-bs-slide="next">
         <span class="carousel-control-next-icon bg-dark rounded-circle"
               aria-hidden="true"></span>
+        <span class="visually-hidden">Catégorie suivante"</span>
     </button>
 
 </div>
@@ -120,6 +163,8 @@
           {% endfor %}
         </div>
       </div>
+
+
 
 {% endblock %}
 

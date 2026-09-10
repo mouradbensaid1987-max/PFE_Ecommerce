@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    <h1>✏️ Modifier mon profil</h1>
+    <h1><span aria-hidden="true">✏️</span> Modifier mon profil</h1>
 
     <div class="card mt-3">
     
@@ -14,7 +14,9 @@
 
             {{ form_widget(form) }}
 
-            <button class="btn btn-primary">💾 Enregistrer</button>
+            <button class="btn btn-primary">
+                <span aria-hidden="true">💾</span> Enregistrer
+            </button>
 
             <a href="{{ path('app_profile') }}" class="btn btn-secondary">Annuler</a>
 

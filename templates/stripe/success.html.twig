@@ -1,0 +1,52 @@
+
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement confirmé{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+
+    <div class="card border-0 shadow-sm text-center">
+      <div class="card-body p-5">
+
+        <div class="mb-4">
+          <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success bg-opacity-10"
+               style="width: 88px; height: 88px;">
+            <i class="bi bi-check-lg text-success" style="font-size: 2.75rem;"></i>
+          </div>
+        </div>
+
+        <h1 class="h3 fw-bold mb-2">Paiement réussi</h1>
+        <p class="text-muted mb-4">
+          Merci pour votre commande. Votre paiement a bien été pris en compte par Stripe.
+        </p>
+
+        <div class="alert alert-light border d-flex align-items-start gap-2 text-start mb-4">
+          <i class="bi bi-info-circle text-primary mt-1"></i>
+          <div class="small text-muted">
+            Nous finalisons la préparation de votre commande.
+            Vous recevrez un e-mail de confirmation dans quelques instants avec tous les détails.
+          </div>
+        </div>
+
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <a href="{{ path('app_home') }}" class="btn btn-primary px-4">
+            <i class="bi bi-house-door me-1"></i> Retour à l'accueil
+          </a>
+          <a href="{{ path('app_order_history') }}" class="btn btn-outline-secondary px-4">
+            <i class="bi bi-receipt me-1"></i> Voir mes commandes
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="text-center text-muted small mt-4 mb-0">
+      Un souci avec votre commande&nbsp;? <a href="{{ path('app_message_new') }}" >Contactez notre support</a>.
+    </p>
+
+  </div>
+</div>
+{% endblock %}

@@ -15,11 +15,11 @@
             <thead>
                 <tr>
                     
-                    <th>Ref</th>
-                    <th>Produit</th>
-                    <th>Qté</th>
-                    <th>Prix</th>
-                    <th>Sous-total</th>
+                    <th scope="col">Ref</th>
+                    <th scope="col">Produit</th>
+                    <th scope="col">Qté</th>
+                    <th scope="col">Prix</th>
+                    <th scope="col">Sous-total</th>
                 </tr>
             </thead>
 
@@ -39,8 +39,8 @@
 
             <tfoot>
                 <tr>
-                    <th colspan="4" class="text-end">Total</th>
-                    <th class="text-primary">{{ order.totalTtc|number_format(2, ',', ' ') }}€</th>
+                    <th scope="row" colspan="4" class="text-end">Total</th>
+                    <th scope="col" class="text-primary">{{ order.totalTtc|number_format(2, ',', ' ') }}€</th>
                 </tr>
             </tfoot>
         </table>
@@ -51,7 +51,7 @@
     <div class="col-md-3">
         <div class="card">
             <div class="card-header">
-                <strong>📦 Livraison</strong>
+                <strong><span aria-hidden="true">📦</span> Livraison</strong>
             </div>
 
             <div class="card-body">
@@ -66,7 +66,7 @@
 
 
 <a href="{{ path('app_admin_order_index') }}" class="btn btn-secondary mt-3">← Retourner</a>
-{% if order.status in ['paid', 'shipped', 'delivered'] %}
+{% if order.status in ['paid','preparing', 'shipped', 'delivered'] %}
     <a href="{{ path('app_facture', {id: order.id}) }}" class="btn btn-outline-success mt-3">
         Télécharger la facture
     </a>

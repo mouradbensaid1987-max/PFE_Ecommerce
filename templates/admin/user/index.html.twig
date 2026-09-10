@@ -2,15 +2,15 @@
 
 {% block admin_body %}
 
-    <h1>👥 Utilisateurs</h1>
+    <h1><span aria-hidden="true">👥</span> Utilisateurs</h1>
     <table class="table mt-3">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Email</th>
-                <th>Nom</th>
-                <th>Rôles</th>
-                <th></th>
+                <th scope="col">ID</th>
+                <th scope="col">Email</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Rôles</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -28,7 +28,7 @@
                     </td>
                     <td>
                         <a href="{{ path('app_admin_user_edit', {id: u.id}) }}" 
-                           class="btn btnsm btn-outline-primary">✏️</a>
+                           class="btn btn-sm btn-outline-primary" aria-label="Modifier le client {{ u.firstName}}"><span aria-hidden="true">✏️</span></a>
                     </td>
                 </tr>
             {% endfor %}

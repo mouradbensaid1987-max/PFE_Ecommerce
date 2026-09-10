@@ -22,13 +22,6 @@ class AddressFormType extends AbstractType
             ->add('city', TextType::class, ['label' => 'Ville'])
             ->add('country', TextType::class, ['label' => 'Pays'])
             ->add('phone', TextType::class, ['label' => 'Téléphone', 'required' => false])
-            ->add('type', ChoiceType::class, [
-                'label' => "Type d'adresse",
-                'choices' => [
-                      'Livraison' => Address::TYPE_DELIVERY,
-                      'Facturation' => Address::TYPE_BILLING,
-                ],
-            ])
         ;
     }
 

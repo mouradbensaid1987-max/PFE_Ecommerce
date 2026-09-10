@@ -2,31 +2,45 @@ security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        #Ce bloc indique à Symfony comment les mots de passe des utilisateurs doivent être chiffrés (hachés)
+        # 'auto' signifie que Symfony choisit automatiquement un algorithme de hachage adapté.
+
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
-    providers:
+    providers: #Où dois-je chercher les utilisateurs ?
         # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider:
+        app_user_provider: #va chercher dans la table user, la ligne où email = celui-tapé
             entity:
-                class: App\Entity\User
-                property: email
+                class: App\Entity\User #signifie que Symfony utilise cette entité.
+                property: email #Cela signifie que Symfony identifie l'utilisateur grâce à son adresse e-mail.
 
     firewalls:
         dev:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
-            security: false
+            security: false 
         main:
             lazy: true
             provider: app_user_provider
-            form_login:
-                login_path: app_login
-                check_path: app_login
-                default_target_path: app_home
-                enable_csrf: true
-            logout:
-                path: app_logout
-                target: app_home
+            user_checker: App\Security\UserChecker 
+            #permet de réaliser des vérifications supplémentaires sur l'utilisateur lors de l'authentification
+            form_login: 
+            #indique que ton application utilise un formulaire de connexion classique
+                login_path: app_login 
+                #indique la route qui affiche le formulaire de connexion
+                check_path: app_login 
+                #C'est également la route utilisée pour traiter les informations envoyées par le formulaire de connexion.
+                default_target_path: app_home 
+                #ediriger l'utilisateur vers app_home Après une connexion réussie
+                enable_csrf: true 
+                #Symfony protège ton formulaire de connexion avec un token CSRF.
+            logout: 
+            #Ce bloc configure la déconnexion.
+                path: app_logout 
+                #Cela indique la route utilisée pour demander une déconnexion.
+                target: app_home 
+                #Après la déconnexion, Symfony redirige l'utilisateur vers app_home
+
                 # where to redirect after logout
                 # target: app_any_route
 

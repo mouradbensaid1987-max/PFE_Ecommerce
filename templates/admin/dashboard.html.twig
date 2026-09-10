@@ -4,15 +4,15 @@
 
 {% block admin_body %}
 
-<h1 class="mb-4">📊 Tableau de bord</h1>
+<h1 class="mb-4"><span aria-hidden="true">📊</span> Tableau de bord</h1>
 
 <div class="row g-3">
 
         <div class="col-md-3">
             <div class="card text-white bg-primary">
                 <div class="card-body">
-                    <h6 class="card-title">Produits</h6>
-                    <h2>{{ nbProducts }}</h2>
+                    <h2 class="h6 card-title">Produits</h2>
+                    <p class="fs-2 fw-bold mb-0">{{ nbProducts }}</p>
                 </div>
             </div>
         </div>
@@ -20,8 +20,8 @@
         <div class="col-md-3">
             <div class="card text-white bg-primary">
                 <div class="card-body">
-                    <h6 class="card-title">Catégories</h6>
-                    <h2>{{ nbCategories }}</h2>
+                    <h2 class="h6 card-title">Catégories</h2>
+                    <p class="fs-2 fw-bold mb-0">{{ nbCategories }}</p>
                 </div>
             </div>
         </div>
@@ -29,8 +29,8 @@
         <div class="col-md-3">
             <div class="card text-white bg-primary">
                 <div class="card-body">
-                    <h6 class="card-title">Utilisateurs</h6>
-                    <h2>{{ nbUsers }}</h2>
+                    <h2 class="h6 card-title">Utilisateurs</h2>
+                    <p class="fs-2 fw-bold mb-0">{{ nbUsers }}</p>
                 </div>
             </div>
         </div>
@@ -38,8 +38,8 @@
         <div class="col-md-3">
             <div class="card text-white bg-primary">
                 <div class="card-body">
-                    <h6 class="card-title">Commandes</h6>
-                    <h2>{{ nbOrders }}</h2>
+                    <h2 class="h6 card-title">Commandes</h2>
+                    <p class="fs-2 fw-bold mb-0">{{ nbOrders }}</p>
                 </div>
             </div>
         </div>

@@ -8,12 +8,12 @@
     <div class="col-md-5">
       <div class="card">
         <div class="card-body">
-          <h1 class="h3 mb-3">🔐 Connexion</h1>
+          <h1 class="h3 mb-3"> Connexion</h1>
 
           {% if error %}
-            <div class="alert alert-danger">
-              {{ error.messageKey|trans(error.messageData, 'security') }}
-            </div>
+              <div class="alert alert-danger" role="alert">
+                  Adresse e-mail ou mot de passe incorrect.
+              </div>
           {% endif %}
 
 
@@ -29,19 +29,20 @@
               <label for="password" class="form-label">Mot de passe</label>
               <input type="password" id="password" name="_password" class="form-control" required>
             </div>
+            
+            <div class="mb-3 text-end">
+                <a href="{{ path('app_verify_email_resend') }}" class="small d-block">Vous n'avez pas reçu l'email de confirmation ?</a>
+            </div>
+
+            <div class="mb-3 text-end">
+                <a href="{{ path('app_forgot_password_request') }}" class="small">Mot de passe oublié ?</a>
+            </div>
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
             <button class="btn btn-primary w-100" type="submit">Se connecter</button>
 
-
-
-
           </form>
-
-
-
-
 
         </div>
       </div>

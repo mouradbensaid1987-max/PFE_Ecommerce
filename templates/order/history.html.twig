@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<h1>📋 Mes commandes</h1>
+<h1><span aria-hidden="true">📋</span> Mes commandes</h1>
 
 {% if orders|length == 0 %}
     <div class="alert alert-info">Vous n'avez pas encore passé de commande.</div>
@@ -14,12 +14,12 @@
 <table class="table mt-3">
     <thead>
         <tr>
-            <th>Référence</th>
-            <th>Date</th>
-            <th>Articles</th>
-            <th>Total</th>
-            <th>Statut</th>
-            <th></th>
+            <th scope="col">Référence</th>
+            <th scope="col">Date</th>
+            <th scope="col">Articles</th>
+            <th scope="col">Total</th>
+            <th scope="col">Statut</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
@@ -31,15 +31,15 @@
             <td>{{ order.totalTtc|number_format(2, ',', ' ') }} €</td>
             <td >
                     {% if order.status == 'paid' %}
-                      <h5><span class="badge text-dark text-bg-info">Payée</span></h5>
+                      <span class="badge text-dark text-bg-info fs-6">Payée</span>
                     {% elseif order.status == 'shipped' %}
-                      <h5><span class="badge text-dark text-bg-info">Expédiée</span></h5>
+                      <span class="badge text-dark text-bg-info fs-6">Expédiée</span>
                     {% elseif order.status == 'delivered' %}
-                      <h5><span class="badge text-dark text-bg-info">Livrée</span></h5>
+                      <span class="badge text-dark text-bg-info fs-6">Livrée</span>
                     {% elseif order.status == 'cancelled' %}
-                      <h5><span class="badge text-dark text-bg-danger">Annulée</span></h5>
+                      <span class="badge text-dark text-bg-danger fs-6">Annulée</span>
                     {% elseif order.status == 'pending' %}
-                      <h5><span class="badge text-dark text-bg-warning">En attente</span></h5>
+                      <span class="badge text-dark text-bg-warning fs-6">En attente</span>
                     {% endif %}
             </td>
             <td>

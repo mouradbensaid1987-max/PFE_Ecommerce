@@ -1,5 +1,5 @@
 <div class="card h-100 product-card shadow-sm">
-    <a href="{{ path('app_product_show',{id: product.id}) }}" class="text-decoration-none text-reset">
+    <a href="{{ path('app_product_show',{id: product.id, slug: product.slug|replace({'\'': '-', ' ': '-'})|lower}) }}" class="text-decoration-none text-reset">
         <div class="product-image position-relative">
             {% if product.productImages|length > 0 %}
                 <img  src="{{ vich_uploader_asset(product.productImages|first, 'imageFile') }}" 
@@ -36,13 +36,13 @@
         <div class="d-flex justify-content-between align-items-center mb-2">
             <p class="text-primary fw-bold mb-0"> Prix: {{ product.priceTtc|number_format(2, ',', ' ') }} € </p>
             {% if product.stock is defined %}
-              <p class="small fw-normal m-0 badge {{ product.stock <= 0 ? 'bg-danger' : (product.stock <= 5 ? 'bg-warning text-dark' : 'text-success') }}">
+              <p class="small fw-normal m-0 badge {{ product.stock <= 0 ? 'bg-danger' : (product.stock <= 5 ? 'bg-warning text-dark' : 'bgsuccess-subtle text-success-emphasis') }}">
                   {% if product.stock <= 0 %}
-                      <i class="bi bi-x-circle"></i> Rupture
+                      <i class="bi bi-x-circle" aria-hidden="true"></i> Rupture
                   {% elseif product.stock <= 5 %}
-                      <i class="bi bi-exclamation-triangle"></i> {{ product.stock }} restant{{ product.stock > 1 ? 's' : '' }}
+                      <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> {{ product.stock }} restant{{ product.stock > 1 ? 's' : '' }}
                   {% else %}
-                      <i class="bi bi-check-circle"></i> En stock({{ product.stock }})
+                      <i class="bi bi-check-circle" aria-hidden="true"></i> En stock({{ product.stock }})
                   {% endif %}
               </p>
           {% endif %}
@@ -65,8 +65,11 @@
               {% if app.user %}
                 {% set isFavorite = product.id in favoriteIds %}
                 <form method="post" action="{{ path('app_favorite_toggle', {id: product.id}) }}">
-                    <button class="btn btn-outline-danger btn-sm" title="Ajouter aux favoris" >
-                         <i class="bi {{ isFavorite ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                    <button class="btn btn-outline-danger btn-sm" 
+                            aria-label="{{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}" 
+                            title= " {{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}">
+                         <i class="bi {{ isFavorite ? 'bi-heart-fill' : 'bi-heart' }}"  aria-hidden="true"></i>
+                         
                     </button>
                 </form>
               {% endif %}

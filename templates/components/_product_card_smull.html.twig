@@ -2,7 +2,7 @@
     <div class="row g-0 h-100">
 
         <div class="col-6">
-            <a href="{{ path('app_product_show',{id: product.id}) }}" class="text-decoration-none text-reset d-block h-100">
+            <a href="{{ path('app_product_show',{id: product.id, slug: product.slug|replace({'\'': '-', ' ': '-'})|lower}) }}" class="text-decoration-none text-reset d-block h-100">
                 <div class="product-image position-relative h-100">
                     {% if product.productImages|length > 0 %}
                         <img  src="{{ vich_uploader_asset(product.productImages|first, 'imageFile') }}" 
@@ -23,7 +23,7 @@
 
         <div class="col-6">
             <div class="d-flex flex-column h-100 p-2">
-                <a href="{{ path('app_product_show',{id: product.id}) }}" class="text-decoration-none text-reset">
+                <a href="{{ path('app_product_show',{id: product.id, slug: product.slug|replace({'\'': '-', ' ': '-'})|lower}) }}" class="text-decoration-none text-reset">
                     <h6 class="card-title mb-1 text-truncate">{{ product.name }}</h6>
                     <p class="text-muted small mb-1">{{ product.ref }}</p>
                     {% if product.diametreMm or product.longueurMm %}
@@ -42,13 +42,13 @@
                     <div class="d-flex justify-content-between align-items-center mb-2">
                             <p class="text-primary fw-bold mb-2">Prix : {{ product.priceTtc|number_format(2, ',', ' ') }} €</p>
                             {% if product.stock is defined %}
-                                <p class="small fw-normal mb-2 badge {{ product.stock <= 0 ? 'bg-danger' : (product.stock <= 5 ? 'bg-warning text-dark' : 'text-success') }}">
+                                <p class="small fw-normal mb-2 badge {{ product.stock <= 0 ? 'bg-danger' : (product.stock <= 5 ? 'bg-warning text-dark' : 'bgsuccess-subtle text-success-emphasis') }}">
                                     {% if product.stock <= 0 %}
-                                        <i class="bi bi-x-circle"></i> Rupture
+                                        <i class="bi bi-x-circle" aria-hidden="true"></i> Rupture
                                     {% elseif product.stock <= 5 %}
-                                        <i class="bi bi-exclamation-triangle"></i> {{ product.stock }} restant{{ product.stock > 1 ? 's' : '' }}
+                                        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> {{ product.stock }} restant{{ product.stock > 1 ? 's' : '' }}
                                     {% else %}
-                                        <i class="bi bi-check-circle"></i> En stock({{ product.stock }})
+                                        <i class="bi bi-check-circle" aria-hidden="true"></i> En stock({{ product.stock }})
                                     {% endif %}
                                 </p>
                             {% endif %}
@@ -68,8 +68,10 @@
                           {% if app.user %}
                             {% set isFavorite = product.id in favoriteIds %}
                             <form method="post" action="{{ path('app_favorite_toggle', {id: product.id}) }}" class="mb-0">
-                                <button class="btn btn-outline-danger btn-sm" title="Ajouter aux favoris">
-                                    <i class="bi {{ isFavorite ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                                <button class="btn btn-outline-danger btn-sm" 
+                                        aria-label="{{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}"
+                                        title= " {{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}">
+                                    <i class="bi {{ isFavorite ? 'bi-heart-fill' : 'bi-heart' }}" aria-hidden="true"></i>
                                 </button>
                             </form>
                           {% endif %}

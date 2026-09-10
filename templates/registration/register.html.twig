@@ -9,7 +9,7 @@
       <div class="card">
         <div class="card-body">
 
-          <h1 class="h3 mb-3">✨ Créer un compte</h1>
+          <h1 class="h3 mb-3"><span aria-hidden="true">✨</span> Créer un compte</h1>
 
           {{ form_start(registrationForm) }}
 
@@ -30,7 +30,7 @@
               </div>
 
               <div class="mb-3 form-check">
-                  {{ form_widget(registrationForm.agreeTerms, {attr: {class: 'formcheck-input'}}) }}
+                  {{ form_widget(registrationForm.agreeTerms, {attr: {class: 'form-check-input'}}) }}
                   {{ form_label(registrationForm.agreeTerms, null, {label_attr: {class: 'form-check-label'}}) }}
               </div>
 

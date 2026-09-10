@@ -3,6 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Order;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -57,21 +60,45 @@ class AdminOrderController extends AbstractController
       }
 
       #[Route('/{id}/status', name: 'app_admin_order_status', methods: ['POST'])]
-      public function changeStatus(Order $order, Request $request, EntityManagerInterface $em):Response
+      public function changeStatus(Order $order, Request $request, EntityManagerInterface $em, MailerInterface $mailer):Response
       {
         $newStatus = $request->request->get('status');
         $valid = [
-                    Order::STATUS_PENDING, 
+            //      Order::STATUS_PENDING, 
                     Order::STATUS_PAID, 
+                    Order::STATUS_PREPARING,
                     Order::STATUS_SHIPPED,
-                    Order::STATUS_DELIVERED, 
-                    Order::STATUS_CANCELLED
+                    Order::STATUS_DELIVERED
+            //      Order::STATUS_CANCELLED
                 ];
         if (in_array($newStatus, $valid, true)) 
           {
               $order->setStatus($newStatus);
               $em->flush();
               $this->addFlash('success', 'Statut mis à jour');
+
+              $email = (new TemplatedEmail())
+                  ->from(new Address('no-reply@fixpro.fr', 'Admin'))
+                  ->to(new Address($order->getUser()->getEmail()))
+                  ->subject('Mise à jour du statut de votre commande n°' . $order->getReference())
+                  ->htmlTemplate('emails/order_status.html.twig')
+                  ->context(['order' => $order])
+                  ;
+
+              try {
+                  $mailer->send($email);
+              } catch (\Symfony\Component\Mailer\Exception\TransportExceptionInterface $e) {
+                  // logge l'erreur mais ne bloque pas le webhook Stripe
+                  // ex: $this->logger->error('Erreur envoi email: '.$e->getMessage());
+              }
+
+
+
+
+
+
+
+
           }
 
         return $this->redirectToRoute('app_admin_order_index');

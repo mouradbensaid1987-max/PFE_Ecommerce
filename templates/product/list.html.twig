@@ -8,16 +8,18 @@
     <h1 class="mb-4">Tous nos produits</h1>
 
     <form class="mb-4 p-3 border rounded bg-light" method="get" action="{{ path('app_product_list') }}">
+
         <div class="row g-2 align-items-end">
 
               <div class="col-12 col-md-4">
-                <label class="form-label small">Recherche</label>
-                <input type="search" name="q" class="form-control" placeholder="Nom, référence..." value="{{ filters.search }}">
+            
+                <label for="search-q" class="form-label small visually-hidden">Recherche un produit</label>
+                <input type="search" id="search-q" name="q" class="form-control" placeholder="Nom, référence..." value="{{ filters.search }}">
               </div>
 
               <div class="col-6  col-md-2">
-                <label class="form-label small">Catégorie</label>
-                <select name="category" class="form-select">
+                <label for="filter-category" class="form-label small">Catégorie</label>
+                <select id="filter-category" name="category" class="form-select">
                   <option value="">Toutes</option>
                   {% for cat in categories %}
                     <option value="{{ cat.id }}" {{ filters.category == cat.id ? 'selected' : '' }}>{{ cat.name }}</option>
@@ -25,8 +27,8 @@
                 </select>
               </div>
           <div class="col-6 col-md-2">
-            <label class="form-label small">Matériau</label>
-            <select name="materiau" class="form-select">
+            <label for="filter-materiau" class="form-label small">Matériau</label>
+            <select id="filter-materiau" name="materiau" class="form-select">
               <option value="">Tous</option>
               {% for m in materiaux %}
                 <option value="{{ m }}" {{ filters.materiau == m ? 'selected' : '' }}>{{ m }}</option>
@@ -34,8 +36,8 @@
             </select>
           </div>
           <div class="col-6 col-md-2">
-            <label class="form-label small">Diamètre</label>
-            <select name="diametreMm" class="form-select">
+            <label for="filter-diametre" class="form-label small">Diamètre</label>
+            <select id="filter-diametre" name="diametreMm" class="form-select">
               <option value="">Tous</option>
               {% for d in diametres %}
                 <option value="{{ d }}" {{ filters.diametreMm == d ? 'selected' : '' }}>{{ d }}</option>
@@ -43,8 +45,8 @@
             </select>
           </div>
           <div class="col-6 col-md-2">
-            <label class="form-label small">Type de tête</label>
-            <select name="typeTete" class="form-select">
+            <label for="filter-type-tete" class="form-label small">Type de tête</label>
+            <select id="filter-type-tete" name="typeTete" class="form-select">
               <option value="">Tous</option>
               {% for t in typesTete %}
                 <option value="{{ t }}" {{ filters.typeTete == t ? 'selected' : '' }}>{{ t }}</option>
@@ -52,8 +54,8 @@
             </select>
           </div>
           <div class="col-6 col-md-2">
-            <label class="form-label small">Empreinte</label>
-            <select name="typeEmpreinte" class="form-select">
+            <label for="filter-empreinte" class="form-label small">Empreinte</label>
+            <select id="filter-empreinte" name="typeEmpreinte" class="form-select">
               <option value="">Toutes</option>
               {% for e in typesEmpreinte %}
                 <option value="{{ e }}" {{ filters.typeEmpreinte == e ? 'selected' : '' }}>{{ e }}</option>
@@ -61,8 +63,8 @@
             </select>
           </div>
           <div class="col-6 col-md-2">
-            <label class="form-label small">Unité</label>
-            <select name="unite" class="form-select">
+            <label for="filter-unite" class="form-label small">Unité</label>
+            <select id="filter-unite" name="unite" class="form-select">
               <option value="">Toutes</option>
               {% for u in unites %}
                 <option value="{{ u }}" {{ filters.unite == u ? 'selected' : '' }}>{{ u }}</option>
@@ -70,20 +72,21 @@
             </select>
           </div>
           <div class="col-6 col-md-2">
-            <label class="form-label small">Longueur min (mm)</label>
-            <input type="number" name="longueurMin" class="form-control" value="{{ filters.longueurMin }}">
+            <label for="longueurMin" class="form-label">Longueur min (mm)</label>
+            <input type="number" id="longueurMin" name="longueurMin" class="form-control" value="{{ filters.longueurMin }}">
           </div>
           <div class="col-6 col-md-2">
-            <label class="form-label small">Longueur max (mm)</label>
-            <input type="number" name="longueurMax" class="form-control" value="{{ filters.longueurMax }}">
+            <label for="longueurMax" class="form-label small">Longueur max (mm)</label>
+            <input id="longueurMax" type="number" name="longueurMax" class="form-control" value="{{ filters.longueurMax }}">
           </div>
           <div class="col-6 col-md-2">
-            <button class="btn btn-primary w-100">🔍 Filtrer</button>
+            <button class="btn btn-primary w-100"><span aria-hidden="true">🔍</span> Filtrer</button>
           </div>
           <div class="col-6 col-md-2">
             <a href="{{ path('app_product_list') }}" class="btn btn-outline-secondary w-100">Réinitialiser</a>
           </div>
         </div>
+        
       </form>
 
 

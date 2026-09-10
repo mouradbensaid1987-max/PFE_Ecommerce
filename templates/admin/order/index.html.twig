@@ -3,7 +3,7 @@
 
 {% block admin_body %}
 
-<h1>📋 Toutes les commandes</h1>
+<h1><span aria-hidden="true">📋</span> Toutes les commandes</h1>
 {# === Formulaire de recherche : référence + statut + client === #}
 <form method="get" action="{{ path('app_admin_order_index') }}" class="card mb-4">
     <div class="card-body row g-3 align-items-end">
@@ -15,12 +15,12 @@
             <label class="form-label">État de la commande</label>
             <select name="status" class="form-select">
                 <option value="">Tous les statuts</option>
-                <option value="pending" {% if status == 'pending' %}selected{% endif %}>En attente</option>
+                {#<option value="pending" {% if status == 'pending' %}selected{% endif %}>En attente</option> #}  
                 <option value="paid" {% if status == 'paid' %}selected{% endif %}>Payée</option>
                 <option value="preparing" {% if status == 'preparing' %}selected{% endif %}>En préparation</option>
                 <option value="shipped" {% if status == 'shipped' %}selected{% endif %}>Expédiée</option>
                 <option value="delivered" {% if status == 'delivered' %}selected{% endif %}>Livrée</option>
-                <option value="cancelled" {% if status == 'cancelled' %}selected{% endif %}>Annulée</option>
+                {#<option value="cancelled" {% if status == 'cancelled' %}selected{% endif %}>Annulée</option> #}  
             </select>
         </div>
         <div class="col-md-4">
@@ -38,59 +38,182 @@
 {% if orders|length == 0 %}
     <div class="alert alert-warning">Aucune commande ne correspond à cette recherche.</div>
 {% else %}
-<table class="table mt-3">
-    <thead>
-          <tr>
-              <th>Référence</th>
-              <th>Date</th>
-              <th>Client</th>
-              <th>Total</th>
-              <th class="text-center">Statut</th>
-              <th>Action</th>
-              <th></th>
-          </tr>
-    </thead>
-    <tbody>
-        {% for o in orders %} 
-            <tr>
-                  <td>{{ o.reference }}</td>
-                  <td>{{ o.createdAt|date('d/m/Y H:i') }}</td>
-                  <td>{{ o.user.email }}</td>
-                  <td>{{ o.totalTtc|number_format(2, ',', ' ') }} €</td>
-                  <td class="text-center">
+    <div class="admin-tablet-up">
+      <table class="table mt-3">
+          <thead>
+                <tr>
+                    <th scope="col">Référence</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Client</th>
+                    <th scope="col">Total</th>
+                    <th scope="col" class="text-center">Statut</th>
+                    <th scope="col">Action</th>
+                    <th scope="col"></th>
+                </tr>
+          </thead>
+          <tbody>
+              {% for o in orders %} 
+                  <tr>
+                        <td>{{ o.reference }}</td>
+                        <td>{{ o.createdAt|date('d/m/Y H:i') }}</td>
+                        <td>{{ o.user.email }}</td>
+                        <td>{{ o.totalTtc|number_format(2, ',', ' ') }} €</td>
+                        <td class="text-center">
+                              {% if o.status == 'paid' %}
+                                <span class="badge text-bg-primary fs-6">Payée</span>
+                              {% elseif o.status == 'preparing' %}
+                                <span class="badge text-bg-info fs-6">En préparation</span>
+                              {% elseif o.status == 'shipped' %}
+                                <span class="badge text-bg-secondary fs-6">Expédiée</span>
+                              {% elseif o.status == 'delivered' %}
+                              <span class="badge text-bg-success fs-6">Livrée</span>
+                        
+                              {% endif %}
+                        </td>
+                        <td>
+                            <form method="post" action="{{ path('app_admin_order_status', {id:o.id}) }}" class="d-flex gap-1">
+                              <select name="status" class="form-select form-select-sm">
+                                 {#  <option value="pending" {% if o.status == 'pending'%}selected{% endif %}>En attente</option> #} 
+                                  <option value="paid" {% if o.status == 'paid' %}selected{%endif %}>Payée</option>
+                                  <option value="preparing" {% if o.status == 'preparing' %}selected{%endif %}>En préparation</option>
+                                  <option value="shipped" {% if o.status == 'shipped'%}selected{% endif %}>Expédiée</option>
+                                  <option value="delivered" {% if o.status == 'delivered'%}selected{% endif %}>Livrée</option>
+                                {#  <option value="cancelled" {% if o.status == 'cancelled'%}selected{% endif %}>Annulée</option> #}  
+                              </select>
+                              <button class="btn btn-sm btn-primary" aria-label="Modifier le commande {{ o.reference }}"><span aria-hidden="true">↻</span></button>
 
-                    {% if o.status == 'paid' %}
-                      <h5><span class="badge text-dark text-bg-info">Payée</span></h5>
-                    {% elseif o.status == 'shipped' %}
-                      <h5><span class="badge text-dark text-bg-info">Expédiée</span></h5>
-                    {% elseif o.status == 'delivered' %}
-                      <h5><span class="badge text-dark text-bg-info">Livrée</span></h5>
-                    {% elseif o.status == 'cancelled' %}
-                      <h5><span class="badge text-dark text-bg-danger">Annulée</span></h5>
-                    {% elseif o.status == 'pending' %}
-                      <h5><span class="badge text-dark text-bg-warning">En attente</span></h5>
-                    {% endif %}
-                  
-                  </td>
-                  <td>
-                      <form method="post" action="{{ path('app_admin_order_status', {id:o.id}) }}" class="d-flex gap-1">
-                        <select name="status" class="form-select form-select-sm">
-                            <option value="pending" {% if o.status == 'pending'%}selected{% endif %}>En attente</option>
-                            <option value="paid" {% if o.status == 'paid' %}selected{%endif %}>Payée</option>
-                            <option value="shipped" {% if o.status == 'shipped'%}selected{% endif %}>Expédiée</option>
-                            <option value="delivered" {% if o.status == 'delivered'%}selected{% endif %}>Livrée</option>
-                            <option value="cancelled" {% if o.status == 'cancelled'%}selected{% endif %}>Annulée</option>
-                        </select>
-                        <button class="btn btn-sm btn-primary">↻</button>
-                      </form>
-                  </td>
-                  <td>
-                  <a  href="{{ path('app_admin_order_show', {id: o.id}) }}"
-                    class="btn btn-sm btn-outline-primary">Détails</a>
-                  </td>
-            </tr>
+                            </form>
+                        </td>
+                        <td>
+                        <a  href="{{ path('app_admin_order_show', {id: o.id}) }}"
+                          class="btn btn-sm btn-outline-primary">Détails</a>
+                        </td>
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+    </div>
+
+    <div class="admin-carte-down">
+        {% for o in orders %}
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+
+                    {# En-tête de la commande #}
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="fw-bold mb-1">
+                                Commande #{{ o.reference }}
+                            </h6>
+
+                            <small class="text-muted">
+                                {{ o.createdAt|date('d/m/Y H:i') }}
+                            </small>
+                        </div>
+
+                        {# Statut #}
+                        <div>
+                            {% if o.status == 'paid' %}
+                                <span class="badge text-bg-primary">
+                                    Payée
+                                </span>
+                            {% elseif o.status == 'preparing' %}
+                                <span class="badge text-bg-info">
+                                    En préparation
+                                </span>
+
+                            {% elseif o.status == 'shipped' %}
+                                <span class="badge text-bg-secondary">
+                                    Expédiée
+                                </span>
+
+                            {% elseif o.status == 'delivered' %}
+                                <span class="badge text-bg-success">
+                                    Livrée
+                                </span>
+
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    {# Informations client #}
+                    <div class="mb-3">
+                        <div class="text-muted small">
+                          Client 
+                        </div>
+
+                        <span class="fw-semibold text-break">
+                            {{ o.user.email }}
+                        </span>
+                    </div>
+
+                    {# Total #}
+                    <div class="mb-3">
+                        <div class="text-muted small">
+                            Total
+                        </div>
+
+                        <div class="fs-5 fw-bold">
+                            {{ o.totalTtc|number_format(2, ',', ' ') }} €
+                        </div>
+                    </div>
+
+                    {# Changement de statut #}
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">
+                            Modifier le statut
+                        </label>
+
+                        <form method="post"
+                              action="{{ path('app_admin_order_status', {id:o.id}) }}"
+                              class="d-flex gap-2">
+
+                            <select name="status" class="form-select form-select-sm">
+                                <option value="paid"
+                                    {% if o.status == 'paid' %}selected{% endif %}>
+                                    Payée
+                                </option>
+
+                                <option value="preparing"
+                                    {% if o.status == 'preparing' %}selected{% endif %}>
+                                    En préparation
+                                </option>
+
+                                <option value="shipped"
+                                    {% if o.status == 'shipped' %}selected{% endif %}>
+                                    Expédiée
+                                </option>
+
+                                <option value="delivered"
+                                    {% if o.status == 'delivered' %}selected{% endif %}>
+                                    Livrée
+                                </option>
+
+                            </select>
+
+                            <button type="submit"
+                                    class="btn btn-sm btn-primary"
+                                    title="Modifier le statut"
+                                    aria-label="Modifier le statut de la commande{{ o.reference }}">
+                                <span aria-hidden="true">↻</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    {# Bouton détails #}
+                    <div class="d-grid">
+                        <a href="{{ path('app_admin_order_show', {id: o.id}) }}"
+                          class="btn btn-outline-primary btn-sm">
+                            Voir les détails
+                        </a>
+                    </div>
+
+                </div>
+            </div>
         {% endfor %}
-    </tbody>
-</table>
+
+    </div>
 {% endif %}
 {% endblock %}

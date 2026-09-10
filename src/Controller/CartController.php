@@ -20,6 +20,10 @@ final class CartController extends AbstractController
        
        $data = $cart->getcart($session);
 
+       if($data['cartUpdated'])
+        {
+            $this->addFlash('warning','Le panier a été mis à jour car certains produits ne sont plus disponibles.');
+        }
         return $this->render('cart/index.html.twig', [
             'items'=>$data['cart'],
             'total'=>$data['total'],
@@ -34,7 +38,7 @@ final class CartController extends AbstractController
         $cart = $session->get('cart', []);
         $id = $product->getId();
         $stock = $product->getStock();
-
+        
         $currentQty = $cart[$id] ?? 0;
         $newQty = $currentQty + 1;
 
@@ -71,7 +75,7 @@ final class CartController extends AbstractController
 
 
 
-    #[Route('/remove', name: 'app_cart_remove', methods: ['GET'])]
+    #[Route('/remove', name: 'app_cart_remove', methods: ['POST'])]
     public function remove(SessionInterface $session): Response
     {
 
@@ -84,7 +88,7 @@ final class CartController extends AbstractController
     #[Route('/update/{id}', name: 'app_cart_update', methods: ['POST'])]
     public function update(Product $product, Request $request, SessionInterface $session): Response
     {
-        $qty = (int) $request->request->get('quantity', 1);
+        $qty = (int) $request->request->get('quantity');
         $cart = $session->get('cart');
 
         if ($qty <= 0) 

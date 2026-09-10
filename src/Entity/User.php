@@ -9,11 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Un compte existe déjà avec cette adresse e-mail.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -21,50 +22,69 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+
     #[ORM\Column(length: 180)]
+    #[Assert\Email(message: 'L’adresse e-mail "{{ value }}" n’est pas valide.')]
+    #[Assert\Length(
+        max: 120,
+        maxMessage: 'L’adresse e-mail ne peut pas dépasser {{ limit }} caractères.'
+    )]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
+  
     #[ORM\Column]
     private array $roles = [];
 
+
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire.')]
+    #[Assert\Regex(
+        pattern: "/^[\p{L}\s'-]+$/u",
+        message: 'Le nom ne peut contenir que des lettres, des espaces, des apostrophes et des tirets.'
+    )]
     private ?string $firstName = null;
 
+
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\NotBlank(message: 'Le prenom est obligatoire.')]
+    #[Assert\Regex(
+        pattern: "/^[\p{L}\s'-]+$/u",
+        message: 'Le prenom ne peut contenir que des lettres, des espaces, des apostrophes et des tirets.'
+    )]
     private ?string $lastName = null;
 
-    /**
-     * @var string The hashed password
-     */
+
+    #[ORM\Column]
+    private bool $isVerified = false;
+
+  
     #[ORM\Column]
     private ?string $password = null;
 
-    /**
-     * @var Collection<int, Address>
-     */
+  
     #[ORM\OneToMany(targetEntity: Address::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $addresses;
 
-    /**
-     * @var Collection<int, Order>
-     */
+  
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'user')]
     private Collection $orders;
 
-    /**
-     * @var Collection<int, Message>
-     */
+    
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'user')]
     private Collection $messages;
+
+    /**
+     * @var Collection<int, ResetPasswordRequest>
+     */
+    #[ORM\OneToMany(targetEntity: ResetPasswordRequest::class, mappedBy: 'user')]
+    private Collection $resetPasswordRequests;
 
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->messages = new ArrayCollection();
+        $this->resetPasswordRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,19 +104,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
+    
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
+    
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+
+    public function setVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
+        return $this;
+    }
+
+  
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -106,9 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
+    
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
@@ -116,9 +141,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
+  
+    
+
     public function getPassword(): ?string
     {
         return $this->password;
@@ -131,9 +156,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
-     */
+    
     public function __serialize(): array
     {
         $data = (array) $this;
@@ -171,9 +194,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
       return $this; 
     }
 
-    /**
-     * @return Collection<int, Address>
-     */
+  
     public function getAddresses(): Collection
     {
         return $this->addresses;
@@ -201,9 +222,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Order>
-     */
+  
     public function getOrders(): Collection
     {
         return $this->orders;
@@ -231,9 +250,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Message>
-     */
+  
     public function getMessages(): Collection
     {
         return $this->messages;
@@ -260,4 +277,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, ResetPasswordRequest>
+     */
+    public function getResetPasswordRequests(): Collection
+    {
+        return $this->resetPasswordRequests;
+    }
+
+    public function addResetPasswordRequest(ResetPasswordRequest $resetPasswordRequest): static
+    {
+        if (!$this->resetPasswordRequests->contains($resetPasswordRequest)) {
+            $this->resetPasswordRequests->add($resetPasswordRequest);
+            $resetPasswordRequest->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResetPasswordRequest(ResetPasswordRequest $resetPasswordRequest): static
+    {
+        if ($this->resetPasswordRequests->removeElement($resetPasswordRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($resetPasswordRequest->getUser() === $this) {
+                $resetPasswordRequest->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
+    
 }

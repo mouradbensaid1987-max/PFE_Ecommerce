@@ -7,15 +7,13 @@
 {% block body %}
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"> <a href="{{ path('app_home') }}"><i class="bi bi-house-door"></i> Accueil </a> </li>
+        <li class="breadcrumb-item"> <a href="{{ path('app_home') }}"><i class="bi bi-house-door" aria-hidden="true"></i> Accueil </a> </li>
         <li class="breadcrumb-item"> <a href="{{ path('app_product_list') }}"> Produits </a> </li>
-        <li class="breadcrumb-item active">{{ product.name }}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
       </ol>
     </nav>
 
-
   <div class="row g-5">
-
     <div class="col-md-6">
     {% if product.productImages|length > 0 %}
 
@@ -44,11 +42,13 @@
             
             <div class="mt-2">
                 {% for productImage in product.productImages %}
-                    <img src="{{ vich_uploader_asset(productImage, 'imageFile') }}"
-                         alt="{{ product.name }}"
-                         class="product-thumbnail me-2 m-2"
-                         data-bs-target="#productCarousel"
-                         data-bs-slide-to="{{ loop.index0 }}">
+                    <button type="button"
+                            class="product-thumbnail-btn me-2 m-2 p-0 border-0 bg-transparent"
+                            data-bs-target="#productCarousel"
+                            data-bs-slide-to="{{ loop.index0 }}"
+                            aria-label="Voir la photo {{ loop.index }} sur {{ product.productImages|length }} de {{product.name }}">
+                            <img src="{{ vich_uploader_asset(productImage, 'imageFile') }}" alt="" class="product-thumbnail">
+                    </button>
                 {% endfor %}
             </div>
           
@@ -63,8 +63,9 @@
 
     <div class="col-md-6">
       <h1>{{ product.name }}</h1>
+      <p class="text-muted">Reference : {{ product.ref }}</p>
       <p class="text-muted">Catégorie : {{ product.category.name }}</p>
-      <p>{{ product.description }}</p>
+      <p class="text-justify">{{ product.description }}</p>
       <h2 class="text-primary">  {{ product.priceTtc|number_format(2, ',', ' ') }} € TTC  </h2>
       <p class="text-muted small">TVA {{ product.tva.rate }}%</p>
 
@@ -76,43 +77,43 @@
               <tbody>
                   {% if product.materiau %}
                     <tr>
-                        <th>Matériau</th>
+                        <th scope="row">Matériau</th>
                         <td>{{ product.materiau }}</td>
                     </tr>
                   {% endif %}
                   {% if product.diametreMm %}
                     <tr>
-                        <th>Diamètre</th>
+                        <th scope="row">Diamètre</th>
                         <td>{{ product.diametreMm }}</td>
                     </tr>
                   {% endif %}
                   {% if product.longueurMm %}
                     <tr>
-                        <th>Longueur</th>
+                        <th scope="row">Longueur</th>
                         <td>{{ product.longueurMm }} mm</td>
                     </tr>
                   {% endif %}
                   {% if product.typeTete %}
                     <tr>
-                        <th>Type de tête</th>
+                        <th scope="row">Type de tête</th>
                         <td>{{ product.typeTete }}</td>
                     </tr>
                   {% endif %}
                   {% if product.typeEmpreinte %}
                     <tr>
-                        <th>Empreinte</th>
+                        <th scope="row">Empreinte</th>
                         <td>{{ product.typeEmpreinte }}</td>
                     </tr>
                   {% endif %}
                   {% if product.unite %}
                     <tr>
-                        <th>Unité de vente</th>
+                        <th scope="row">Unité de vente</th>
                         <td>{{ product.unite }}</td>
                     </tr>
                   {% endif %}
                   {% if product.quantiteConditionnement %}
                     <tr>
-                        <th>Conditionnement</th>
+                        <th scope="row">Conditionnement</th>
                         <td>{{ product.quantiteConditionnement }} pièce(s)</td>
                     </tr>
                   {% endif %}
@@ -121,13 +122,13 @@
       {% endif %}
 
       {% if product.stock is defined %}
-          <p class="badge {{ product.stock <= 0 ? 'bg-danger' : (product.stock <= 5 ? 'bg-warning text-dark' : 'text-success') }}">
+          <p class="badge {{ product.stock <= 0 ? 'bg-danger' : (product.stock <= 5 ? 'bg-warning text-dark' : 'bgsuccess-subtle text-success-emphasis') }}">
               {% if product.stock <= 0 %}
-                  <i class="bi bi-x-circle"></i> Rupture
+                  <i class="bi bi-x-circle" aria-hidden="true"></i> Rupture
               {% elseif product.stock <= 5 %}
-                  <i class="bi bi-exclamation-triangle"></i> {{ product.stock }} restant{{ product.stock > 1 ? 's' : '' }}
+                  <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> {{ product.stock }} restant{{ product.stock > 1 ? 's' : '' }}
               {% else %}
-                  <i class="bi bi-check-circle"></i> En stock({{ product.stock }})
+                  <i class="bi bi-check-circle" aria-hidden="true"></i> En stock({{ product.stock }})
               {% endif %}
           </p>
       {% endif %}
@@ -137,14 +138,16 @@
           <form method="post" action="{{ path('app_cart_add', {id: product.id}) }}" class="flex-grow-1">
               <button class="btn btn-primary btn-lg w-100"
                 {% if product.stock <= 0 %} disabled {% endif %}>
-                🛒 Ajouter au panier
+                <span aria-hidden="true">🛒</span> Ajouter au panier
               </button>
           </form>
           {% if app.user %}
               {% set isFavorite = product.id in favoriteIds %}
               <form method="post" action="{{ path('app_favorite_toggle', {id: product.id}) }}">
-                  <button class="btn btn-outline-danger btn-lg" title="Ajouter aux favoris">
-                      <i class="bi {{ isFavorite ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                  <button class="btn btn-outline-danger btn-lg" 
+                          aria-label="{{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}"
+                          title= " {{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}">  
+                      <i class="bi {{ isFavorite ? 'bi-heart-fill' : 'bi-heart' }}" aria-hidden="true" ></i>
                   </button>
               </form>
           {% endif %}

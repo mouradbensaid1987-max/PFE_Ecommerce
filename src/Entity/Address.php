@@ -10,8 +10,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Address
 {
 
-    public const TYPE_DELIVERY = 'delivery';
-    public const TYPE_BILLING = 'billing';
 
 
     #[ORM\Id]
@@ -45,8 +43,6 @@ class Address
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $phone = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $type = self::TYPE_DELIVERY;
 
     #[ORM\ManyToOne(inversedBy: 'addresses')]
     #[ORM\JoinColumn(nullable: false)]

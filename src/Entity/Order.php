@@ -7,17 +7,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
 class Order
 {
 
-    public const STATUS_PENDING = 'pending';
+    //public const STATUS_PENDING = 'pending';
     public const STATUS_PAID = 'paid';
+    public const STATUS_PREPARING = 'preparing';
     public const STATUS_SHIPPED = 'shipped';
     public const STATUS_DELIVERED = 'delivered';
-    public const STATUS_CANCELLED = 'cancelled';
+    //public const STATUS_CANCELLED = 'cancelled';
 
 
     #[ORM\Id]
@@ -32,7 +34,7 @@ class Order
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(length: 20)]
-    private ?string $status = self::STATUS_PENDING;
+    private ?string $status = self::STATUS_PAID;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $totalTtc = null;
@@ -61,6 +63,8 @@ class Order
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+  
 
     /**
      * @var Collection<int, OrderItem>

@@ -2,14 +2,11 @@
 
 namespace App\Controller\Client;
 
-use App\Entity\Order;
-use App\Entity\OrderItem;
+
 use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Service\Cart;
 
-use App\Service\StripePayment;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,16 +24,23 @@ class OrderController extends AbstractController
     #[Route('/checkout', name: 'app_order_checkout')]
     public function checkout(Cart $cart,SessionInterface $session, AddressRepository $addressRepository): Response
     {
-      $data =$cart->getcart($session);
-      if (empty($data)) 
+      
+      $data = $cart->getcart($session);
+      
+    
+      if (empty($data) || $data['total']==0) 
         {
           $this->addFlash('warning', 'Votre panier est vide.');
           return $this->redirectToRoute('app_cart_index');
+
+        } elseif($data['cartUpdated'])
+        {
+            $this->addFlash('warning','Votre panier a été mis à jour : certains produits ne sont plus disponibles.');
         }
+
       
       $deliveryAddresses = $addressRepository->findBy([
-          'user' => $this->getUser(),
-          'type' => 'delivery',
+          'user' => $this->getUser()
         ]);
 
 
@@ -52,7 +56,7 @@ class OrderController extends AbstractController
 
     #[Route('/confirm', name: 'app_order_confirm', methods: ['POST'])]
     public function confirm( Request $request, AddressRepository $addressRepository,
-                             Cart $cart,StripePayment $payment, EntityManagerInterface $em, SessionInterface $session
+                             Cart $cart,SessionInterface $session
                         ): Response {
 
         $addressId = (int) $request->request->get('address_id');
@@ -63,36 +67,47 @@ class OrderController extends AbstractController
               throw $this->createAccessDeniedException();
           }
         
-          $data =$cart->getcart($session);
+        $data =$cart->getcart($session);
 
-          $order = new Order();
-          $order->setUser($this->getUser());
-          $order->setShippingCost((string) $data['shippingFee']);
-          $order->setTotalTtc((string) $data['totalWithShipping']);
-          $order->setStatus(Order::STATUS_PENDING);
+        if (empty($data) || $data['total']==0) 
+        {
+          $this->addFlash('warning', 'Votre panier est vide.');
+          return $this->redirectToRoute('app_cart_index');
 
-          $order->setDeliveryFirstName($address->getFirstName());
-          $order->setDeliveryLastName($address->getLastName());
-          $order->setDeliveryStreet($address->getStreet());
-          $order->setDeliveryPostalCode($address->getPostalCode());
-          $order->setDeliveryCity($address->getCity());
-          $order->setDeliveryCountry($address->getCountry());
+        } elseif($data['cartUpdated'])
+        {
+            $this->addFlash('warning','Votre panier a été mis à jour : certains produits ne sont plus disponibles.');
+        }
 
-          foreach ($data['cart'] as $item) 
-            {
-                $orderItem = new OrderItem();
-                $orderItem->setProduct($item['product']);
-                $orderItem->setTva($item['product']->getTva()->getRate());
-                $orderItem->setPriceTtc((string) $item['product']->getPriceTtc());
-                $orderItem->setQuantity($item['quantity']);
-                $order->addItem($orderItem);
-            }
+        $cartData = [];
+        foreach ($data['cart'] as $item)
+          {
+                $product = $item['product'];
+                $cartData[] = [
+                      'productId' => $product->getId(),
+                      'name' => $product->getName(),
+                      'quantity' => $item['quantity'],
+                      'priceTtc' => (string) $product->getPriceTtc(),
+                      'tva' => (string) $product->getTva()->getRate(),
+                ];
+          }
+          $checkoutData = [
+                'reference' => 'CMD-' . strtoupper(bin2hex(random_bytes(4))),
+                'userId' => $this->getUser()->getId(),
+                'userEmail' => $this->getUser()->getEmail(),
+                'totalTtc' => (string) $data['totalWithShipping'],
+                'shippingCost' => (string) $data['shippingFee'],
+                'deliveryFirstName' => $address->getFirstName(),
+                'deliveryLastName' => $address->getLastName(),
+                'deliveryStreet' => $address->getStreet(),
+                'deliveryPostalCode' => $address->getPostalCode(),
+                'deliveryCity' => $address->getCity(),
+                'deliveryCountry' => $address->getCountry(),
+                'cart' => $cartData,
+            ];
 
-          $em->persist($order);
-          $em->flush();
-          
-        return $this->redirectToRoute('app_payment', ['id' => $order->getId()]);
-
+          $session->set('checkout_order', $checkoutData);    
+          return $this->redirectToRoute('app_payment');
     }
 
     #[Route('/history', name: 'app_order_history')]

@@ -1,7 +1,7 @@
 {% if pageCount > 1 %}
 
 
-<nav aria-label="...">
+<nav aria-label="Pagination des résultats">
   <ul style="display: flex; align-items: center; justify-content:space-around" class="pagination">
 
         {% if previous is defined %}
@@ -15,12 +15,12 @@
         {% for page in pagesInRange %}
 
             {% if page != current %}
-                <li class="page-item active" aria-current="page">
-                    <a style="border-radius:10%" class="page-link m-1" href = "{{ path(route,query|merge({(pageParameterName):page})) }}">{{ page }}</a>
+                <li class="page-item">
+                    <a class="page-link m-1" href = "{{ path(route,query|merge({(pageParameterName):page})) }}">{{ page }}</a>
                 </li>
             {% else %}
                 <li class="page-item active" aria-current="page">
-                    <a style="border-radius: 10%;" class="page-link disabled text-white-50 bg-primary" href = "{{ path(route,query|merge({(pageParameterName):page})) }}">{{ page }}</a>
+                    <span class="page-link disabled text-white bg-primary" href = "{{ path(route,query|merge({(pageParameterName):page})) }}">{{ page }}</span>
                 </li>
             {% endif %}
 

@@ -5,8 +5,8 @@
 {% block body %}
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>📍 Mes adresses</h1>
-        <a href="{{ path('app_address_new') }}" class="btn btn-primary pb-2 pe-3">➕ Ajouter</a>
+        <h1><span aria-hidden="true">📍</span> Mes adresses</h1>
+        <a href="{{ path('app_address_new') }}" class="btn btn-primary pb-2 pe-3"><span aria-hidden="true">➕</span> Ajouter</a>
     </div>
 
     {% if addresses|length == 0 %}
@@ -18,27 +18,22 @@
             <div class="col-md-6">
               <div class="card h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between mb-2">
-                        {% if address.isDelivery() %}
-                            <span class="badge bg-success">📦 Livraison</span>
-                        {% else %}
-                            <span class="badge bg-info">🧾 Facturation</span>
-                        {% endif %}
-                    </div>
-                    <h6 class="mb-1">{{ address.firstName }} {{ address.lastName }}</h6>
+                    
+                    <h2 class="h6 mb-1">{{ address.firstName }} {{ address.lastName }}</h2>
                     <p class="mb-1 text-muted small">
                         {{ address.street }}<br>
                         {{ address.postalCode }} {{ address.city }}<br>
                         {{ address.country }}
                         {% if address.phone %}
-                            <br>📞 {{ address.phone }}
+                            <br><span aria-hidden="true">📞</span> {{ address.phone }}
                         {% endif %}
                     </p>
                 </div>
                 <div class="card-footer d-flex gap-2">
 
                     <a href="{{ path('app_address_edit', {id: address.id}) }}" 
-                       class="btn btn-sm btn-outline-primary">✏️ Modifier</a>
+                       class="btn btn-sm btn-outline-primary"><span aria-hidden="true">✏️</span> Modifier</a>
+                       <span aria-hidden="true"></span>
 
                     <form method="post" 
                           action="{{ path('app_address_delete', {id:address.id}) }}"
@@ -47,8 +42,7 @@
                       <input type="hidden" 
                              name="_token"
                              value="{{ csrf_token('delete' ~ address.id) }}">
-
-                      <button class="btn btn-sm btn-outline-danger">🗑️ Supprimer</button>
+                      <button class="btn btn-sm btn-outline-danger"><span aria-hidden="true">🗑️</span> Supprimer</button>
 
                     </form>
                 </div>

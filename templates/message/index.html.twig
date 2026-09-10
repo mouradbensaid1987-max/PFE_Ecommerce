@@ -5,8 +5,13 @@
 {% block body %}
 
     <div class="d-flex justify-content-between align-items-center">
-        <h1>✉️ Mes messages</h1>
-        <a href="{{ path('app_message_new') }}" class="btn btn-primary">Nouveau message</a>
+        <h1><span aria-hidden="true">✉️</span> Mes messages</h1>
+          {% if is_granted('ROLE_ADMIN') %}
+                  
+            {% else %}
+                <a href="{{ path('app_message_new') }}" class="btn btn-primary">Nouveau message</a>
+            {% endif %}
+        
     </div>
 
     {% for m in messages %}

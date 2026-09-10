@@ -1,36 +1,154 @@
-<h1 style="color:#333; font-family: Arial, sans-serif;">Merci pour votre commande !</h1>
 
-<p style="font-family: Arial, sans-serif; font-size: 14px;">
-    Bonjour {{ order.user.firstname }},
-</p>
 
-<p style="font-family: Arial, sans-serif; font-size: 14px;">
-    Votre commande <strong>#{{ order.reference }}</strong> a bien été payée.
-</p>
+<body style="margin:0; padding:0; background-color:#f4f5f7; font-family: Arial, Helvetica, sans-serif;">
 
-<table style="width:100%; border-collapse: collapse; font-family: Arial, sans-serif;">
-    <thead>
-        <tr style="background-color:#cfe2ff; text-align:left;">
-            <th style="padding:8px; border:1px solid #dee2e6;">Produit</th>
-            <th style="padding:8px; border:1px solid #dee2e6;">Quantité</th>
-            <th style="padding:8px; border:1px solid #dee2e6;">Prix</th>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f5f7; padding: 30px 0;">
+  <tr>
+    <td align="center">
+
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+
+        {# HEADER #}
+        <tr>
+          <td style="background-color:#1e4a8a; padding: 28px 32px; text-align:center;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td align="center">
+                  <div style="display:inline-block; width:52px; height:52px; background-color:#ffffff; border-radius:50%; line-height:52px; font-size:26px; color:#0d6efd; font-weight:bold;">&#10003;</div>
+                </td>
+              </tr>
+            </table>
+            <h1 style="margin: 16px 0 4px 0; color:#ffffff; font-size:22px; font-weight:bold;">Commande confirmée</h1>
+            <p style="margin:0; color:#dbe9ff; font-size:14px;">Merci pour votre confiance</p>
+          </td>
         </tr>
-    </thead>
-    <tbody>
-        {% for item in order.items %}
-        <tr style="background-color:#e7f1ff;">
-            <td style="padding:8px; border:1px solid #dee2e6;">{{ item.product.name }}</td>
-            <td style="padding:8px; border:1px solid #dee2e6;">{{ item.quantity }}</td>
-            <td style="padding:8px; border:1px solid #dee2e6;">{{ item.product.getPriceTtc() }} €</td>
+
+        {# INTRO #}
+        <tr>
+          <td style="padding: 28px 32px 8px 32px;">
+            <p style="margin:0 0 6px 0; font-size:15px; color:#212529;">
+              Bonjour {{ order.user.firstName }},
+            </p>
+            <p style="margin:0; font-size:14px; color:#495057; line-height:1.6;">
+              Nous avons bien reçu votre paiement. <br>
+              Un e-mail vous sera envoyé lorsque votre commande aura été expédiée.<br>
+              Sachez que vous pouvez vérifier le statut de votre commande à tout moment en vous connectant à votre compte.<br>
+              Voici le récapitulatif de votre commande.
+            </p>
+          </td>
         </tr>
-        {% endfor %}
-    </tbody>
+
+        {# REFERENCE BOX #}
+        <tr>
+          <td style="padding: 16px 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8f9fa; border:1px solid #e9ecef; border-radius:6px;">
+              <tr>
+                <td style="padding:14px 18px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="font-size:13px; color:#6c757d;">Numéro de commande</td>
+                      <td style="font-size:13px; color:#6c757d; text-align:right;">Statut</td>
+                    </tr>
+                    <tr>
+                      <td style="font-size:15px; font-weight:bold; color:#212529; padding-top:2px;">#{{ order.reference }}</td>
+                      <td style="text-align:right; padding-top:2px;">
+                        <span style="display:inline-block; background-color:#d1e7dd; color:#0f5132; font-size:12px; font-weight:bold; padding:3px 10px; border-radius:12px;">Payée</span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        {# ITEMS TABLE #}
+        <tr>
+          <td style="padding: 8px 32px 0 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <thead>
+                <tr>
+                  <th align="left" style="font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:#868e96; padding: 10px 0; border-bottom: 2px solid #e9ecef;">Produit</th>
+                  <th align="center" style="font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:#868e96; padding: 10px 0; border-bottom: 2px solid #e9ecef;">Qté</th>
+                  <th align="right" style="font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:#868e96; padding: 10px 0; border-bottom: 2px solid #e9ecef;">Prix</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in order.items %}
+                <tr>
+                  <td style="padding: 12px 0; font-size:14px; color:#212529; border-bottom:1px solid #f1f3f5;">{{ item.product.name }}</td>
+                  <td align="center" style="padding: 12px 0; font-size:14px; color:#495057; border-bottom:1px solid #f1f3f5;">{{ item.quantity }}</td>
+                  <td align="right" style="padding: 12px 0; font-size:14px; color:#212529; border-bottom:1px solid #f1f3f5;">{{ item.priceTtc }} €</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </td>
+        </tr>
+
+        {# TOTALS #}
+        <tr>
+          <td style="padding: 12px 32px 0 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="font-size:14px; color:#495057; padding: 4px 0;">Sous-total</td>
+                <td align="right" style="font-size:14px; color:#495057; padding: 4px 0;">{{ (order.totalTtc - order.shippingCost)|number_format(2, ',', ' ') }} €</td>
+              </tr>
+              <tr>
+                <td style="font-size:14px; color:#495057; padding: 4px 0;">Livraison</td>
+                <td align="right" style="font-size:14px; color:#495057; padding: 4px 0;">{{ order.shippingCost }} €</td>
+              </tr>
+              <tr>
+                <td style="font-size:16px; font-weight:bold; color:#212529; padding: 10px 0 0 0; border-top:1px solid #e9ecef;">Total TTC</td>
+                <td align="right" style="font-size:16px; font-weight:bold; color:#0d6efd; padding: 10px 0 0 0; border-top:1px solid #e9ecef;">{{ order.totalTtc }} €</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        {# DELIVERY ADDRESS #}
+        <tr>
+          <td style="padding: 24px 32px 0 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8f9fa; border:1px solid #e9ecef; border-radius:6px;">
+              <tr>
+                <td style="padding:14px 18px;">
+                  <p style="margin:0 0 6px 0; font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:#868e96; font-weight:bold;">Adresse de livraison</p>
+                  <p style="margin:0; font-size:14px; color:#212529; line-height:1.5;">
+                    {{ order.deliveryFirstName }} {{ order.deliveryLastName }}<br>
+                    {{ order.deliveryStreet }}<br>
+                    {{ order.deliveryPostalCode }} {{ order.deliveryCity }}<br>
+                    {{ order.deliveryCountry }}
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        {# CTA #}
+        <tr>
+          <td style="padding: 28px 32px; text-align:center;">
+            <a href="{{ absolute_url(path('app_order_show', {id: order.id})) }}" style="display:inline-block; background-color:#1e4a8a; color:#ffffff; text-decoration:none; font-size:14px; font-weight:bold; padding:12px 28px; border-radius:6px;">
+              Voir ma commande
+            </a>
+          </td>
+        </tr>
+
+        {# FOOTER #}
+        <tr>
+          <td style="padding: 20px 32px; background-color:#f8f9fa; border-top:1px solid #e9ecef; text-align:center;">
+            <p style="margin:0; font-size:12px; color:#868e96;">
+              Un souci avec votre commande ? Contactez-nous à support@tonsite.fr
+            </p>
+            <p style="margin:6px 0 0 0; font-size:12px; color:#adb5bd;">
+              © 2026 Quincaillerie Pro — Tous droits réservés
+            </p>
+          </td>
+        </tr>
+
+      </table>
+
+    </td>
+  </tr>
 </table>
-
-<p style="font-family: Arial, sans-serif; font-size: 14px;">
-    <strong>Total TTC : {{ order.totalTtc }} €</strong>
-</p>
-
-<p style="font-family: Arial, sans-serif; font-size: 14px;">
-    Merci de votre confiance !
-</p>
+</body>

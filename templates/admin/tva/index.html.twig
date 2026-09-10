@@ -3,16 +3,16 @@
 {% block admin_body %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>💰 TVA</h1>
-    <a href="{{ path('app_admin_tva_new') }}" class="btn btn-primary">➕ Nouvelle</a>
+    <h1><span aria-hidden="true">💰</span> TVA</h1>
+    <a href="{{ path('app_admin_tva_new') }}" class="btn btn-primary"><span aria-hidden="true">➕</span> Nouvelle</a>
 </div>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Nom</th>
-            <th>Taux</th>
-            <th></th>
+            <th scope="col">Nom</th>
+            <th scope="col">Taux</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
@@ -21,11 +21,15 @@
             <td>{{ tva.name }}</td>
             <td>{{ tva.rate }}</td>
             <td class="text-end">
-                <a href="{{ path('app_admin_tva_edit', {id: tva.id}) }}" class="btn btn-sm btn-outline-primary">✏️</a>
+                <a href="{{ path('app_admin_tva_edit', {id: tva.id}) }}" 
+                   class="btn btn-sm btn-outline-primary"
+                   aria-label="Modifier la TVA {{ tva.name}}">
+                  <span aria-hidden="true">✏️</span>
+                </a>
                 <form method="post" action="{{ path('app_admin_tva_delete', {id:tva.id}) }}"
                       class="d-inline" onsubmit="return confirm('Supprimer ?');">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tva.id) }}">
-                    <button class="btn btn-sm btn-outline-danger">🗑️</button>
+                    <button class="btn btn-sm btn-outline-danger" aria-label="Supprimer la TVA {{ tva.name}}"><span aria-hidden="true">🗑️</span></button>
                 </form>
             </td>
           </tr>

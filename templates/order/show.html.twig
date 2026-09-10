@@ -10,15 +10,15 @@
 
 <div class="row mt-3">
     <div class="col-md-9">
-        <h3>Articles</h3>
+        <h2 class="h5">Articles</h2>
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>Ref</th>
-                    <th>Produit</th>
-                    <th>Qté</th>
-                    <th>Prix</th>
-                    <th class="text-end pe-4">Sous-total</th>
+                    <th scope="col">Ref</th>
+                    <th scope="col">Produit</th>
+                    <th scope="col">Qté</th>
+                    <th scope="col">Prix</th>
+                    <th scope="col" class="text-end pe-4">Sous-total</th>
                 </tr>
             </thead>
 
@@ -38,17 +38,17 @@
 
             <tfoot>
                 <tr>
-                    <th colspan="4" class="text-end">Sous-total</th>
-                    <th class="text-end pe-4">{{ (order.totalTtc - order.shippingCost)|number_format(2, ',', ' ') }}€</th>
+                    <th scope="row" colspan="4" class="text-end">Sous-total</th>
+                    <th scope="col" class="text-end pe-4">{{ (order.totalTtc - order.shippingCost)|number_format(2, ',', ' ') }}€</th>
                 </tr>
                 <tr>
-                    <th colspan="4" class="text-end">Frais de livraison</th>
-                    <th class="text-end pe-4">{{ order.shippingCost|number_format(2, ',', ' ') }}€</th>
+                    <th scope="row" colspan="4" class="text-end">Frais de livraison</th>
+                    <th scope="col" class="text-end pe-4">{{ order.shippingCost|number_format(2, ',', ' ') }}€</th>
                 </tr>
 
                 <tr>
-                    <th colspan="4" class="text-end">Total</th>
-                    <th class="text-primary text-end pe-4">{{ order.totalTtc|number_format(2, ',', ' ') }}€</th>
+                    <th scope="row" colspan="4" class="text-end">Total</th>
+                    <th scope="col" class="text-primary text-end pe-4">{{ order.totalTtc|number_format(2, ',', ' ') }}€</th>
                 </tr>
             </tfoot>
         </table>
@@ -59,7 +59,7 @@
     <div class="col-md-3">
         <div class="card">
             <div class="card-header">
-                <strong>📦 Livraison</strong>
+                <strong><span aria-hidden="true">📦</span> Livraison</strong>
             </div>
 
             <div class="card-body">

@@ -2,16 +2,19 @@
 
     <div class="container">
 
-        <a class="navbar-brand fw-bold" href="{{ path('app_home') }}">🛍️ Quincaillerie Pro</a>
+        <a class="navbar-brand fw-bold" href="{{ path('app_home') }}">
+              <img src="{{ asset('images/logo_nav.svg') }}" alt="" height="40" >
+              FixPro
+        </a>
 
         <div class="collapse navbar-collapse" id="navMain">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_product_list') }}">Produits</a>
+                    <a class="nav-link text-white" href="{{ path('app_product_list') }}">Produits</a>
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Catégories
                     </a>
                     <ul class="dropdown-menu">
@@ -24,7 +27,7 @@
                 </li>
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item">
-                        <li><a class="nav-link" href="{{ path('app_admin_dashboard') }}"><i class="bi bi-speedometer2"></i> Administration</a></li>
+                        <a class="nav-link text-white" href="{{ path('app_admin_dashboard') }}">Administration</a>
                     </li>
                 {% endif %}
 
@@ -36,14 +39,14 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            👤 {{ app.user.firstName }}
+                            <span aria-hidden="true">👤</span> {{ app.user.firstName }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{{ path('app_profile') }}">👤 Mon profil</a></li>
-                            <li><a class="dropdown-item" href="{{ path('app_address_list') }}">📍 Mes adresses</a></li>
-                            <li><a class="dropdown-item" href="{{ path('app_order_history') }}">📦 Mes commandes</a></li>
-                            <li><a class="dropdown-item" href="{{ path('app_favorites') }}">❤️ Mes favoris</a></li>
-                            <li><a class="dropdown-item" href="{{ path('app_message_index') }}">✉️ Mes messages</a></li>
+                            <li><a class="dropdown-item" href="{{ path('app_profile') }}"><span aria-hidden="true">👤</span> Mon profil</a></li>
+                            <li><a class="dropdown-item" href="{{ path('app_address_list') }}"><span aria-hidden="true">📍</span> Mes adresses</a></li>
+                            <li><a class="dropdown-item" href="{{ path('app_order_history') }}"><span aria-hidden="true">📦</span> Mes commandes</a></li>
+                            <li><a class="dropdown-item" href="{{ path('app_favorites') }}"><span aria-hidden="true">❤️</span> Mes favoris</a></li>
+                            <li><a class="dropdown-item" href="{{ path('app_message_index') }}"><span aria-hidden="true">✉️</span> Mes messages</a></li>
   
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a></li>
@@ -59,19 +62,26 @@
                 {% endif %}
             </ul>
         </div>
-        <li class="nav-item d-flex align-items-center">
-            <a class="btn btn-outline-light btn-sm position-relative ms-2" href="{{ path('app_cart_index') }}">
-              🛒
+        <div class="nav-item d-flex align-items-center">
+            <a class="btn btn-outline-light btn-sm position-relative mx-2" href="{{ path('app_cart_index') }}"
+               aria-label="Voir mon panier ( {{ cart.getCount() }} article(s))">
+              <span aria-hidden="true">🛒</span>
                 {% if cart.getCount() > 0 %}
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                       {{ cart.getCount() }}
                     </span>
                 {% endif %}
             </a>
+            
+      
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <button class="navbar-toggler mx-2" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navMain"
+                    aria-controls="navMain" aria-expanded="false"
+                    aria-label="Ouvrir/fermer le menu de navigation">
+                  <span class="navbar-toggler-icon"></span>
+            </button>
+      </div>
 
     </div>
 </nav>

@@ -38,7 +38,7 @@ final class FactureController extends AbstractController
             throw $this->createNotFoundException('Aucune facture disponible pour cette commande.');
         }
 
-        $logoPath = $this->getParameter('kernel.project_dir') . '/public/uploads/image1.png';
+        $logoPath = $this->getParameter('kernel.project_dir') . '/public/images/logo_facture.png';
         
 
         $pdfOptions = new Options();

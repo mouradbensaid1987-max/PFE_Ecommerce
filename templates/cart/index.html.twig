@@ -32,20 +32,20 @@
                 <table class="table table-striped align-middle mb-0">
                     <thead>
                         <tr class="bg-primary text-white">
-                            <th class="bg-primary text-white">Img</th>
-                            <th class="bg-primary text-white">Ref</th>
-                            <th class="bg-primary text-white">Produit</th>
-                            <th class="bg-primary text-white">Quantité</th>
-                            <th class="bg-primary text-white text-end">Prix-U</th>
-                            <th class="bg-primary text-white text-end">S-total</th>
-                            <th class="bg-primary text-white text-end"></th>
+                            <th scope="col" class="bg-primary text-white">Img</th>
+                            <th scope="col" class="bg-primary text-white">Ref</th>
+                            <th scope="col" class="bg-primary text-white">Produit</th>
+                            <th scope="col" class="bg-primary text-white">Quantité</th>
+                            <th scope="col" class="bg-primary text-white text-end">Prix-U</th>
+                            <th scope="col" class="bg-primary text-white text-end">S-total</th>
+                            <th scope="col" class="bg-primary text-white text-end"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for item in items %}
                             <tr>
                                 <td>
-                                    <a href="{{ path('app_product_show', {id: item.product.id}) }}">
+                                    <a href="{{ path('app_product_show', {id: item.product.id, slug: item.product.slug|replace({'\'': '-', ' ': '-'})|lower}) }}">
                                       <div class="admin-product-image">
                                           {% if item.product.productImages|length > 0 %}
                                               <img  src="{{ vich_uploader_asset(item.product.productImages|first, 'imageFile') }}"
@@ -59,7 +59,7 @@
                                 </td>
                                 <td>{{ item.product.ref }}</td>
                                 <td>
-                                    <a href="{{ path('app_product_show', {id: item.product.id}) }}"
+                                    <a href="{{ path('app_product_show', {id: item.product.id, slug: item.product.slug|replace({'\'': '-', ' ': '-'})|lower}) }}"
                                        class="text-decoration-none text-dark fw-medium">
                                         {{ item.product.name }}
                                     </a>
@@ -69,14 +69,20 @@
                                     <form method="post"
                                           action="{{ path('app_cart_update', {id: item.product.id}) }}"
                                           class="d-flex gap-2">
+
+                                          <label for="qty-{{ item.product.id }}" class="visually-hidden">
+                                              Quantité pour {{ item.product.name }}
+                                          </label>
+
                                         <input type="number"
+                                              id="qty-{{ item.product.id }}"
                                                name="quantity"
                                                value="{{ item.quantity }}"
                                                min="0"
                                                class="form-control form-control-sm text-center"
                                                style="max-width:70px">
-                                        <button class="btn btn-sm btn-outline-primary" title="Mettre à jour">
-                                            ↻
+                                        <button class="btn btn-sm btn-outline-primary" aria-label="Mettre à jour la quantité" title="Mettre à jour">
+                                            <span aria-hidden="true">↻</span>
                                         </button>
                                     </form>
                                 </td>
@@ -92,8 +98,9 @@
                                 <td class="text-end">
                                     <a href="{{ path('app_cart_product_remove', {id: item.product.id}) }}"
                                        class="btn btn-sm btn-outline-danger"
-                                       title="Retirer l'article">
-                                        🗑️
+                                       title="Retirer l'article"
+                                       aria-label="Retirer {{ item.product.name }} du panier">
+                                        <span aria-hidden="true">🗑️</span>
                                     </a>
                                 </td>
                             </tr>
@@ -118,7 +125,7 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col-4 text-center">
-                              <a href="{{ path('app_product_show',{id:item.product.id}) }}">
+                              <a href="{{ path('app_product_show',{id:item.product.id, slug: item.product.slug|replace({'\'': '-', ' ': '-'})|lower}) }}">
                                 {% if item.product.productImages|length > 0 %}
                                   <img src="{{ vich_uploader_asset(item.product.productImages|first,'imageFile') }}" class="img-fluid rounded" alt="{{ item.product.name }}">
                                 {% else %}
@@ -142,13 +149,24 @@
                                       action="{{ path('app_cart_update', {id: item.product.id}) }}"
                                       class="mt-3">
                                     <div class="input-group">
+                                          <label for="qty-{{ item.product.id }}" class="visually-hidden">
+                                              Quantité pour {{ item.product.name }}
+                                          </label>
                                         <input type="number"
+                                              id="qty-{{ item.product.id }}"
                                               name="quantity"
                                               value="{{ item.quantity }}"
                                               min="0"
                                               class="form-control">
-                                        <button class="btn btn-primary">↻</button>
-                                        <a href="{{ path('app_cart_product_remove', {id: item.product.id}) }}"class="btn btn-outline-danger">🗑️</a>
+                                        <button class="btn btn-sm btn-outline-primary" aria-label="Mettre à jour la quantité" title="Mettre à jour">
+                                            <span aria-hidden="true">↻</span>
+                                        </button>
+                                        <a href="{{ path('app_cart_product_remove', {id: item.product.id}) }}"
+                                           class="btn btn-outline-danger"
+                                           title="Retirer l'article"
+                                           aria-label="Retirer {{ item.product.name }} du panier">
+                                          <span aria-hidden="true">🗑️</span>
+                                        </a>
                                     </div>
                                 </form>
                           </div>
@@ -163,11 +181,16 @@
 
         <div class="mt-3">
             <a href="{{ path('app_product_list') }}" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-1"></i>Continuer mes achats
+                <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>Continuer mes achats
             </a>
-            <a href="{{ path('app_cart_remove') }}" class="btn btn-outline-danger ms-2">
-                <i class="bi bi-trash me-1"></i>Vider le panier
-            </a>
+            <form method="post" action="{{ path('app_cart_remove') }}" 
+                  class="d-inline"
+                  onsubmit="return confirm('Vider tout le panier ?');">
+                      <input type="hidden" name="_token" value="{{ csrf_token('cart_remove') }}">
+                      <button type="submit" class="btn btn-outline-danger ms-2">
+                            <i class="bi bi-trash me-1" aria-hidden="true"></i>Vider le panier
+                      </button>
+            </form>
         </div>
     </div>
 
@@ -178,7 +201,7 @@
     <div class="col-lg-3">
         <div class="card shadow-sm border-0" style="position: sticky; top: 1rem;">
             <div class="card-header bg-primary text-white">
-                <strong><i class="bi bi-receipt me-2"></i>Récapitulatif</strong>
+                <strong><i class="bi bi-receipt me-2" aria-hidden="true"></i>Récapitulatif</strong>
             </div>
 
             <div class="card-body">
@@ -189,7 +212,7 @@
                     </li>
                     <li class="d-flex justify-content-between mb-2">
                         <span class="text-muted">
-                            <i class="bi bi-truck me-1"></i>Frais de livraison
+                            <i class="bi bi-truck me-1" aria-hidden="true"></i>Frais de livraison
                         </span>
                         {% if shippingFee == 0 %}
                             <span class="badge bg-success-subtle text-success-emphasis">Gratuit</span>
@@ -208,13 +231,13 @@
 
                 {% if shippingFee > 0 %}
                     <p class="text-muted small mt-3 mb-0">
-                        <i class="bi bi-info-circle me-1"></i>
+                        <i class="bi bi-info-circle me-1" aria-hidden="true"></i>
                         Livraison gratuite dès 50,00 € d'achat.
                     </p>
                 {% endif %}
 
                 <a href="{{ path('app_order_checkout') }}" class="btn btn-success btn-lg w-100 mt-4">
-                    Commander <i class="bi bi-arrow-right ms-1"></i>
+                    Commander <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
                 </a>
             </div>
         </div>

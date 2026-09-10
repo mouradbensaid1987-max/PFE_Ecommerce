@@ -64,9 +64,18 @@ final class ProductController extends AbstractController
 
 
 
-    #[Route('/produit/{id}', name: 'app_product_show')]
-    public function show(Product $product, CategoryRepository $categoryRepository, FavoriteRepository $favoriteRepo): Response
+    #[Route('/produit/{slug}-{id}', name: 'app_product_show', requirements: ['id' => '\d+', 'slug' => '[A-Za-z0-9-]+']) ]
+    public function show(Product $product, ProductRepository $rep, FavoriteRepository $favoriteRepo, string $slug, int $id): Response
     {
+      $product = $rep->find($id);
+
+      if(!$product) {
+            throw $this->createNotFoundException("Le produit avec l'id {$id} n'existe pas.");
+        }
+
+      if($product->getSlug() !== $slug) {
+            return $this->redirectToRoute('app_product_show', ['slug' => $product->getSlug(), 'id' => $product->getId()]);
+        }
 
         $favoriteIds = [];
         if ($this->getUser()) {

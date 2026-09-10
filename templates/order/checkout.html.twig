@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<h1>📋 Validation de votre commande</h1>
+<h1>Validation de votre commande</h1>
 
   <div class="row mt-4 g-4">
 
@@ -20,10 +20,10 @@
               <table class="table table-hover align-middle mb-0">
                   <thead class="table-light">
                       <tr>
-                          <th>Produit</th>
-                          <th class="text-center">Qté</th>
-                          <th class="text-end">Prix unitaire</th>
-                          <th class="text-end">Total</th>
+                          <th scope="col">Produit</th>
+                          <th scope="col" class="text-center">Qté</th>
+                          <th scope="col" class="text-end">Prix unitaire</th>
+                          <th scope="col" class="text-end">Total</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -49,7 +49,7 @@
                   </li>
                   <li class="d-flex justify-content-between mb-2">
                       <span class="text-muted">
-                          <i class="bi bi-truck me-1"></i>Frais de livraison
+                          <i class="bi bi-truck me-1" aria-hidden="true"></i>Frais de livraison
                       </span>
                       {% if shippingFee == 0 %}
                           <span class="badge bg-success-subtle text-success-emphasis">Gratuit</span>
@@ -78,7 +78,7 @@
     
 
       <div class="col-md-5">
-          <h3>📦 Choisir une adresse de livraison</h3>
+          <h2 class="h5">Choisir une adresse de livraison</h2>
           {% if deliveryAddresses|length == 0 %}
               <div class="alert alert-warning">
                   Vous n'avez aucune adresse de livraison.
