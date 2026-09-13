@@ -3,7 +3,7 @@
 
 {% block admin_body %}
 
-<h1><span aria-hidden="true">📋</span> Toutes les commandes</h1>
+<h1><i class="bi bi-clipboard-fill text-primary me-2" aria-hidden="true"></i> Toutes les commandes</h1>
 {# === Formulaire de recherche : référence + statut + client === #}
 <form method="get" action="{{ path('app_admin_order_index') }}" class="card mb-4">
     <div class="card-body row g-3 align-items-end">
@@ -80,7 +80,7 @@
                                   <option value="delivered" {% if o.status == 'delivered'%}selected{% endif %}>Livrée</option>
                                 {#  <option value="cancelled" {% if o.status == 'cancelled'%}selected{% endif %}>Annulée</option> #}  
                               </select>
-                              <button class="btn btn-sm btn-primary" aria-label="Modifier le commande {{ o.reference }}"><span aria-hidden="true">↻</span></button>
+                              <button class="btn btn-sm btn-primary" aria-label="Modifier le commande {{ o.reference }}"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i></button>
 
                             </form>
                         </td>

@@ -36,44 +36,76 @@ class Product
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Length(
+        max: 5000,
+        maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères.'
+    )]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Assert\NotBlank(message: 'Le prix HT est obligatoire.')]
+    #[Assert\Positive(message: 'Le prix HT doit être supérieur à 0.')]
     private ?string $priceHt = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'Le stock est obligatoire.')]
+    #[Assert\PositiveOrZero(message: 'Le stock ne peut pas être négatif.')]
     private ?int $stock = null;
 
     #[ORM\Column]
     private ?bool $isActive = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'Le matériau ne peut pas dépasser {{ limit }} caractères.'
+    )]
     private ?string $materiau = null;
 
     #[ORM\Column(length: 20, nullable: true)]
+    #[Assert\Regex(
+        pattern: '/^(M\d+(?:\.\d+)?|\d+(?:\.\d+)?mm)$/i',
+        message: 'Le diamètre doit être au format M6 ou 4mm.'
+    )]
     private ?string $diametreMm = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Positive(message: 'La longueur doit être supérieure à 0.')]
     private ?int $longueurMm = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'Le type de tête ne peut pas dépasser {{ limit }} caractères.'
+    )]
     private ?string $typeTete = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: "Le type d'empreinte ne peut pas dépasser {{ limit }} caractères."
+    )]
     private ?string $typeEmpreinte = null;
 
     #[ORM\Column(length: 30, nullable: true)]
+    #[Assert\Choice(
+        choices: ['piece', 'boite', 'sachet', 'kg'],
+        message: 'L\'unité de vente doit être : pièce, boîte, sachet ou kilogramme.'
+    )]
     private ?string $unite = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Positive(message: 'La quantité par conditionnement doit être supérieure à 0.')]
     private ?int $quantiteConditionnement = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'La catégorie est obligatoire.')]
     private ?Category $category = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'La TVA est obligatoire.')]
     private ?Tva $tva = null;
 
     #[ORM\Column]
@@ -115,7 +147,7 @@ class Product
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
@@ -151,7 +183,7 @@ class Product
         return $this->priceHt;
     }
 
-    public function setPriceHt(string $priceHt): static
+    public function setPriceHt(?string $priceHt): static
     {
         $this->priceHt = $priceHt;
 
@@ -163,7 +195,7 @@ class Product
         return $this->stock;
     }
 
-    public function setStock(int $stock): static
+    public function setStock(?int $stock): static
     {
         $this->stock = $stock;
 

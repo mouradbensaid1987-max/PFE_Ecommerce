@@ -17,6 +17,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 
 class ProductFormType extends AbstractType
@@ -26,22 +27,23 @@ class ProductFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                  'label' => 'Nom'
+                  'label' => 'Nom',
+                  'required' => false
+                  
             ])
-            ->add('slug', TextType::class, [
-                'label' => 'Slug',
-                'required' => false
-            ])
+            ->add('slug', HiddenType::class)
             ->add('description', TextareaType::class, [
                   'label' => 'Description', 
                   'required' =>false
             ])
             ->add('priceHt', MoneyType::class, [
                   'label' => 'Prix HT', 
-                  'currency' => 'EUR'
+                  'currency' => 'EUR',
+                  'required' => False,
             ])
             ->add('stock', IntegerType::class, [
-                  'label' => 'Stock'
+                  'label' => 'Stock',
+                  'required' => False,
             ])
             ->add('isActive', CheckboxType::class, [
                   'label' => 'Actif', 

@@ -1,6 +1,7 @@
-// import './stimulus_bootstrap.js';
+ import './stimulus_bootstrap.js';
 import 'bootstrap';
-import 'bootstrap-icons';
+console.log('hello');
+// import 'bootstrap-icons';
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -8,5 +9,7 @@ import 'bootstrap-icons';
  * which should already be in your base.html.twig.
  */
 import './styles/app.css';
+import './js/custom.js';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+console.log('hello');

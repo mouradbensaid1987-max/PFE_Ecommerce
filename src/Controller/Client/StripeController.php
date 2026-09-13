@@ -52,9 +52,9 @@ final class StripeController extends AbstractController
     #[Route('/pay/success', name: 'app_stripe_success')]
     public function index(SessionInterface $session): Response
     {
-         dump($this->getUser());
-        dump($session->getId());
-        dump($session->all());
+    //     dump($this->getUser());
+    //    dump($session->getId());
+    //    dump($session->all());
 
         $session->set('cart', []);
         $session->remove('checkout_order');

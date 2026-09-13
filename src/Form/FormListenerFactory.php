@@ -17,12 +17,16 @@ class FormListenerFactory
     {
         return function (PreSubmitEvent $event) use ($field) {
             $data = $event->getData();
-            if (empty($data['slug'])) {
-                $data['slug'] = strtolower($this->slugger->slug($data[$field]));
+
+            if (!is_array($data)) {
+                return;
+            }
+            if (!empty($data[$field])) {
+                $slug = $this->slugger->slug($data[$field])->lower()->toString();
+                $data['slug'] = $slug;
                 $event->setData($data);
            }
         };
-
     }
 
     public function timestamps(): callable

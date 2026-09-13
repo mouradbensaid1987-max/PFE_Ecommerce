@@ -31,19 +31,26 @@ class AdminCategoryController extends AbstractController
 
 
     #[Route('/new', name: 'app_admin_category_new')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request, EntityManagerInterface $em, CategoryRepository $categoryRepository): Response
     {
           $category = new Category();
 
           $form = $this->createForm(CategoryFormType::class, $category);
           $form->handleRequest($request);
+          
           if ($form->isSubmitted() && $form->isValid()) 
             {
+              $existingCategory = $categoryRepository->findOneBy(['slug' => $category->getSlug()]);
+               
+              if ($existingCategory) {
+                    $this->addFlash('danger','Cette catégorie existe déjà.');
+                } else {
                 $em->persist($category);
                 $em->flush();
                 $this->addFlash('success', 'Catégorie enregistrée');
 
                 return $this->redirectToRoute('app_admin_category_index');
+                }
             }
 
       return $this->render('admin/category/form.html.twig', [
@@ -54,7 +61,7 @@ class AdminCategoryController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_admin_category_edit')]
-    public function edit(Category $category, Request $request, EntityManagerInterface $em): Response
+    public function edit(Category $category, Request $request, EntityManagerInterface $em, CategoryRepository $categoryRepository): Response
     {
 
         $form = $this->createForm(CategoryFormType::class, $category);
@@ -62,10 +69,16 @@ class AdminCategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) 
             {
+              $existingCategory = $categoryRepository->findOneBy(['slug' => $category->getSlug()]);
+               
+              if ($existingCategory) {
+                    $this->addFlash('danger','Cette catégorie existe déjà.');
+                } else {
                 $em->flush();
                 $this->addFlash('success', 'Catégorie enregistrée');
 
                 return $this->redirectToRoute('app_admin_category_index');
+                }
             }
 
         return $this->render('admin/category/form.html.twig', [

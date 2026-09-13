@@ -1,4 +1,8 @@
 security:
+    access_decision_manager: # Configuration du gestionnaire de décision d'accès
+        strategy: affirmative # ou unanimous. Permet de définir la stratégie de décision d'accès
+        allow_if_all_abstain: false # Permet de définir si l'accès est accordé si tous les votants s'abstiennent
+      
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -51,8 +55,9 @@ security:
             # switch_user: true
 
     # Note: Only the *first* matching rule is applied
+  
     access_control:
-         - { path: ^/admin, roles: ROLE_ADMIN }
+         #- { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER

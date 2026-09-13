@@ -5,8 +5,8 @@
 {% block body %}
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1><span aria-hidden="true">📍</span> Mes adresses</h1>
-        <a href="{{ path('app_address_new') }}" class="btn btn-primary pb-2 pe-3"><span aria-hidden="true">➕</span> Ajouter</a>
+        <h1><i class="bi bi-geo-alt-fill text-danger me-2" aria-hidden="true"></i> Mes adresses</h1>
+        <a href="{{ path('app_address_new') }}" class="btn btn-primary pb-2 pe-3"> <i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Ajouter</a>
     </div>
 
     {% if addresses|length == 0 %}
@@ -25,14 +25,14 @@
                         {{ address.postalCode }} {{ address.city }}<br>
                         {{ address.country }}
                         {% if address.phone %}
-                            <br><span aria-hidden="true">📞</span> {{ address.phone }}
+                            <br><i class="bi bi-telephone-fill text-primary me-2" aria-hidden="true"></i> {{ address.phone }}
                         {% endif %}
                     </p>
                 </div>
                 <div class="card-footer d-flex gap-2">
 
                     <a href="{{ path('app_address_edit', {id: address.id}) }}" 
-                       class="btn btn-sm btn-outline-primary"><span aria-hidden="true">✏️</span> Modifier</a>
+                       class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-fill text-danger me-2" aria-hidden="true"></i> Modifier</a>
                        <span aria-hidden="true"></span>
 
                     <form method="post" 
@@ -42,7 +42,7 @@
                       <input type="hidden" 
                              name="_token"
                              value="{{ csrf_token('delete' ~ address.id) }}">
-                      <button class="btn btn-sm btn-outline-danger"><span aria-hidden="true">🗑️</span> Supprimer</button>
+                      <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash-fill text-danger me-2" aria-hidden="true"></i> Supprimer</button>
 
                     </form>
                 </div>

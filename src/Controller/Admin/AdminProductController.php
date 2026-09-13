@@ -5,9 +5,10 @@ namespace App\Controller\Admin;
 use App\Entity\Product;
 use App\Entity\ProductImage;
 use App\Form\ProductFormType;
+use App\Repository\CategoryRepository;
 use App\Repository\OrderItemRepository;
 use App\Repository\ProductRepository;
-use App\Repository\CategoryRepository;
+use App\Security\Voter\ProductVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,12 +18,16 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
-#[IsGranted('ROLE_ADMIN')]
+ 
+
+
+
 #[Route('/admin/products')]
 class AdminProductController extends AbstractController
 {
 
     #[Route('', name: 'app_admin_product_index')]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, PaginatorInterface $paginator, Request $request): Response
     {
 
@@ -51,8 +56,11 @@ class AdminProductController extends AbstractController
 
 
     #[Route('/new', name: 'app_admin_product_new')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request, EntityManagerInterface $em, ProductRepository $productRepository): Response
     {
+
+      $this->denyAccessUnlessGranted(ProductVoter::CREATE); 
+    
       $product = new Product();
       $product->addProductImage(new ProductImage());
       $form = $this->createForm(ProductFormType::class, $product);
@@ -60,47 +68,67 @@ class AdminProductController extends AbstractController
 
       if ($form->isSubmitted() && $form->isValid()) 
             {
+
+              $existingProduct = $productRepository->findOneBy(['slug' => $product->getSlug()]);
+               
+              if ($existingProduct) {
+                
+                    $this->addFlash('danger','Ce Produit existe déjà.');
+                } else {
+
+
                 $em->persist($product);
                 $em->flush();
                 $this->addFlash('success', 'Produit enregistré');
 
                 return $this->redirectToRoute('app_admin_product_index');
+                }
             }
       
       return $this->render('admin/product/form.html.twig', [
-            'form' => $form->createView(),
+            //'form' => $form->createView(),
+            'form' => $form,
             'title' => 'Nouveau produit',
         ]);
     }
 
-
-
     #[Route('/{id}/edit', name: 'app_admin_product_edit')]
-    public function edit(Product $product, Request $request, EntityManagerInterface $em):Response
+    public function edit(Product $product, Request $request, EntityManagerInterface $em,ProductRepository $productRepository):Response
     {
+      $this->denyAccessUnlessGranted(ProductVoter::EDIT, $product); 
 
       $form = $this->createForm(ProductFormType::class, $product);
       $form->handleRequest($request);
 
       if ($form->isSubmitted() && $form->isValid()) 
             {
+              $existingProduct = $productRepository->findOneBy(['slug' => $product->getSlug()]);
+               
+              if ($existingProduct) {
+
+                    $this->addFlash('danger','Ce Produit existe déjà.');
+                } else {
+
+
                 $em->flush();
                 $this->addFlash('success', 'Produit enregistré');
 
                 return $this->redirectToRoute('app_admin_product_index');
+                }
             }
       
       return $this->render('admin/product/form.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form,
             'title' => 'Modifier le produit',
         ]);
 
     }
 
-
     #[Route('/{id}/delete', name: 'app_admin_product_delete', methods: ['POST'])]
     public function delete(Product $product, Request $request, EntityManagerInterface $em,OrderItemRepository $orderItemRepository ):Response
     {
+      $this->denyAccessUnlessGranted(ProductVoter::DELETE,$product);
+      
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) 
           {
             $item = $orderItemRepository->findBy([

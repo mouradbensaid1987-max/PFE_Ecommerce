@@ -4,13 +4,13 @@
 
 {% block body %}
 
-<h1><span aria-hidden="true">❤️</span> Mes favoris</h1>
+<h1><i class="bi bi-heart-fill text-danger me-1" aria-hidden="true"></i> Mes favoris</h1>
   <br>
 
     {% if favorites|length == 0 %}
 
         <div class="alert alert-info mt-3">
-              Aucun favori. Cliquez sur le ❤️ sur une page produit pour en ajouter.
+              Aucun favori. Cliquez sur le <i class="bi bi-heart-fill text-danger me-1" aria-hidden="true"></i> sur une page produit pour en ajouter.
         </div>
 
     {% else %}

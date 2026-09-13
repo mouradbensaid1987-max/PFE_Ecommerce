@@ -2,7 +2,7 @@
 
 {% block admin_body %}
 
-    <h1><span aria-hidden="true">👥</span> Utilisateurs</h1>
+    <h1><i class="bi bi-people-fill text-primary me-2" aria-hidden="true"></i> Utilisateurs</h1>
     <table class="table mt-3">
         <thead>
             <tr>
@@ -28,7 +28,7 @@
                     </td>
                     <td>
                         <a href="{{ path('app_admin_user_edit', {id: u.id}) }}" 
-                           class="btn btn-sm btn-outline-primary" aria-label="Modifier le client {{ u.firstName}}"><span aria-hidden="true">✏️</span></a>
+                           class="btn btn-sm btn-outline-primary" aria-label="Modifier le client {{ u.firstName}}"><i class="bi bi-pencil-fill text-danger" aria-hidden="true"></i></a>
                     </td>
                 </tr>
             {% endfor %}

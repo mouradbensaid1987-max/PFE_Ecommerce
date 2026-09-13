@@ -1,39 +1,33 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 	<head>
-		<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title> {% block title %} FixPro {% endblock %} </title>
 
-		<title> {% block title %} FixPro {% endblock %} </title>
-    
+            
+        {% block javascripts %}
+          {{ importmap('app') }} 
+        {% endblock %}
+          
         {% block stylesheets %}
-            {{ importmap('app') }}
+          
         {% endblock %}
-
-      <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-      <link rel="stylesheet" href="{{ asset('bootstrap-icons/bootstrap-icons.min.css') }}">  
+            
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">   
+        <link rel="stylesheet" href="{{ asset('bootstrap-icons/bootstrap-icons.min.css') }}">          
+        
+         
 	</head>
-
-
 	<body>
-    <a class="visually-hidden-focusable skip-link" href="#main-content">
-        Aller au contenu principal
-    </a>
-
-    {% include 'components/_nav.html.twig' %}
-
-		<main id="main-content" class="container py-4">
-        {% include 'partials/_flash_messages.html.twig' %}
-        {% block body %}{% endblock %}
-		</main>
-    
-		{% include 'partials/_footer.html.twig' %}
-  
-  
-				{% block javascripts %}
-            <script src="{{ asset('js/app.js') }}"></script> 
-        {% endblock %}
+        <a class="visually-hidden-focusable skip-link" href="#main-content">Aller au contenu principal </a>
+        {% include 'partials/_nav.html.twig' %}
+        <main id="main-content" class="container py-4">
+            {% include 'partials/_flash_messages.html.twig' %}
+            {% block body %}{% endblock %}
+        </main>
+        {% include 'partials/_footer.html.twig' %}
+				
 	</body>
-
 </html>
+{#<script src="{{ asset('js/app.js') }}"> </script> #}

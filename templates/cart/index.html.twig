@@ -82,7 +82,7 @@
                                                class="form-control form-control-sm text-center"
                                                style="max-width:70px">
                                         <button class="btn btn-sm btn-outline-primary" aria-label="Mettre à jour la quantité" title="Mettre à jour">
-                                            <span aria-hidden="true">↻</span>
+                                            <i class="bi bi-arrow-clockwise me-1" aria-hidden="true"></i>
                                         </button>
                                     </form>
                                 </td>
@@ -100,7 +100,7 @@
                                        class="btn btn-sm btn-outline-danger"
                                        title="Retirer l'article"
                                        aria-label="Retirer {{ item.product.name }} du panier">
-                                        <span aria-hidden="true">🗑️</span>
+                                        <i class="bi bi-trash-fill" aria-hidden="true"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -159,13 +159,13 @@
                                               min="0"
                                               class="form-control">
                                         <button class="btn btn-sm btn-outline-primary" aria-label="Mettre à jour la quantité" title="Mettre à jour">
-                                            <span aria-hidden="true">↻</span>
+                                            <i class="bi bi-arrow-clockwise me-1" aria-hidden="true"></i>
                                         </button>
                                         <a href="{{ path('app_cart_product_remove', {id: item.product.id}) }}"
                                            class="btn btn-outline-danger"
                                            title="Retirer l'article"
                                            aria-label="Retirer {{ item.product.name }} du panier">
-                                          <span aria-hidden="true">🗑️</span>
+                                          <i class="bi bi-trash-fill" aria-hidden="true"></i>
                                         </a>
                                     </div>
                                 </form>

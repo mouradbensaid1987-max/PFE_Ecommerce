@@ -3,8 +3,8 @@
 {% block admin_body %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1><span aria-hidden="true">📦</span> Produits</h1>
-    <a href="{{ path('app_admin_product_new') }}" class="btn btn-primary"><span aria-hidden="true">➕</span> Nouveau</a>
+    <h1><i class="bi bi-box-seam-fill text-primary me-2" aria-hidden="true"></i>Produits</h1>
+    <a href="{{ path('app_admin_product_new') }}" class="btn btn-primary"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i>  Nouveau</a>
 </div>
 
 <form method="get" action="{{ path('app_admin_product_index') }}" class="row g-2 align-items-end mb-3 p-3 border rounded bglight">
@@ -44,11 +44,11 @@
       </div>
 
       <div class="col-sm-3 col-lg-2">
-          <button class="btn btn-primary" title="Filtrer"><span aria-hidden="true">🔍</span> Filtrer</button>
+          <button class="btn btn-primary" title="Filtrer"><i class="bi bi-search me-2" aria-hidden="true"></i> Filtrer</button>
       </div>
 
       <div class="col-sm-6 col-lg-12">
-        <a href="{{ path('app_admin_product_index') }}" class="btn btn-outline-secondary">↺ Réinitialiser les filtres</a>
+        <a href="{{ path('app_admin_product_index') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-clockwise me-1" aria-hidden="true"></i> Réinitialiser les filtres</a>
       </div>
 
 </form>
@@ -107,13 +107,13 @@
                         <a href="{{ path('app_admin_product_edit', {id: p.id}) }}" 
                            class="btn btn-sm btn-outline-primary"
                            aria-label="Modifier le produit {{ p.name }}">
-                           <span aria-hidden="true">✏️</span>
+                           <i class="bi bi-pencil-fill text-danger" aria-hidden="true"></i>
                         </a>
                         <form method="post" action="{{ path('app_admin_product_delete', {id:p.id}) }}"
                               class="d-inline" onsubmit="return confirm('Supprimer ?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ p.id) }}">
                             <button class="btn btn-sm btn-outline-danger" aria-label="Supprimer le produit {{ p.name }}">
-                              <span aria-hidden="true">🗑️</span>
+                              <i class="bi bi-trash-fill" aria-hidden="true"></i>
                             </button>
                         </form>
                     </td>

@@ -82,7 +82,6 @@ final class ProductController extends AbstractController
             $favoriteIds = $favoriteRepo->produit_favorie_user($this->getUser());
         }
 
-
         return $this->render('product/show.html.twig', [
         'product' => $product,
         'favoriteIds' => $favoriteIds,

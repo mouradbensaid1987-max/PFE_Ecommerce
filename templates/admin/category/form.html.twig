@@ -8,11 +8,12 @@
     <div class="card-body">
 
         {{ form_start(form) }}
-            {{ form_widget(form) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.description) }}
 
-            <button class="btn btn-primary"><span aria-hidden="true">💾</span> Enregistrer</button>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-floppy-fill text-danger me-1" aria-hidden="true"></i> Enregistrer</button>
+            <a href="{{ path('app_admin_category_index') }}" class="btn btn-secondary">Annuler</a>
 
-            <a href="{{ path('app_admin_category_index') }}" class="btn btnsecondary">Annuler</a>
         {{ form_end(form) }}
     </div>
 </div>
