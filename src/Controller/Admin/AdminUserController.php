@@ -40,13 +40,11 @@ class AdminUserController extends AbstractController
           $em->flush();
           $this->addFlash('success', 'Utilisateur modifié');
           return $this->redirectToRoute('app_admin_user_index');
-
         }
       return $this->render('admin/user/form.html.twig', [
         'form' => $form->createView(), 
-        'user'=> $user]);
-
-
+        'user'=> $user
+        ]);
   }
 
 

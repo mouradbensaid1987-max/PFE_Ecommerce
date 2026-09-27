@@ -9,8 +9,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
-use Symfony\Component\Validator\Constraints\PasswordStrength;
+
+use Symfony\Component\Validator\Constraints\Regex;
 
 class ChangePasswordFormType extends AbstractType
 {
@@ -18,6 +18,7 @@ class ChangePasswordFormType extends AbstractType
     {
         $builder->add('plainPassword', RepeatedType::class, [
                             'type' => PasswordType::class,
+                            'required' => false,
 
                             'first_options' => ['label' => 'Nouveau mot de passe'],
 
@@ -26,10 +27,23 @@ class ChangePasswordFormType extends AbstractType
                             'invalid_message' => 'Les deux mots de passe ne correspondent pas.',
 
                             'constraints' => [
-
-                                  new NotBlank(message: 'Merci de saisir un mot de passe'),
-                                  new Length(min: 6, minMessage: 'Au moins 6 caractères', max: 4096),
-                                ],
+                                new NotBlank(
+                                    message: 'Mot de passe obligatoire.'
+                                ),
+                                new Length(
+                                    min: 6,
+                                    minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
+                                    max: 4096
+                                ),
+                                new Regex(
+                                    pattern: '/[A-Z]/',
+                                    message: 'Le mot de passe doit contenir au moins une majuscule.'
+                                ),
+                                new Regex(
+                                    pattern: '/[^A-Za-z0-9]/',
+                                    message: 'Le mot de passe doit contenir au moins un caractère spécial (! @ # $ % ...).'
+                                ),
+                            ],
                     ]);
     }
 

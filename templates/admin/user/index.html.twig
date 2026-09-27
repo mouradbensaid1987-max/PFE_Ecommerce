@@ -6,19 +6,21 @@
     <table class="table mt-3">
         <thead>
             <tr>
-                <th scope="col">ID</th>
+              
                 <th scope="col">Email</th>
+                <th scope="col">Prenom</th>
                 <th scope="col">Nom</th>
                 <th scope="col">Rôles</th>
-                <th scope="col"></th>
+                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
             {% for u in users %}
                 <tr>
-                    <td>{{ u.id }}</td>
+                
                     <td>{{ u.email }}</td>
-                    <td>{{ u.firstName }} {{ u.lastName }}</td>
+                    <td>{{ u.firstName }}</td>
+                    <td>{{ u.lastName }}</td>
                     <td>
                         {% if 'ROLE_ADMIN' in u.roles %}
                             <span class="badge bg-danger">Admin</span>

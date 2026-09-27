@@ -15,12 +15,12 @@ class AddressFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstName', TextType::class, ['label' => 'Prénom'])
-            ->add('lastName', TextType::class, ['label' => 'Nom'])
-            ->add('street', TextType::class, ['label' => 'Rue'])
-            ->add('postalCode', TextType::class, ['label' => 'Code postal'])
-            ->add('city', TextType::class, ['label' => 'Ville'])
-            ->add('country', TextType::class, ['label' => 'Pays'])
+            ->add('firstName', TextType::class, ['label' => 'Prénom', 'required' => false])
+            ->add('lastName', TextType::class, ['label' => 'Nom', 'required' => false])
+            ->add('street', TextType::class, ['label' => 'Rue', 'required' => false])
+            ->add('postalCode', TextType::class, ['label' => 'Code postal', 'required' => false])
+            ->add('city', TextType::class, ['label' => 'Ville', 'required' => false])
+            ->add('country', TextType::class, ['label' => 'Pays', 'required' => false])
             ->add('phone', TextType::class, ['label' => 'Téléphone', 'required' => false])
         ;
     }

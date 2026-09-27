@@ -64,12 +64,12 @@ class AdminOrderController extends AbstractController
       {
         $newStatus = $request->request->get('status');
         $valid = [
-            //      Order::STATUS_PENDING, 
+          
                     Order::STATUS_PAID, 
                     Order::STATUS_PREPARING,
                     Order::STATUS_SHIPPED,
                     Order::STATUS_DELIVERED
-            //      Order::STATUS_CANCELLED
+      
                 ];
         if (in_array($newStatus, $valid, true)) 
           {
@@ -92,13 +92,6 @@ class AdminOrderController extends AbstractController
                   // ex: $this->logger->error('Erreur envoi email: '.$e->getMessage());
               }
 
-
-
-
-
-
-
-
           }
 
         return $this->redirectToRoute('app_admin_order_index');
@@ -117,12 +110,5 @@ class AdminOrderController extends AbstractController
         return $this->render('admin/order/show.html.twig', ['order' => $order]);
     }
   
-
-
-
-
-
-
-
 
 }

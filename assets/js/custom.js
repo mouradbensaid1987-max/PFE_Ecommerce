@@ -1,5 +1,83 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+  // =====================================================
+    // Validation du formulaire de réponse (admin messages)
+    // =====================================================
+    const forms = document.querySelectorAll('.js-reply-form');
+    forms.forEach(form => {
+        form.addEventListener('submit', event => {
+            if (form.querySelector('textarea').value.trim() === '') {
+                event.preventDefault();
+                form.querySelector('.reply-error').textContent = 'La réponse ne peut pas être vide.';
+            }
+        });
+    });
+
+    // =====================================================
+    // Afficher le mot de passe de registration
+    // =====================================================
+    
+    const bouton = document.getElementById('bouton-afficher');
+    const champ = document.getElementById('registration_form_plainPassword');
+
+
+    if (bouton && champ) {
+        bouton.addEventListener('click', function () {
+            if (champ.type === 'password') {
+                champ.type = 'text';
+                bouton.textContent = 'Masquer';
+            } else {
+                champ.type = 'password';
+                bouton.textContent = 'Afficher';
+            }
+        });
+    }
+
+    // =====================================================
+    // Afficher le mot de passe de Login
+    // =====================================================
+    const boutonn = document.getElementById('bouton-afficher');
+    const chaxmp2 = document.querySelector('#password');
+    if (boutonn && chaxmp2) {
+        boutonn.addEventListener('click', function () {
+            if (chaxmp2.type === 'password') {
+                chaxmp2.type = 'text';
+                boutonn.textContent = 'Masquer';
+            } else {
+                chaxmp2.type = 'password';
+                boutonn.textContent = 'Afficher';
+            }
+        });
+    }
+
+    // =====================================================
+    // Afficher le mot de passe pour la changement de mot de passe
+    // =====================================================
+
+    // 1. On récupère le bouton et les deux champs
+		const bouton1 = document.getElementById('bouton1-afficher');
+    const champ1 = document.getElementById('change_password_form_plainPassword_first');
+    const champ2 = document.getElementById('change_password_form_plainPassword_second');
+
+    if (bouton1 && champ1 && champ2) {
+        bouton1.addEventListener('click', function () {
+            if (champ1.type === 'password') {
+                champ1.type = 'text';
+                champ2.type = 'text';
+                bouton1.textContent = 'Masquer';
+            } else {
+                champ1.type = 'password';
+                champ2.type = 'password';
+                bouton1.textContent = 'Afficher';
+            }
+        });
+    }
+
+
+
+
+
+
 
     // =====================================================
     // ACCUEIL — Pause du carrousel héro
@@ -22,7 +100,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // La liste qui contient toutes les images
     const liste = document.getElementById("product-images-list");
-
     // Le bouton "Ajouter une image"
     const boutonAjouter = document.getElementById("add-image-btn");
 
@@ -44,7 +121,6 @@ document.addEventListener('DOMContentLoaded', function () {
         let formulaire = prototype.replace(/__name__/g, index);
         //<input type="file" name="product[productImages][__name__][imageFile]">
       
-
         // Créer un nouveau bloc
         let div = document.createElement("div");
 
@@ -52,7 +128,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Ajouter le formulaire dans le bloc
         div.innerHTML = formulaire;
-
 
         // Créer le bouton Supprimer
         let boutonSupprimer = document.createElement("button");
@@ -70,8 +145,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Augmenter l'index
         liste.dataset.index = Number(index) + 1;
     });
-
-
 
     // =====================================================
     // SUPPRIMER UNE IMAGE
@@ -91,8 +164,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
-
-
     // =====================================================
     // AFFICHER L'APERÇU DE L'IMAGE
     // =====================================================
@@ -110,6 +181,12 @@ document.addEventListener('DOMContentLoaded', function () {
         let fichier = input.files[0];
 
         if (!fichier) {
+            return;
+        }
+
+        if (!fichier.type.startsWith("image/")) {
+            alert("Veuillez choisir une image (jpg, png, webp...).");
+            input.value = ""; // on vide le champ
             return;
         }
 
@@ -144,6 +221,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
-
     
-});
+
+
+
+
+
+
+
+
+  });
+  
+
+

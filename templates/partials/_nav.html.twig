@@ -61,7 +61,7 @@
         <div class="nav-item d-flex align-items-center">
             <a class="btn btn-outline-light btn-sm position-relative mx-2" href="{{ path('app_cart_index') }}"
                aria-label="Voir mon panier ( {{ cart.getCount() }} article(s))">
-              <span aria-hidden="true">🛒</span>
+              <i class="bi bi-cart" aria-hidden="true"></i>
                 {% if cart.getCount() > 0 %}
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                       {{ cart.getCount() }}

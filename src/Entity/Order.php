@@ -64,11 +64,6 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-  
-
-    /**
-     * @var Collection<int, OrderItem>
-     */
     #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'orderRef', cascade: ['persist', 'remove'])]
     private Collection $items;
 

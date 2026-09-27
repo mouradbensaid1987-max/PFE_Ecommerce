@@ -27,7 +27,6 @@ class Cart
         foreach($cart as $id=>$quantity)
             {
               $product = $this->productRepository->find($id);
-
                if (!$product || !$product->isActive()) {
                   unset($cart[$id]);
                   $cartUpdated = true;
@@ -39,12 +38,9 @@ class Cart
                 ];
             }
         $session->set('cart', $cart); // mise a jours de la session
-
         $total = array_sum(array_map(function($item){
-      
-            return $item['product']->getPriceTtc() * $item['quantity'];
-            },$cartWhitData
-            ));
+                return $item['product']->getPriceTtc() * $item['quantity'];
+                },$cartWhitData));
         
         if ($total >= self::FREE_SHIPPING_THRESHOLD) {
             $shippingFee = 0.0;
@@ -52,7 +48,6 @@ class Cart
             $shippingFee = self::SHIPPING_FEE;
         }
         $totalWithShipping = round($total + $shippingFee, 2);
-
             return [
                 'cart'=>$cartWhitData,
                 'total'=>$total,

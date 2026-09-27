@@ -7,9 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
+#[UniqueEntity(fields: 'name', message: 'Ce nom est déjà utilisé.')]
+#[UniqueEntity(fields: 'slug', message: 'Ce slug est déjà utilisé.')]
 class Category
 {
     #[ORM\Id]
@@ -41,7 +44,7 @@ class Category
     private ?string $description = null;
 
     
-    #[ORM\OneToMany(mappedBy: 'category',targetEntity: Product::class, cascade: ['remove'],orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'category',targetEntity: Product::class)]
     private Collection $products;
 
     public function __construct()
@@ -84,7 +87,7 @@ class Category
         return $this->slug;
     }
 
-    public function setSlug(string $slug): static
+    public function setSlug(?string $slug): static
     {
         $this->slug = $slug;
 

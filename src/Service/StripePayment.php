@@ -36,32 +36,21 @@ class StripePayment
             'delivery_city' => $checkoutData['deliveryCity'],
             'delivery_country' => $checkoutData['deliveryCountry'],
       ];
-
-
-      // Encodage compact du panier : "id:qte:prix:tva" séparés par "|"
-      // Ex : "12:2:19.90:20.00|7:1:5.50:5.50"
       
       $cartItems = [];
-
       foreach ($checkoutData['cart'] as $item) {
           $cartItems[] = $item['productId'] . ':'
                       . $item['quantity'] . ':'
                       . $item['priceTtc'] . ':'
                       . $item['tva'];
       }
-
       $cartString = implode('|', $cartItems);
-
-
-      // On répartit la chaîne sur plusieurs clés metadata si besoin
-      // (cart_0, cart_1, ...) pour ne jamais dépasser la limite Stripe.
 
       $chunks = str_split($cartString, self::METADATA_CHUNK_SIZE);
       foreach ($chunks as $index => $chunk)
         {
             $metadata['cart_' . $index] = $chunk;
         }
-      // (string) Parce que les metadata Stripe utilisent des valeurs sous forme de chaînes de caractères.
       $metadata['cart_chunks'] = (string) count($chunks); 
 
 
@@ -69,32 +58,23 @@ class StripePayment
       $session = Session::create(
         [
           'customer_email' => $checkoutData['userEmail'],
-
           'line_items' => array_map(fn(array $item) =>
               [
                 'quantity' => $item['quantity'],
                 'price_data' => 
                     [
-                      'currency' => 'eur', //devise
+                      'currency' => 'eur',
                       'product_data' => 
                           [
-                             'name' => "Produit : " . $item['name'], // nom produit affiché sur Stripe
-                          //    'productId' => $item['productId'],
+                             'name' => "Produit : " . $item['name'], 
                           ],
                       'unit_amount' => $item['priceTtc'] * 100,
-                      
                     ],
-                
               ],$checkoutData['cart']),
-
           'mode' => 'payment',
           'payment_method_types' => [$p],
           'cancel_url' => 'https://localhost:8000/pay/cancel',
-        //  'success_url' => 'https://localhost:8000/pay/success',
           'success_url' => 'https://localhost:8000/pay/check?ref=' . $checkoutData['reference'],
-      //  'success_url' => 'https://localhost:8000/pay/check?ref=XXX',
-
-
           'shipping_options' => 
             [
               [
@@ -102,22 +82,19 @@ class StripePayment
                 [
                     'type' => 'fixed_amount',
                     'fixed_amount' => [
-                        'amount' => $checkoutData['shippingCost'] * 100, // en centimes
+                        'amount' => $checkoutData['shippingCost'] * 100, 
                         'currency' => 'eur',
                     ],
                     'display_name' => 'Frais de livraison',
-                    
                 ],
               ],
             ],
-
           'payment_intent_data'=>
             [                
               'metadata' => $metadata,
             ],
         ]);
         $this->redirecturl = $session->url;
-      
     }
 
     public function getStripeRedirectUrl(){

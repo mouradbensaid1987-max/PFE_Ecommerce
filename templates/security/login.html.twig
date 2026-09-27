@@ -11,8 +11,8 @@
           <h1 class="h3 mb-3"> Connexion</h1>
 
           {% if error %}
-              <div class="alert alert-danger" role="alert">
-                  Adresse e-mail ou mot de passe incorrect.
+              <div class="alert alert-danger">
+                  {{ error }}
               </div>
           {% endif %}
 
@@ -26,8 +26,18 @@
             </div>
 
             <div class="mb-3">
-              <label for="password" class="form-label">Mot de passe</label>
-              <input type="password" id="password" name="_password" class="form-control" required>
+                <label for="password" class="form-label">Mot de passe</label>
+
+                <div class="input-group">
+                    <input type="password" id="password" name="_password" class="form-control" required>
+
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            id="bouton-afficher"
+                            aria-label="Afficher le mot de passe">
+                        Afficher
+                    </button>
+                </div>
             </div>
             
             <div class="mb-3 text-end">

@@ -69,16 +69,12 @@ class AdminCategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) 
             {
-              $existingCategory = $categoryRepository->findOneBy(['slug' => $category->getSlug()]);
-               
-              if ($existingCategory) {
-                    $this->addFlash('danger','Cette catégorie existe déjà.');
-                } else {
+            
                 $em->flush();
                 $this->addFlash('success', 'Catégorie enregistrée');
 
                 return $this->redirectToRoute('app_admin_category_index');
-                }
+                
             }
 
         return $this->render('admin/category/form.html.twig', [
@@ -95,6 +91,14 @@ class AdminCategoryController extends AbstractController
 
       if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) 
         {
+          if (!$category->getProducts()->isEmpty()) {
+            $this->addFlash('danger', sprintf(
+                'Impossible de supprimer la catégorie "%s" : elle contient encore %d produit(s). Déplacez ou supprimez ces produits avant de continuer.',
+                $category->getName(),
+                $category->getProducts()->count()
+                ));
+                return $this->redirectToRoute('app_admin_category_index');
+          }
             $em->remove($category);
             $em->flush();
             $this->addFlash('success', 'Catégorie supprimée');

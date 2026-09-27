@@ -53,6 +53,7 @@ class OrderController extends AbstractController
         ]);
     }
 
+    
 
     #[Route('/confirm', name: 'app_order_confirm', methods: ['POST'])]
     public function confirm( Request $request, AddressRepository $addressRepository,
@@ -110,6 +111,8 @@ class OrderController extends AbstractController
           return $this->redirectToRoute('app_payment');
     }
 
+
+
     #[Route('/history', name: 'app_order_history')]
     public function history(OrderRepository $repo): Response
     {
@@ -122,6 +125,8 @@ class OrderController extends AbstractController
             'orders' => $orders,
           ]);
     }
+
+
 
     #[Route('/{id}', name: 'app_order_show')]
     public function show(string $id, OrderRepository $repo): Response

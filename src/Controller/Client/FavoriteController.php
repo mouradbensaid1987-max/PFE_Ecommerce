@@ -19,12 +19,14 @@ class FavoriteController extends AbstractController
   #[Route('/favorites', name: 'app_favorites')]
   public function index(FavoriteRepository $repo): Response
   {
+    
       $favoriteIds = [];
         if ($this->getUser()) {
             $favoriteIds = $repo->produit_favorie_user($this->getUser());
         }
 
       $favorites = $repo->findBy(['user' => $this->getUser()], ['createdAt' => 'DESC']);
+      
       return $this->render('favorite/list.html.twig', [
         'favorites' => $favorites,
         'favoriteIds' => $favoriteIds,

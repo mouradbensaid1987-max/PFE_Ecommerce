@@ -79,20 +79,20 @@ class AdminTvaController extends AbstractController
 
 
     #[Route('/{id}/delete', name: 'app_admin_tva_delete', methods: ['POST'])]
-    public function delete(Tva $tva, Request $request, EntityManagerInterface $em): Response
+    public function delete(Tva $tva,TvaRepository $tvaRepository, Request $request, EntityManagerInterface $em): Response
     {
 
       if ($this->isCsrfTokenValid('delete'.$tva->getId(), $request->request->get('_token'))) 
         {
+          if (!$tva->getProducts()->isEmpty()) {
+            $this->addFlash('danger','Impossible de supprimer cette TVA car elle est utilisée par un ou plusieurs produits.');
+    
+                return $this->redirectToRoute('app_admin_tva_index');
+          }
             $em->remove($tva);
             $em->flush();
             $this->addFlash('success', 'TVA supprimée');
         }
-
       return $this->redirectToRoute('app_admin_tva_index');
-
     }
-
-
-
 }

@@ -16,6 +16,7 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],
@@ -25,6 +26,7 @@ return [
     '@hotwired/turbo' => [
         'version' => '8.0.23',
     ],
+  
     'bootstrap' => [
         'version' => '5.3.8',
     ],

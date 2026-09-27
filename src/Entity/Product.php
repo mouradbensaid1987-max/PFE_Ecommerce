@@ -9,8 +9,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[UniqueEntity(fields: 'name', message: 'Ce nom est déjà utilisé.')]
 class Product
 {
     #[ORM\Id]
@@ -32,6 +35,8 @@ class Product
     )]
     private ?string $name = null;
 
+
+    
     #[ORM\Column(length: 220, unique: true)]
     private ?string $slug = null;
 
@@ -98,28 +103,23 @@ class Product
     #[Assert\Positive(message: 'La quantité par conditionnement doit être supérieure à 0.')]
     private ?int $quantiteConditionnement = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: 'La catégorie est obligatoire.')]
     private ?Category $category = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: 'La TVA est obligatoire.')]
     private ?Tva $tva = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    /**
-     * @var Collection<int, ProductImage>
-     */
+  
     #[ORM\OneToMany(targetEntity: ProductImage::class, mappedBy: 'product', cascade: ['persist','remove'], orphanRemoval: true)]
     private Collection $productImages;
 
-    /**
-     * @var Collection<int, OrderItem>
-     */
     #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'product')]
     private Collection $orderItems;
 
@@ -274,19 +274,15 @@ class Product
             $this->productImages->add($productImage);
             $productImage->setProduct($this);
         }
-
         return $this;
     }
-
     public function removeProductImage(ProductImage $productImage): static
     {
         if ($this->productImages->removeElement($productImage)) {
-            // set the owning side to null (unless already changed)
             if ($productImage->getProduct() === $this) {
                 $productImage->setProduct(null);
             }
         }
-
         return $this;
     }
 

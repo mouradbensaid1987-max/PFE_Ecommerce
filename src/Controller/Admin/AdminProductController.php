@@ -25,27 +25,29 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/admin/products')]
 class AdminProductController extends AbstractController
 {
-
-    #[Route('', name: 'app_admin_product_index')]
     #[IsGranted('ROLE_ADMIN')]
-    public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, PaginatorInterface $paginator, Request $request): Response
+    #[Route('', name: 'app_admin_product_index')]
+    public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, 
+                          PaginatorInterface $paginator, Request $request): Response
     {
-
         $filters = [
               'search' => $request->query->get('q'),
               'category' => $request->query->get('category'),
               'materiau' => $request->query->get('materiau'),
               'isActive' => $request->query->get('isActive'),
+              'sort' => $request->query->get('sort'),
           ];
-
         $data = $productRepository->findFiltered($filters, false);
 
         $produits = $paginator->paginate(
               $data,
               $request->query->getInt('page', 1),
-              20
+              20,
+              [
+                  'sortFieldParameterName' => null,
+                  'sortDirectionParameterName' => null,
+              ]
           );
-
         return $this->render('admin/product/index.html.twig', [
           'products' => $produits,
           'categories' => $categoryRepository->findAll(),
@@ -70,12 +72,10 @@ class AdminProductController extends AbstractController
             {
 
               $existingProduct = $productRepository->findOneBy(['slug' => $product->getSlug()]);
-               
               if ($existingProduct) {
                 
                     $this->addFlash('danger','Ce Produit existe déjà.');
                 } else {
-
 
                 $em->persist($product);
                 $em->flush();
@@ -86,7 +86,6 @@ class AdminProductController extends AbstractController
             }
       
       return $this->render('admin/product/form.html.twig', [
-            //'form' => $form->createView(),
             'form' => $form,
             'title' => 'Nouveau produit',
         ]);
@@ -102,19 +101,11 @@ class AdminProductController extends AbstractController
 
       if ($form->isSubmitted() && $form->isValid()) 
             {
-              $existingProduct = $productRepository->findOneBy(['slug' => $product->getSlug()]);
-               
-              if ($existingProduct) {
-
-                    $this->addFlash('danger','Ce Produit existe déjà.');
-                } else {
-
 
                 $em->flush();
-                $this->addFlash('success', 'Produit enregistré');
+                $this->addFlash('success', 'Le produit a été modifié.');
 
                 return $this->redirectToRoute('app_admin_product_index');
-                }
             }
       
       return $this->render('admin/product/form.html.twig', [
@@ -125,10 +116,10 @@ class AdminProductController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'app_admin_product_delete', methods: ['POST'])]
-    public function delete(Product $product, Request $request, EntityManagerInterface $em,OrderItemRepository $orderItemRepository ):Response
+    public function delete(Product $product, Request $request, EntityManagerInterface $em,
+                           OrderItemRepository $orderItemRepository ):Response
     {
-      $this->denyAccessUnlessGranted(ProductVoter::DELETE,$product);
-      
+        $this->denyAccessUnlessGranted(ProductVoter::DELETE,$product);
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) 
           {
             $item = $orderItemRepository->findBy([
@@ -139,16 +130,13 @@ class AdminProductController extends AbstractController
                 $product->setIsActive(false);
                 $em->flush();
                 $this->addFlash('success', 'Le produit a été désactivé car il est utilisé dans une commande.');
-
               }else{
                 $em->remove($product);
                 $em->flush();
                 $this->addFlash('success', 'Produit supprimé');
               }
-
           }
       return $this->redirectToRoute('app_admin_product_index');
-
     }
 
 }

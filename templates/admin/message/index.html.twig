@@ -25,10 +25,12 @@
 
             <div class="card-body">
                 <p>Message client : {{ m.content }}</p>
-                <form method="post" action="{{ path('app_admin_message_reply', {id: m.id}) }}">
+                <form method="post" class="js-reply-form" action="{{ path('app_admin_message_reply', {id: m.id}) }}">
                     <textarea name="reply" class="form-control mb-2" rows="6" placeholder="Ecrivez votre réponse ici...">{{ m.reply|default('') }}</textarea>
-                    <button class="btn btn-sm btn-primary">Répondre</button>
+                    <div class="text-danger mb-2 reply-error"></div>
+                  <button class="btn btn-sm btn-primary">Répondre</button>
                 </form>
+
             </div>
 
         </div>

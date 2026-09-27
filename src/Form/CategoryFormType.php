@@ -22,7 +22,6 @@ class CategoryFormType extends AbstractType
         $builder
             ->add('name', TextType::class, ['label' => 'Nom', 'required' => false])
             ->add('slug', HiddenType::class)
-        
             ->add('description', TextareaType::class, ['label' => 'Description', 'required' => false])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->listenerFactory->autoslug('name'))
         ;

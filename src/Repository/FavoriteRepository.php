@@ -23,9 +23,9 @@ class FavoriteRepository extends ServiceEntityRepository
             ->andWhere('f.user = :user')
             ->setParameter('user', $user)
             ->getQuery()
-            ->getSingleColumnResult();
+            ->getSingleColumnResult(); // execute et donne sous forme d'un tableau les ID
 
-        return $result;
+            return $result;
     }
 
 //    /**

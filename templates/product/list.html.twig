@@ -11,8 +11,7 @@
 
         <div class="row g-2 align-items-end">
 
-              <div class="col-12 col-md-4">
-            
+              <div class="col-6 col-md-2">
                 <label for="search-q" class="form-label small visually-hidden">Recherche un produit</label>
                 <input type="search" id="search-q" name="q" class="form-control" placeholder="Nom, référence..." value="{{ filters.search }}">
               </div>
@@ -80,20 +79,31 @@
             <input id="longueurMax" type="number" name="longueurMax" class="form-control" value="{{ filters.longueurMax }}">
           </div>
           <div class="col-6 col-md-2">
-            <button class="btn btn-primary w-100"><span aria-hidden="true">🔍</span> Filtrer</button>
+            <label for="tri" class="form-label small">TRI</label>
+            <select id="tri" name="sort" class="form-select">
+                <option value="">Trier par...</option>
+                <option value="name_asc" {{ filters.sort == "name_asc" ? 'selected' : '' }}>Nom : A → Z</option>
+                <option value="name_desc" {{ filters.sort == "name_desc" ? 'selected' : '' }}>Nom : Z → A</option>
+                <option value="price_asc" {{ filters.sort == "price_asc" ? 'selected' : '' }}>Prix : croissant</option>
+                <option value="price_desc" {{ filters.sort == "price_desc" ? 'selected' : '' }}>Prix : décroissant</option>
+                <option value="newest" {{ filters.sort == "newest" ? 'selected' : '' }}>Plus récent</option>
+                <option value="oldest" {{ filters.sort == "oldest" ? 'selected' : '' }}>Plus ancien</option>
+            </select>
           </div>
-          <div class="col-6 col-md-2">
-            <a href="{{ path('app_product_list') }}" class="btn btn-outline-secondary w-100">Réinitialiser</a>
+
+          <div class="col-12 col-md-4">
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-fill"><i class="bi bi-search text-danger me-2" aria-hidden="true"></i> Filtrer</button>
+                <a href="{{ path('app_product_list') }}" class="btn btn-outline-secondary flex-fill">Réinitialiser</a>
+            </div>
           </div>
-        </div>
         
       </form>
 
 
 
 
-
-    {% if filters.category or filters.materiau or filters.diametreMm or filters.typeTete or filters.typeEmpreinte or filters.unite %}
+    {% if filters.category or filters.materiau or filters.diametreMm or filters.typeTete or filters.typeEmpreinte or filters.unite or filters.sort %}
       <div class="mb-3">
         <span class="text-muted small">Filtres actifs :</span>
         {% if filters.category %}
@@ -115,25 +125,30 @@
         {% if filters.unite %}
           <span class="badge bg-secondary me-1">{{ filters.unite }}</span>
         {% endif %}
+
+          {% set sortLabels = {
+            name_asc: 'Nom : A → Z',
+            name_desc: 'Nom : Z → A',
+            price_asc: 'Prix : croissant',
+            price_desc: 'Prix : décroissant',
+            newest: 'Plus récent',
+            oldest: 'Plus ancien'
+          } %}
+
+
+        {% if filters.sort %}
+          <span class="badge bg-secondary me-1">Tri : {{ sortLabels[filters.sort] }}</span>
+        {% endif %}
       </div>
     {% endif %}
 
-
-
+  </br>
     {% if products.items|length == 0 %}
       <div class="alert alert-warning">Aucun produit trouvé.</div>
     {% else %}
 
 
-    {# 
-      <div class="row g-3">
-        {% for product in products %}
-          <div class="col-lg-3 col-md-4 col-sm-6">
-            {% include 'components/_product_card.html.twig' with {product: product} %}
-          </div>
-        {% endfor %}
-      </div>
-    #}
+  
     <div class="version-sm-plus">
             <div class="row g-3">
                 {% for product in products %}
@@ -150,10 +165,6 @@
                 {% endfor %}
           </div>
     </div>
-
-
-
-
 
 
       <div class="d-flex justify-content-center mt-4">

@@ -6,6 +6,10 @@ use App\Repository\MessageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
+
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
 {
@@ -18,9 +22,23 @@ class Message
     private ?int $id = null;
 
     #[ORM\Column(length: 150)]
+    #[Assert\NotBlank(message: 'Le sujet est obligatoire.', normalizer: 'trim')]
+    #[Assert\Length(
+        min: 3,
+        max: 150,
+        minMessage: 'Le sujet doit contenir au moins {{ limit }} caractères.',
+        maxMessage: 'Le sujet ne peut pas dépasser {{ limit }} caractères.'
+    )]
     private ?string $subject = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'Le message est obligatoire.', normalizer: 'trim')]
+    #[Assert\Length(
+        min: 10,
+        max: 5000,
+        minMessage: 'Le message doit contenir au moins {{ limit }} caractères.',
+        maxMessage: 'Le message ne peut pas dépasser {{ limit }} caractères.'
+    )]
     private ?string $content = null;
 
     #[ORM\Column]
@@ -30,6 +48,10 @@ class Message
     private ?string $status = self::STATUS_OPEN;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Length(
+        max: 5000,
+        maxMessage: 'La réponse ne peut pas dépasser {{ limit }} caractères.'
+    )]
     private ?string $reply = null;
 
     #[ORM\Column(nullable: true)]

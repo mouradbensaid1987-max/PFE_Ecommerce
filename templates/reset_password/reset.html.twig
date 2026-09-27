@@ -17,6 +17,13 @@
 					    {{ form_row(resetForm.plainPassword.first) }}
 					    {{ form_row(resetForm.plainPassword.second) }}
 
+              <button type="button" 
+                      class="btn btn-outline-secondary btn-sm mb-3"
+                      id="bouton1-afficher" 
+                      aria-label="Afficher le mot de passe">
+					        Afficher
+					    </button>
+
 					    <button class="btn btn-primary w-100 mt-2" type="submit">Réinitialiser le mot de passe</button>
 
 					{{ form_end(resetForm) }}

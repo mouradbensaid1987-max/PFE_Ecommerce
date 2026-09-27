@@ -9,9 +9,9 @@
       <div class="card">
         <div class="card-body">
 
-          <h1 class="h3 mb-3"><span aria-hidden="true">✨</span> Créer un compte</h1>
+          <h1 class="h3 mb-3"><i class="bi bi-stars" aria-hidden="true"></i> Créer un compte</h1>
 
-          {{ form_start(registrationForm) }}
+          {{ form_start(registrationForm, {attr: {novalidate: 'novalidate'}}) }}
 
               <div class="mb-3">
                   {{ form_row(registrationForm.firstName) }}
@@ -25,14 +25,31 @@
                   {{ form_row(registrationForm.email) }}
               </div>
 
+
               <div class="mb-3">
-                  {{ form_row(registrationForm.plainPassword) }}
+                  {{ form_label(registrationForm.plainPassword) }}
+                  
+                  <div class="input-group">
+                      {{ form_widget(registrationForm.plainPassword) }}
+                      <button type="button"
+                              class="btn btn-outline-secondary"
+                              id="bouton-afficher"
+                              aria-label="Afficher le mot de passe">
+                          Afficher
+                      </button>
+                  </div>
+                  {{ form_errors(registrationForm.plainPassword) }}
               </div>
+
+
 
               <div class="mb-3 form-check">
                   {{ form_widget(registrationForm.agreeTerms, {attr: {class: 'form-check-input'}}) }}
                   {{ form_label(registrationForm.agreeTerms, null, {label_attr: {class: 'form-check-label'}}) }}
-              </div>
+                  <div class="text-danger small">
+                      {{ form_errors(registrationForm.agreeTerms) }}
+                  </div>
+                </div>
 
               <button class="btn btn-primary w-100">S'inscrire</button>
 

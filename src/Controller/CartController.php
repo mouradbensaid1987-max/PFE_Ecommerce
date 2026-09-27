@@ -38,7 +38,7 @@ final class CartController extends AbstractController
         $cart = $session->get('cart', []);
         $id = $product->getId();
         $stock = $product->getStock();
-        
+
         $currentQty = $cart[$id] ?? 0;
         $newQty = $currentQty + 1;
 
@@ -49,12 +49,11 @@ final class CartController extends AbstractController
         if ($newQty > $stock) {
             // On plafonne à la quantité max disponible
             $cart[$id] = $stock;
-            $this->addFlash('warning','Stock insuffisant pour "' . $product->getName() . '". Quantité limitée à ' . $stock . '.');
+            $this->addFlash('warning','Stock insuffisant pour "' . $product->getName() . '". Quantité ajustée à' . $stock . '.');
         } else {
             $cart[$id] = $newQty;
             $this->addFlash('success', 'Le produit "' . $product->getName() . '" a été ajouté au panier.');
         }
-
         $session->set('cart', $cart);
         return $this->redirectToRoute('app_cart_index');
     }

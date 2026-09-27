@@ -32,14 +32,12 @@
             <td >
                     {% if order.status == 'paid' %}
                       <span class="badge text-dark text-bg-info fs-6">Payée</span>
+                    {% elseif order.status == 'preparing' %}
+                      <span class="badge text-dark text-bg-info fs-6">En préparation</span>
                     {% elseif order.status == 'shipped' %}
                       <span class="badge text-dark text-bg-info fs-6">Expédiée</span>
                     {% elseif order.status == 'delivered' %}
-                      <span class="badge text-dark text-bg-info fs-6">Livrée</span>
-                    {% elseif order.status == 'cancelled' %}
-                      <span class="badge text-dark text-bg-danger fs-6">Annulée</span>
-                    {% elseif order.status == 'pending' %}
-                      <span class="badge text-dark text-bg-warning fs-6">En attente</span>
+                      <span class="badge text-dark text-bg-success fs-6">Livrée</span>                    
                     {% endif %}
             </td>
             <td>

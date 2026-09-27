@@ -5,7 +5,9 @@ namespace App\Entity;
 use App\Repository\ProductImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 #[ORM\Entity(repositoryClass: ProductImageRepository::class)]
 #[Vich\Uploadable]
@@ -19,7 +21,20 @@ class ProductImage
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageName = null;
 
+
+    //mapping: 'product_images' : Pour ce fichier, utilise la configuration product_images définie dans vich_uploader.yaml
+    //fileNameProperty: 'imageName' : Après avoir enregistré le fichier, mets son nom dans la propriété imageName.
     #[Vich\UploadableField(mapping: 'product_images', fileNameProperty: 'imageName')]
+    #[Assert\Image(
+        maxSize: '10M',
+        mimeTypes: [
+            'image/jpeg',
+            'image/png',
+            'image/webp'
+        ],
+        mimeTypesMessage: 'Veuillez sélectionner une image JPEG, PNG ou WebP.',
+        maxSizeMessage: 'L image ne doit pas dépasser 10 Mo.'
+    )]
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]

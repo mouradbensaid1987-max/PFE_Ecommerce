@@ -14,10 +14,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'Un compte existe déjà avec cette adresse e-mail.')]
+#[UniqueEntity(
+    fields: ['email'],
+    errorPath: 'email',
+    message: 'Un compte existe déjà avec cette adresse e-mail.'
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-
         public const ROLE_USER = 'ROLE_USER';
         public const ROLE_ADMIN = 'ROLE_ADMIN';
     
@@ -31,18 +34,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-
     #[ORM\Column(length: 180)]
-    #[Assert\Email(message: 'L’adresse e-mail "{{ value }}" n’est pas valide.')]
-    #[Assert\Length(
-        max: 120,
-        maxMessage: 'L’adresse e-mail ne peut pas dépasser {{ limit }} caractères.'
-    )]
-    private ?string $email = null;
+    #[Assert\NotBlank(message: 'L’email est obligatoire.')]
+    #[Assert\Email(message: 'L’adresse e-mail n’est pas valide.', mode: 'strict')]
+    #[Assert\Length(max: 180, maxMessage: 'L’email ne peut pas dépasser {{ limit }} caractères.')]
 
+    private ?string $email = null;
   
     #[ORM\Column]
     private array $roles = [];
+
+
+    #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\NotBlank(message: 'Le prenom est obligatoire.')]
+    #[Assert\Regex(
+        pattern: "/^[\p{L}\s'-]+$/u",
+        message: 'Le nom ne peut contenir que des lettres, des espaces, des apostrophes et des tirets.'
+    )]
+    #[Assert\Length(
+        min: 2,
+        max: 100,
+        minMessage: 'Le prenom doit contenir au moins {{ limit }} caractères.',
+        maxMessage: 'le prenom ne peut pas dépasser {{ limit }} caractères.'
+    )]
+    private ?string $firstName = null;
+
 
 
     #[ORM\Column(length: 100, nullable: true)]
@@ -51,40 +67,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         pattern: "/^[\p{L}\s'-]+$/u",
         message: 'Le nom ne peut contenir que des lettres, des espaces, des apostrophes et des tirets.'
     )]
-    private ?string $firstName = null;
-
-
-    #[ORM\Column(length: 100, nullable: true)]
-    #[Assert\NotBlank(message: 'Le prenom est obligatoire.')]
-    #[Assert\Regex(
-        pattern: "/^[\p{L}\s'-]+$/u",
-        message: 'Le prenom ne peut contenir que des lettres, des espaces, des apostrophes et des tirets.'
-    )]
+    #[Assert\Length(
+        min: 2,
+        max: 100,
+        minMessage: 'Le nom doit contenir au moins {{ limit }} caractères.',
+        maxMessage: 'le nom ne peut pas dépasser {{ limit }} caractères.'
+        )]
     private ?string $lastName = null;
-
 
     #[ORM\Column]
     private bool $isVerified = false;
-
   
     #[ORM\Column]
     private ?string $password = null;
+
 
   
     #[ORM\OneToMany(targetEntity: Address::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $addresses;
 
-  
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'user')]
     private Collection $orders;
-
     
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'user')]
     private Collection $messages;
 
-    /**
-     * @var Collection<int, ResetPasswordRequest>
-     */
     #[ORM\OneToMany(targetEntity: ResetPasswordRequest::class, mappedBy: 'user')]
     private Collection $resetPasswordRequests;
 
@@ -106,7 +113,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
 

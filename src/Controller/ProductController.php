@@ -28,20 +28,21 @@ final class ProductController extends AbstractController
               'unite' => $request->query->get('unite'),
               'longueurMin' => $request->query->get('longueurMin'),
               'longueurMax' => $request->query->get('longueurMax'),
+              'sort' => $request->query->get('sort'),
           ];
+      
+      $data = $productRepository->findFiltered($filters, true);
 
-    $data = $productRepository->findFiltered($filters, true);
-
-
-    //  $search = $request->query->get('q');
-    //  $data = $productRepository->findActiveProducts($search);
-    
        $products = $paginator->paginate(
-                    $data,
-                    $request->query->getInt('page', 1),
-                    20
-          );
-          
+            $data, 
+            $request->query->getInt('page', 1), 
+            12 ,
+            [
+                'sortFieldParameterName' => null,
+                'sortDirectionParameterName' => null,
+            ]
+       );
+       
         $favoriteIds = [];
         if ($this->getUser()) {
             $favoriteIds = $favoriteRepo->produit_favorie_user($this->getUser());
@@ -49,16 +50,17 @@ final class ProductController extends AbstractController
 
         return $this->render('product/list.html.twig', [
 
-            'categories' => $categoryRepository->findAll(),
+            'filters' => $filters,
             'products' => $products,
             'search' => $filters['search'],
-            'filters' => $filters,
+            'categories' => $categoryRepository->findBy([], ['name' => 'ASC']),
             'materiaux' => $productRepository->findDistinctValues('materiau'),
             'diametres' => $productRepository->findDistinctValues('diametreMm'),
             'typesTete' => $productRepository->findDistinctValues('typeTete'),
             'typesEmpreinte' => $productRepository->findDistinctValues('typeEmpreinte'),
             'unites' => $productRepository->findDistinctValues('unite'),
             'favoriteIds' => $favoriteIds,
+          
         ]);
     }
 

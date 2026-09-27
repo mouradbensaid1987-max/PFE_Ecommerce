@@ -21,27 +21,11 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-
       $slugger = new AsciiSlugger();
-
-      $categoryNames = [
-          'Vis',
-          'Boulons',
-          'Écrous',
-          'Rondelles',
-          'Chevilles',
-          'Tiges filetées',
-          'Rivets',
-          'Clous',
-          'Charnières',
-          'Serrures',
-          'Équerres',
-          'Fixations',
-        ];
-
+      $categoryNames = ['Vis','Boulons','Écrous','Rondelles','Chevilles','Tiges filetées',
+          'Rivets','Clous','Charnières','Serrures','Équerres','Fixations'];
 
         $categories = [];
-
         foreach ($categoryNames as $name) 
           {
               $cat = new Category();
@@ -51,7 +35,6 @@ class AppFixtures extends Fixture
               $manager->persist($cat);
               $categories[$name] = $cat;
           }
-
         $tvaData = [
           ['Standard', '20.00'],
           ['Intermédiaire', '10.00'],
@@ -59,7 +42,6 @@ class AppFixtures extends Fixture
           ['Super réduit', '2.10'],
         ];
         $tvas = [];
-
         foreach ($tvaData as [$name, $rate]) 
           {
               $t = new Tva();

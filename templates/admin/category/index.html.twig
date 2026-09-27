@@ -27,40 +27,56 @@
                    class="btn btn-sm btn-outline-primary" 
                    aria-label="Modifier la catégorie {{ cat.name}}"><i class="bi bi-pencil-fill text-danger" aria-hidden="true"></i></a>
                 
-                <form method="post" action="{{ path('app_admin_category_delete', {id:cat.id}) }}" class="d-inline" id="deleteForm{{ cat.id }}">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cat.id) }}">
-                    <button type="button" 
-                            class="btn btn-sm btn-outline-danger" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#deleteModal{{ cat.id }}"
-                            aria-label="Supprimer la catégorie {{ cat.name}}"><i class="bi bi-trash-fill" aria-hidden="true"></i>
-                    </button>
-                </form>
-
-                <div class="modal fade" id="deleteModal{{ cat.id }}" tabindex="-1">
-                  <div class="modal-dialog">
-                    <div class="modal-content border-danger">
-                      <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title">Confirmation de suppression</h5>
-                        <button type="button" class="btn-close btn-close-white"
-                                data-bs-dismiss="modal" aria-label="Fermer"></button>
-                      </div>
-                      <div class="modal-body">
-                        <p>Êtes-vous sûr de vouloir supprimer cette catégorie ?</p>
-                        <p>La suppression de cette catégorie entraînera également la suppression de tous les produits associés.</p>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" form="deleteForm{{ cat.id }}" class="btn btn-danger">Supprimer</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {% if cat.products.isEmpty %}
+                    <form method="post" action="{{ path('app_admin_category_delete', {id: cat.id}) }}" class="d-inline" id="deleteForm{{ cat.id }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cat.id) }}">
+                        <button type="button"
+                                class="btn btn-sm btn-outline-danger"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteModal{{ cat.id }}"
+                                aria-label="Supprimer la catégorie {{ cat.name }}">
+                            <i class="bi bi-trash-fill" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                {% else %}
+                        <button type="button"
+                                class="btn btn-sm btn-outline-secondary"
+                                disabled
+                                title="{{ cat.products.count }} produit(s) rattaché(s) — suppression impossible"
+                                aria-label="Suppression impossible : {{ cat.products.count }} produit(s) rattaché(s) à {{ cat.name }}">
+                            <i class="bi bi-trash-fill" aria-hidden="true"></i>
+                        </button>
+                {% endif %}
             </td>
           </tr>
         {% endfor %}
     </tbody>
 </table>
+
+{# Modales de confirmation — regroupées ici, hors du tableau #}
+{% for cat in categories %}
+    {% if cat.products.isEmpty %}
+        <div class="modal fade" id="deleteModal{{ cat.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ cat.id }}" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel{{ cat.id }}">Confirmer la suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+              </div>
+              <div class="modal-body">
+                Voulez-vous vraiment supprimer la catégorie « {{ cat.name }} » ? Cette action est irréversible.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="submit" class="btn btn-danger" form="deleteForm{{ cat.id }}">
+                    <i class="bi bi-trash-fill me-1" aria-hidden="true"></i> Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endif %}
+{% endfor %}
 
 
 {% endblock %}

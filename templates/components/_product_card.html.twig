@@ -12,7 +12,6 @@
                     <span class="text-muted small">Pas d'image</span>
                 </div>
             {% endif %}
-
         </div>
 
         <div class="px-2 pt-2">
@@ -49,8 +48,6 @@
     </div>
 
 
-
-
         <div class="d-flex gap-1 mt-auto">
               <form action="{{ path('app_cart_add', {id: product.id}) }}" method="post" class="flex-grow-1">
                   <button type="submit" class="btn btn-primary btn-sm w-100" {% if product.stock is defined and product.stock <= 0 %}disabled{% endif %}>
@@ -62,6 +59,7 @@
                       {% endif %}
                   </button>
               </form>
+              
               {% if app.user %}
                 {% set isFavorite = product.id in favoriteIds %}
                 <form method="post" action="{{ path('app_favorite_toggle', {id: product.id}) }}">
@@ -69,7 +67,6 @@
                             aria-label="{{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}" 
                             title= " {{ isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}">
                          <i class="bi {{ isFavorite ? 'bi-heart-fill' : 'bi-heart' }}"  aria-hidden="true"></i>
-                         
                     </button>
                 </form>
               {% endif %}

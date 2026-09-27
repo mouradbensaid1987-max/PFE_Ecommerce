@@ -1,3 +1,76 @@
-  <footer class="bg-dark text-light text-center py-4 mt-5">
-			<p class="mb-0">&copy; 2026 FixPro — Tous droits réservés</p>
-	</footer>
+{# templates/_footer.html.twig #}
+{# Inclure dans base.html.twig avec : {{ include('_footer.html.twig') }} #}
+
+<footer class="footer bg-dark text-light mt-5" role="contentinfo">
+    <div class="container py-5">
+        <div class="row g-4">
+
+            {# Marque + description #}
+            <div class="col-lg-4 col-md-6">
+                <a href="{{ path('app_home') }}" class="footer-brand h4 fw-bold text-white text-decoration-none">
+                    FixPro
+                </a>
+                <p class="text-secondary mt-3 mb-4">
+                    Votre partenaire pour la gestion et le suivi de vos interventions,
+                    simplement et efficacement.
+                </p>
+            </div>
+
+            {# Navigation #}
+            <div class="col-lg-2 col-md-3 col-6 offset-lg-1">
+                <h2 class="h6 fw-semibold text-white mb-3">Navigation</h2>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2"><a href="{{ path('app_home') }}" class="footer-link">Accueil</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">Nos services</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">Tarifs</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">Contact</a></li>
+                </ul>
+            </div>
+
+            {# Aide #}
+            <div class="col-lg-2 col-md-3 col-6">
+                <h2 class="h6 fw-semibold text-white mb-3">Aide</h2>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2"><a href="#" class="footer-link">Centre d'aide</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">FAQ</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">Suivre une demande</a></li>
+                </ul>
+            </div>
+
+            {# Contact #}
+            <div class="col-lg-3 col-md-6">
+                <h2 class="h6 fw-semibold text-white mb-3">Contact</h2>
+                <address class="text-secondary mb-0">
+                    <p class="mb-2">12 rue de l'Exemple<br>44000 Nantes</p>
+                    <p class="mb-2">
+                        <a href="mailto:contact@fixpro.fr" class="footer-link">contact@fixpro.fr</a>
+                    </p>
+                    <p class="mb-0">
+                        <a href="tel:+33200000000" class="footer-link">02 00 00 00 00</a>
+                    </p>
+                </address>
+            </div>
+
+        </div>
+    </div>
+
+    {# Barre du bas #}
+    <div class="border-top border-secondary border-opacity-25">
+        <div class="container py-3">
+            <div class="row align-items-center gy-2">
+                <div class="col-md-6 text-center text-md-start">
+                    <small class="text-secondary">
+                        &copy; {{ 'now'|date('Y') }} FixPro. Tous droits réservés.
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <ul class="list-inline mb-0 text-center text-md-end">
+                        <li class="list-inline-item"><a href="#" class="footer-link small">Mentions légales</a></li>
+                        <li class="list-inline-item ms-3"><a href="#" class="footer-link small">Confidentialité</a></li>
+                        <li class="list-inline-item ms-3"><a href="#" class="footer-link small">CGU</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

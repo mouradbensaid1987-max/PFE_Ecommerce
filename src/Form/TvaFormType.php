@@ -14,8 +14,8 @@ class TvaFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class, ['label' => 'Nom (ex: Standard)'])
-            ->add('rate', NumberType::class, ['label' => 'Taux (%)', 'scale' => 2])
+            ->add('name', TextType::class, ['label' => 'Nom (ex: Standard)', 'required' => false,])
+            ->add('rate', NumberType::class, ['label' => 'Taux (%)', 'required' => false,])
         ;
     }
 

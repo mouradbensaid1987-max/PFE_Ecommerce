@@ -1,6 +1,5 @@
- import './stimulus_bootstrap.js';
+ //import './stimulus_bootstrap.js';
 import 'bootstrap';
-console.log('hello');
 // import 'bootstrap-icons';
 /*
  * Welcome to your app's main JavaScript file!
@@ -11,5 +10,3 @@ console.log('hello');
 import './styles/app.css';
 import './js/custom.js';
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
-console.log('hello');

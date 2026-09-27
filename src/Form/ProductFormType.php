@@ -28,10 +28,10 @@ class ProductFormType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                   'label' => 'Nom',
-                  'required' => false
-                  
+                  'required' => false,
             ])
             ->add('slug', HiddenType::class)
+
             ->add('description', TextareaType::class, [
                   'label' => 'Description', 
                   'required' =>false
@@ -39,11 +39,13 @@ class ProductFormType extends AbstractType
             ->add('priceHt', MoneyType::class, [
                   'label' => 'Prix HT', 
                   'currency' => 'EUR',
-                  'required' => False,
+                  'required' => false,
+          
             ])
             ->add('stock', IntegerType::class, [
                   'label' => 'Stock',
-                  'required' => False,
+                  'required' => false,
+        
             ])
             ->add('isActive', CheckboxType::class, [
                   'label' => 'Actif', 
@@ -64,19 +66,23 @@ class ProductFormType extends AbstractType
                   'required' => false,
             ])
             ->add('diametreMm', TextType::class, [
-                  'label' => 'Diamètre (ex: M6, 4mm, 8mm)',
+                  'label' => 'Diamètre',
+                  'attr' => ['placeholder' => '(ex: M6, 4mm, 8mm)'],
                   'required' => false,
             ])
             ->add('longueurMm', IntegerType::class, [
-                'label' => 'Longueur (mm)',
+                'label' => 'Longueur',
+                'attr' => ['placeholder' => 'mm'],
                 'required' => false,
             ])
             ->add('typeTete', TextType::class, [
-                'label' => 'Type de tête (ex: Fraisée, Cylindrique, Bombée)',
+                'label' => 'Type de tête',
+                'attr' => ['placeholder' => '(ex: Fraisée, Cylindrique, Bombée)'],
                 'required' => false,
             ])
             ->add('typeEmpreinte', TextType::class, [
-                'label' => "Type d'empreinte (ex: Cruciforme PZ2, Torx T20)",
+                'label' => "Type d'empreinte",
+                'attr' => ['placeholder' => '(ex: Cruciforme PZ2, Torx T20)'],
                 'required' => false,
             ])
             ->add('unite', ChoiceType::class, [
@@ -91,15 +97,15 @@ class ProductFormType extends AbstractType
                 'placeholder' => 'Choisir une unité',
             ])
             ->add('quantiteConditionnement', IntegerType::class, [
-                'label' => 'Quantité par conditionnement (ex: 100 vis/boîte)',
+                'label' => 'Unités par boîte',
                 'required' => false,
             ])
 
-            ->add('productImages', CollectionType::class, [
-                  'entry_type' => ProductImageFormType::class,
-                  'by_reference' => false,
+            ->add('productImages', CollectionType::class, [ //CollectionType permet de gérer plusieurs champs du même type.
+                  'entry_type' => ProductImageFormType::class, //Chaque élément de ma collection productImages doit utiliser le formulaire ProductImageFormType.
+                  'by_reference' => false, // Symfony utilise les méthodes de ton entité pour ajouter ou supprimer les éléments.
                   'entry_options' => ['label' => false],
-                  'allow_add' => true,
+                  'allow_add' => true, // tres important pour cree le prototype 
                   'allow_delete' => true,
                   'attr' => ['class' => 'img-fluid my-2'],
             ])

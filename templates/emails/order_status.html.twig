@@ -55,7 +55,16 @@
                     font-size: 16px;
                     font-weight: bold;
                 ">
-                    {{ order.status }}
+
+                    {% if order.status == 'paid' %}
+                      Payée
+                    {% elseif order.status == 'preparing' %}
+                      En préparation
+                    {% elseif order.status == 'shipped' %}
+                      Expédiée
+                    {% elseif order.status == 'delivered' %}
+                      Livrée                  
+                    {% endif %}
                 </span>
 
             </div>

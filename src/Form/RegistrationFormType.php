@@ -13,51 +13,47 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
+
 
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstName', TextType::class, [
-                'label' => 'Prénom',
-                'constraints' => [new NotBlank()],
+            ->add('firstName', TextType::class, ['label' => 'Prénom',
+                'required' => false,
                 ])
-
-
-            ->add('lastName', TextType::class, [
-                'label' => 'Nom',
-                'constraints' => [new NotBlank()],
-                ])
-
-
-            ->add('email', EmailType::class, [
-                'label' => 'Email',
-                ])
-
-
-            ->add('agreeTerms', CheckboxType::class, [
+            ->add('lastName', TextType::class, ['label' => 'Nom',
+                'required' => false,
+              ])
+            ->add('email', EmailType::class, ['label' => 'Email',
+                'required' => false,
+              ])
+            ->add('agreeTerms', CheckboxType::class, ['label' => "J'accepte les conditions",
                 'mapped' => false,
-                'label' => "J'accepte les conditions",
-                'constraints' => [
-                    new IsTrue(
-                        message: 'Vous devez accepter les conditions.')],
+                'required' => false,
+                'constraints' => [new IsTrue(message: 'Vous devez accepter les conditions.'),]
                 ])
-
-
-            ->add('plainPassword', PasswordType::class, [
+            ->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe',
                 'mapped' => false,
-                'label' => 'Mot de passe',
                 'constraints' => [
-                    new NotBlank(
-                        message: 'Mot de passe obligatoire'),
-                    new Length(
-                        min: 6,
-                        minMessage: 'Au moins 6 caractères'),
-                    ],
-                ]);
-
-                
+                      new NotBlank(message: 'Mot de passe obligatoire.'),
+                      new Length(
+                          min: 6,
+                          max: 4096,
+                          minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.'
+                      ),
+                      new Regex(
+                          pattern: '/[A-Z]/',
+                          message: 'Le mot de passe doit contenir au moins une majuscule.'
+                      ),
+                      new Regex(
+                          pattern: '/[^A-Za-z0-9]/',
+                          message: 'Le mot de passe doit contenir au moins un caractère spécial (! @ # $ % ...).'
+                      ),
+                  ],                
+                ]);  
     }
 
     public function configureOptions(OptionsResolver $resolver): void

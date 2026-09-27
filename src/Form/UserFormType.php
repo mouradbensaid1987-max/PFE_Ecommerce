@@ -17,9 +17,9 @@ class UserFormType extends AbstractType
     {
         $builder
             
-            ->add('firstName', TextType::class, ['label' => 'Prénom'])
-            ->add('lastName', TextType::class, ['label' => 'Nom'])
-            ->add('email', EmailType::class, ['label' => 'Email'])
+            ->add('firstName', TextType::class, ['label' => 'Prénom', 'required' => false])
+            ->add('lastName', TextType::class, ['label' => 'Nom', 'required' => false])
+            ->add('email', EmailType::class, ['label' => 'Email', 'required' => false])
             ->add('roles', ChoiceType::class, [
                 'label' => 'Rôle',
                 'choices' => [
