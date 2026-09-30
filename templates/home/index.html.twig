@@ -8,17 +8,15 @@
 
 <div class="hero-quincaillerie text-white p-5 rounded mb-4 position-relative overflow-hidden" id="heroBanner">
 
+    <button type="button" id="heroPauseBtn"
+            class="btn btn-sm btn-light btn-sm rounded-circle position-absolute top-0 end-0 m-2"
+            style="z-index: 10;"
+            aria-pressed="false"
+            aria-label="Mettre en pause le diaporama"
+      >
+          <i class="bi bi-pause-fill" aria-hidden="true"></i>
+    </button>
 
-  <button type="button" id="heroPauseBtn"
-          class="btn btn-sm btn-light btn-sm rounded-circle position-absolute top-0 end-0 m-2"
-          style="z-index: 10;"
-          aria-pressed="false"
-          aria-label="Mettre en pause le diaporama"
-    >
-        <i class="bi bi-pause-fill" aria-hidden="true"></i>
-  </button>
-
-  
     <div class="hero-slide" style="background-image: url('{{ asset('images/aaa.webp') }}'); animation-delay: 0s;"></div>
     <div class="hero-slide" style="background-image: url('{{ asset('images/aaa1.jpg') }}'); animation-delay: 5s;"></div>
     <div class="hero-slide" style="background-image: url('{{ asset('images/aaa2.avif') }}'); animation-delay: 10s;"></div>
@@ -26,7 +24,8 @@
     <div class="hero-slide" style="background-image: url('{{ asset('images/aaa4.jpg') }}'); animation-delay: 20s;"></div>
 
     <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-end" 
-         style="background: linear-gradient(90deg, rgba(10,20,40,0.65) 0%, rgba(10,20,40,0.35) 45%, rgba(10,20,40,0) 75%);"></div>
+         style="background: linear-gradient(90deg, rgba(10,20,40,0.65) 0%, rgba(10,20,40,0.35) 45%, rgba(10,20,40,0) 75%);">
+    </div>
 
      <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-end p-5">
         <div class="hero-card p-3 p-md-4" style="max-width: 380px;">

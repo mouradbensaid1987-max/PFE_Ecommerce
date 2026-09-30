@@ -180,7 +180,7 @@
                     </tr>
                 </table>
 							<p class="text-muted mt-3">
-                12 rue de la République<br>
+                42 rue de rennes<br>
                 44590 Derval – France<br>
                 Tél. : 02 XX XX XX XX<br>
                 www.fixpro.fr<br>
@@ -199,7 +199,7 @@
 
 			<table class="layout-table mb-4">
 				<tr>
-					<td style="width:33%; padding-right:15px;">
+					<td style="width:50%; padding-right:15px;">
             <div class="border rounded p-3">
                 <div class="text-primary fw-bold mb-2">
                     Vendeur
@@ -212,22 +212,13 @@
                 TVA : FR12 123456789
             </div>
           </td>
-					<td style="width:33%; padding-right:15px;">
+					<td style="width:50%;">
 						<div class="border rounded p-3">
-							<div class="text-primary fw-bold mb-2">Client</div>
-							{{ order.user.firstname }} {{ order.user.lastname }}<br>
-							{{ order.user.email }}
-            
-						</div>
-          </td>
-          <td style="width:33%;">
-            <div class="border rounded p-3">
-							<div class="text-primary fw-bold mb-2">Adresse de livraison</div>
-              {{ order.deliveryFirstName }} {{ order.deliveryLastName }}<br>
-
-              {{ order.deliveryStreet}}<br>
-              {{ order.deliveryPostalCode}} {{ order.deliveryCity }} <br>
-              {{ order.deliveryCountry }}
+							<div class="text-primary fw-bold mb-2">Client / Adresse de livraison</div>
+							{{ order.deliveryFirstName }} {{ order.deliveryLastName }}<br>
+							{{ order.deliveryStreet }}<br>
+							{{ order.deliveryPostalCode }} {{ order.deliveryCity }}<br>
+							{{ order.deliveryCountry }}
 						</div>
 					</td>
 				</tr>

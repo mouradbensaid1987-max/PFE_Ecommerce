@@ -4,8 +4,11 @@
 
 {% block body %}
 
-<div class="card mt-3">
+<h1> <i class="bi bi-person-fill text-danger me-2" aria-hidden="true"></i> Mon Profil</h1>
 
+
+<div class="card mt-3">
+  
   <div class="card-body">
       <p><strong>Email :</strong> {{ user.email }}</p>
       <p><strong>Prénom :</strong> {{ user.firstName }}</p>
@@ -16,6 +19,34 @@
       <a href="{{ path('app_profile_edit') }}" class="btn btn-primary"><i class="bi bi-pencil-fill text-danger me-2" aria-hidden="true"></i> Modifier mes informations</a>
       <a href="{{ path('app_address_list') }}" class="btn btn-outline-primary"><i class="bi bi-geo-alt-fill text-danger me-2" aria-hidden="true"></i> Mes adresses</a>
   </div>
+
+
+  <div class="card border-danger mt-4">
+    <div class="card-body">
+        <h2 class="h5 text-danger">Supprimer mon compte</h2>
+        <p class="small text-secondary mb-3">
+            Vos adresses, favoris et messages seront définitivement supprimés.
+            Vos commandes sont conservées de façon anonyme pendant 10 ans (obligation comptable).
+            Cette action est irréversible.
+            <a href="{{ path('app_privacy') }}">En savoir plus</a>
+        </p>
+
+        <form method="post" action="{{ path('app_profile_delete') }}"
+              onsubmit="return confirm('Supprimer définitivement votre compte ?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete_account') }}">
+
+            <label for="delete-password" class="form-label small">Confirmez avec votre mot de passe</label>
+            <div class="d-flex gap-2 flex-wrap">
+                <input type="password" id="delete-password" name="password"
+                       class="form-control" style="max-width: 300px;"
+                       autocomplete="current-password" required>
+                <button type="submit" class="btn btn-outline-danger">
+                    <i class="bi bi-trash me-1" aria-hidden="true"></i>Supprimer mon compte
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
 </div>
 

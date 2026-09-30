@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conditions générales d'utilisation{% endblock %}
+
+{% block body %}
+<div class="container py-4" style="max-width: 800px;">
+    <h1 class="mb-4">Conditions générales d'utilisation</h1>
+
+    <h2 class="h5">1. Objet</h2>
+    <p>Les présentes conditions définissent les règles d'utilisation du site FixPro.</p>
+
+    <h2 class="h5">2. Compte utilisateur</h2>
+    <p>La création d'un compte nécessite une adresse e-mail valide, vérifiée par un lien
+       de confirmation. L'utilisateur est responsable de la confidentialité de son mot de passe.</p>
+
+    <h2 class="h5">3. Commandes et paiement</h2>
+    <p>Les prix sont indiqués en euros TTC. La livraison est offerte à partir de 50 € d'achat.
+       Le paiement est effectué de façon sécurisée via Stripe.</p>
+
+    <h2 class="h5">4. Données personnelles</h2>
+    <p>Voir la page <a href="{{ path('app_legal_notice') }}">Mentions légales</a>.</p>
+</div>
+{% endblock %}

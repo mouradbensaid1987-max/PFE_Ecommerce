@@ -104,6 +104,8 @@ class ProductRepository extends ServiceEntityRepository
     return $qb->getQuery()->getResult();
   }
 
+
+  
   public function findDistinctValues(string $field): array
   {
     $allowed = ['materiau', 'diametreMm', 'typeTete', 'typeEmpreinte', 'unite'];
@@ -120,8 +122,6 @@ class ProductRepository extends ServiceEntityRepository
       ->getQuery()
       ->getSingleColumnResult();
   }
-
-
 
 
 

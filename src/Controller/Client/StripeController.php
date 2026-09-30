@@ -86,24 +86,31 @@ final class StripeController extends AbstractController
           if (!isset($metadata->reference)){
                 return new Response('Metadata manquante', 200);
             }
+
           $existingOrder = $orderRepository->findOneBy(['reference' => $metadata->reference]);
           if ($existingOrder){
               return new Response('Commande déjà créée', 200);
           }
+
           $totalTtc = (float) $metadata->total_ttc;
           $stripeTotalAmount = $paymentIntent->amount / 100;
           if ($totalTtc !== $stripeTotalAmount){
               return new Response('Montant incohérent', 200);
           }
+
           $user = $userRepository->find((int) $metadata->user_id);
           if (!$user){
               return new Response('Utilisateur introuvable', 200);
           }
+
           $chunkCount = (int) ($metadata->cart_chunks ?? '0');
           $cartString = '';
+
           for ($i = 0; $i < $chunkCount; $i++)
             {   $key = 'cart_' . $i;
-                $cartString .= $metadata->$key ?? '';  }
+                $cartString .= $metadata->$key ?? '';  
+            }
+
           $order = new Order();
           $order->setReference($metadata->reference);
           $order->setUser($user);
@@ -116,14 +123,24 @@ final class StripeController extends AbstractController
           $order->setDeliveryPostalCode($metadata->delivery_postal_code);
           $order->setDeliveryCity($metadata->delivery_city);
           $order->setDeliveryCountry($metadata->delivery_country);
+
           foreach (explode('|', $cartString) as $line)
               {
-                  if ($line === ''){ continue; }
+                  if ($line === ''){ 
+                    continue; 
+                    }
                   [$productId, $quantity, $priceTtc, $tva] = explode(':', $line);
+
                   $product = $productRepository->find((int) $productId);
-                  if (!$product) { return new Response('Produit introuvable', 200); }
+                  if (!$product) { 
+                    return new Response('Produit introuvable', 200); 
+                    }
                   $quantity = (int) $quantity;
-                  if ($product->getStock() < $quantity) { return new Response('Stock insuffisant pour le produit : ' . $product->getName(),200); }
+
+                  if ($product->getStock() < $quantity) { 
+                    return new Response('Stock insuffisant pour le produit : ' . $product->getName(),200); 
+                    }
+
                   $orderItem = new OrderItem();
                   $orderItem->setProduct($product);
                   $orderItem->setTva($tva);

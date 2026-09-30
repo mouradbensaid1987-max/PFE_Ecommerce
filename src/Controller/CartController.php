@@ -75,10 +75,15 @@ final class CartController extends AbstractController
 
 
     #[Route('/remove', name: 'app_cart_remove', methods: ['POST'])]
-    public function remove(SessionInterface $session): Response
+    public function remove(Request $request, SessionInterface $session): Response
     {
+      if (!$this->isCsrfTokenValid('cart_remove', $request->request->get('_token'))) {
+        $this->addFlash('danger', 'Action non autorisée.');
+        return $this->redirectToRoute('app_cart_index');
+    }
 
         $session->set('cart', []);
+        $this->addFlash('success', 'Votre panier a été vidé.');
         return $this->redirectToRoute('app_cart_index');
     }
 

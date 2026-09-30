@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mentions légales{% endblock %}
+
+{% block body %}
+<div class="container py-4" style="max-width: 800px;">
+    <h1 class="mb-4">Mentions légales</h1>
+
+    <h2 class="h5">Éditeur du site</h2>
+    <p>FixPro — site réalisé dans le cadre d'un projet de fin de formation
+       « Développeur Web et Web Mobile » au centre DAWAN.<br>
+       Adresse : 42 rue de rennes, 44000 Nantes<br>
+       E-mail : contact@fixpro.fr</p>
+
+    <h2 class="h5">Directeur de la publication</h2>
+    <p>Mourad Ben Said</p>
+
+
+    <h2 class="h5">Données personnelles</h2>
+    <p>Les informations recueillies (nom, e-mail, adresses) servent uniquement à la gestion
+       des comptes et des commandes. Conformément au RGPD, vous pouvez demander l'accès,
+       la modification ou la suppression de vos données à l'adresse contact@fixpro.fr.</p>
+
+    <h2 class="h5">Paiement</h2>
+    <p>Les paiements sont traités par Stripe. FixPro ne conserve aucune donnée bancaire.</p>
+</div>
+{% endblock %}

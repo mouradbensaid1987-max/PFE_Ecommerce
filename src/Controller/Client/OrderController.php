@@ -2,11 +2,10 @@
 
 namespace App\Controller\Client;
 
-
 use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Service\Cart;
-
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,6 +59,13 @@ class OrderController extends AbstractController
                              Cart $cart,SessionInterface $session
                         ): Response {
 
+
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException();
+        }
+
         $addressId = (int) $request->request->get('address_id');
         $address = $addressRepository->find($addressId);
 
@@ -93,17 +99,17 @@ class OrderController extends AbstractController
                 ];
           }
           $checkoutData = [
-                'reference' => 'CMD-' . strtoupper(bin2hex(random_bytes(4))),
-                'userId' => $this->getUser()->getId(),
-                'userEmail' => $this->getUser()->getEmail(),
-                'totalTtc' => (string) $data['totalWithShipping'],
-                'shippingCost' => (string) $data['shippingFee'],
-                'deliveryFirstName' => $address->getFirstName(),
-                'deliveryLastName' => $address->getLastName(),
-                'deliveryStreet' => $address->getStreet(),
-                'deliveryPostalCode' => $address->getPostalCode(),
-                'deliveryCity' => $address->getCity(),
-                'deliveryCountry' => $address->getCountry(),
+                'reference' => 'CMD-' . strtoupper(bin2hex(random_bytes(4))),//
+                'userId' => $user->getId(),//
+                'userEmail' => $user->getEmail(),
+                'totalTtc' => (string) $data['totalWithShipping'],//
+                'shippingCost' => (string) $data['shippingFee'],//
+                'deliveryFirstName' => $address->getFirstName(),//
+                'deliveryLastName' => $address->getLastName(),//
+                'deliveryStreet' => $address->getStreet(),//
+                'deliveryPostalCode' => $address->getPostalCode(),//
+                'deliveryCity' => $address->getCity(),//
+                'deliveryCountry' => $address->getCountry(),//
                 'cart' => $cartData,
             ];
 

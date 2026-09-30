@@ -169,7 +169,7 @@ class AppFixtures extends Fixture
 
             // === UTILISATEURS ===
           $admin = new User();
-          $admin->setEmail('admin@test.com');
+          $admin->setEmail('admin@fixpro.com');
           $admin->setFirstName('Admin');
           $admin->setLastName('Boutique');
           $admin->setRoles(['ROLE_ADMIN']);
@@ -177,7 +177,7 @@ class AppFixtures extends Fixture
           $manager->persist($admin);
         
           $client = new User();
-          $client->setEmail('client@test.com');
+          $client->setEmail('client@gmail.com');
           $client->setFirstName('Client');
           $client->setLastName('Test');
           $client->setRoles(['ROLE_USER']);

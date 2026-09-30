@@ -31,11 +31,11 @@ class Cart
                   unset($cart[$id]);
                   $cartUpdated = true;
                   continue;
-              }
-                $cartWhitData[]=[
-                    'product'=> $product,
-                    'quantity'=>$quantity
-                ];
+                }
+              $cartWhitData[]=[
+                  'product'=> $product,
+                  'quantity'=>$quantity
+              ];
             }
         $session->set('cart', $cart); // mise a jours de la session
         $total = array_sum(array_map(function($item){

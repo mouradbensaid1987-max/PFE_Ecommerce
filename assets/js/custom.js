@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-  // =====================================================
+    // =====================================================
     // Validation du formulaire de réponse (admin messages)
     // =====================================================
     const forms = document.querySelectorAll('.js-reply-form');
@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const bouton = document.getElementById('bouton-afficher');
     const champ = document.getElementById('registration_form_plainPassword');
 
-
     if (bouton && champ) {
         bouton.addEventListener('click', function () {
             if (champ.type === 'password') {
@@ -36,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // =====================================================
     // Afficher le mot de passe de Login
     // =====================================================
+    
     const boutonn = document.getElementById('bouton-afficher');
     const chaxmp2 = document.querySelector('#password');
     if (boutonn && chaxmp2) {
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Le bouton "Ajouter une image"
     const boutonAjouter = document.getElementById("add-image-btn");
 
-
+  if (liste && boutonAjouter) { 
     // =====================================================
     // AJOUTER UNE IMAGE
     // =====================================================
@@ -221,6 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
+  }
     
 
 
